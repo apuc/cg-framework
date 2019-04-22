@@ -1,0 +1,15 @@
+{
+    "require": {
+        "phroute/phroute": "^2.1",
+        "illuminate/events": "^5.8"
+    },
+    "autoload": {
+        "classmap": [
+            "core/",
+            "workspace/"
+        ],
+        "files": [
+            "init.php"
+        ]
+    }
+}
