@@ -4,10 +4,10 @@ use Phroute\Phroute\Dispatcher;
 
 $collector = new RouteCollector();
 $collector->get('/', ['workspace\controllers\MainController', 'actionIndex']);
-$collector->post('products', function(){
+$collector->get('products', function(){
     return 'Create Product';
 });
-$collector->put('items/{id}', function($id){
+$collector->get('/items/{id}', function($id){
     return 'Amend Item ' . $id;
 });
 

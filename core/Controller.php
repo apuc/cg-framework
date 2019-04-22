@@ -18,6 +18,9 @@ class Controller
         $this->tpl->compile_dir = WORKSPACE_DIR . '/views_c/';
         $this->tpl->config_dir = ROOT_DIR . '/cache';
         $this->tpl->cache_dir = ROOT_DIR . '/config';
+
+        $this->tpl->assign('res_dir', RESOURCES_DIR);
+        $this->tpl->assign('workspace_dir', WORKSPACE_DIR);
     }
 
     public function render($tpl, $data = [])
