@@ -14,4 +14,9 @@ class MainController extends Controller
         return $this->render('main/index.tpl', ['title' => 'Название страницы 123', 'h1' => 'Заголовок']);
     }
 
+    public function actionItems($id)
+    {
+        return $this->render('main/index.tpl', ['title' => 'Название страницы ' . $id, 'h1' => 'Item ' . $id]);
+    }
+
 }

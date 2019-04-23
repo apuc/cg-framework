@@ -7,8 +7,6 @@ $collector->get('/', ['workspace\controllers\MainController', 'actionIndex']);
 $collector->get('products', function(){
     return 'Create Product';
 });
-$collector->get('/items/{id}', function($id){
-    return 'Amend Item ' . $id;
-});
+$collector->get('/items/{id}', ['workspace\controllers\MainController', 'actionItems']);
 
 return $collector;
