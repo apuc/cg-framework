@@ -9,5 +9,6 @@ $collector->get('products', function(){
     return 'Create Product';
 });
 $collector->get('/items/{id}', ['workspace\controllers\MainController', 'actionItems']);
+$collector->get('/forms/{id}', ['workspace\controllers\FormsController', 'actionShow']);
 
 return $collector;
