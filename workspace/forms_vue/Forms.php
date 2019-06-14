@@ -9,15 +9,10 @@
 namespace workspace\forms_vue;
 
 
-class Forms
+use core\VueForm;
+
+class Forms extends VueForm
 {
-    public static function find($id)
-    {
-        if(method_exists(self::class, $id)){
-            return self::$id();
-        }
-        return ['error' => 'form not found'];
-    }
 
     public static function first()
     {
