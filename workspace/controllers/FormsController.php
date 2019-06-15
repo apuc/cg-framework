@@ -20,7 +20,7 @@ class FormsController extends Controller
     public function actionShow($id)
     {
         App::$responseType = ResponseType::APPLICATION_JSON;
-        header("Access-Control-Allow-Origin: *");
+        App::$header->add('Access-Control-Allow-Origin', '*');
 
         return json_encode(Forms::find($id));
     }
