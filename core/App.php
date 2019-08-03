@@ -34,6 +34,7 @@ class App
 
     public function run()
     {
+        new Database();
         $dispatcher =  new Dispatcher($this->rout->getData());
         $response = $dispatcher->dispatch($_SERVER['REQUEST_METHOD'], parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
         header('Content-Type: ' . App::$responseType);

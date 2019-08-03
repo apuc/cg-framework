@@ -7,5 +7,15 @@
  */
 
 return [
-    'app_name' => 'CG'
+    'app_name' => 'CG',
+    'db' => [
+        'driver' => 'mysql',
+        'host' => 'localhost',
+        'user' => 'root',
+        'pass' => '',
+        'db_name' => 'cg',
+        'charset' => 'utf8',
+        'collation' => 'utf8_unicode_ci',
+        'prefix' => '',
+    ]
 ];

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace workspace\controllers;
-
 
 use core\App;
 use core\Controller;
