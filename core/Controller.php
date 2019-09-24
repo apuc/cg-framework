@@ -25,7 +25,7 @@ class Controller
 
     public function render($tpl, $data = [])
     {
-        foreach ((array)$data as $key => $datum){
+        foreach ((array)$data as $key => $datum) {
             $this->tpl->assign($key, $datum);
         }
 
