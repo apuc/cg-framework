@@ -1,5 +1,5 @@
 .idea/
 .git/
 vendor
-config
+config/main
 workspace/views_c
