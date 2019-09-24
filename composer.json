@@ -1,7 +1,9 @@
 {
     "require": {
         "phroute/phroute": "^2.1",
-        "illuminate/events": "^5.8"
+        "illuminate/events": "^6.0",
+        "illuminate/database": "^6.0",
+        "swiftmailer/swiftmailer": "^6.2"
     },
     "autoload": {
         "classmap": [

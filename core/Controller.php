@@ -34,4 +34,13 @@ class Controller
         return $this->tpl->fetch($this->layout, ['content' => $content]);
     }
 
+    public function getTpl($tpl, $data = [])
+    {
+        foreach ((array)$data as $key => $datum) {
+            $this->tpl->assign($key, $datum);
+        }
+
+        return $this->tpl->fetch($tpl);
+    }
+
 }

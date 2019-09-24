@@ -4,29 +4,64 @@
 namespace core;
 
 
+use Illuminate\Support\Arr;
 use Phroute\Phroute\Dispatcher;
+use Phroute\Phroute\RouteCollector;
+use Illuminate\Database\Capsule\Manager as Capsule;
 
+/**
+ * Class App
+ * @package core
+ * @property Header $header
+ */
 class App
 {
-    public $config;
-    public $rout;
+    public $routList;
 
-    public function setConfig($conf)
+    /**
+     * @var array
+     */
+    static $config = [];
+
+    /**
+     * @var $collector RouteCollector
+     */
+    static $collector;
+
+    /**
+     * @var array
+     */
+    static $configList;
+    static $responseType = ResponseType::TEXT_HTML;
+    static $header;
+
+    public function setConfig($configListFile = 'list.php')
     {
-        $this->config = (include  (CONFIG_DIR . '/' . $conf));
+        App::$configList = (include  (CONFIG_DIR . '/' . $configListFile));
+        foreach (App::$configList as $item){
+            App::$config = array_merge(App::$config, (include  (CONFIG_DIR . '/' . $item)));
+        }
+        App::$header = new Header();
+        App::$collector = new RouteCollector();
         return $this;
     }
 
-    public function setRouting($rout)
+    public function setRouting($routListFile = 'list.php')
     {
-        $this->rout = (include (ROUTING_DIR . '/' . $rout));
+        $this->routList = (include (ROUTING_DIR . '/' . $routListFile));
+        foreach ($this->routList as $item){
+            include  (ROUTING_DIR . '/' . $item);
+        }
         return $this;
     }
 
     public function run()
     {
-        $dispatcher =  new Dispatcher($this->rout->getData());
+        new Database();
+        $dispatcher =  new Dispatcher(App::$collector->getData());
         $response = $dispatcher->dispatch($_SERVER['REQUEST_METHOD'], parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+        header('Content-Type: ' . App::$responseType);
+        App::$header->set();
         echo $response;
     }
 
