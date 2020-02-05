@@ -24,7 +24,7 @@ class App
     static $config = [];
 
     /**
-     * @var $collector RouteCollector
+     * @var $collector CgRouteCollector
      */
     static $collector;
 
@@ -42,7 +42,7 @@ class App
             App::$config = array_merge(App::$config, (include  (CONFIG_DIR . '/' . $item)));
         }
         App::$header = new Header();
-        App::$collector = new RouteCollector();
+        App::$collector = new CgRouteCollector();
         return $this;
     }
 

@@ -10,3 +10,5 @@ App::$collector->get('products', function(){
 });
 App::$collector->get('/items/{id}', ['workspace\controllers\MainController', 'actionItems']);
 App::$collector->get('/forms/{id}', ['workspace\controllers\FormsController', 'actionShow']);
+
+App::$collector->crud('/news', ['workspace\controllers\NewsController']);
