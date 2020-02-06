@@ -23,4 +23,9 @@ class CgRouteCollector extends RouteCollector
     {
     }
 
+    public function console($route, $handler, array $filters = [])
+    {
+        $this->addRoute(Route::GET, $route, $handler, $filters);
+    }
+
 }
