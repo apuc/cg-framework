@@ -10,9 +10,15 @@ class Controller
     public $tpl;
     public $layout = 'layouts/main.tpl';
 
+    /**
+     * @var View
+     */
+    public $view;
+
     public function __construct()
     {
         $this->tpl = new \Smarty();
+        $this->view = new View();
 
         $this->tpl->template_dir = WORKSPACE_DIR . '/views/';
         $this->tpl->compile_dir = WORKSPACE_DIR . '/views_c/';
@@ -21,17 +27,24 @@ class Controller
 
         $this->tpl->assign('res_dir', RESOURCES_DIR);
         $this->tpl->assign('workspace_dir', WORKSPACE_DIR);
+        $this->tpl->assign('title', $this->view->title);
     }
 
     public function render($tpl, $data = [])
     {
+        $this->tpl->assign('view', $this->view);
         foreach ((array)$data as $key => $datum) {
             $this->tpl->assign($key, $datum);
         }
 
-        $content = $this->tpl->fetch($tpl);
+        $view = $this->tpl->fetch($tpl);
 
-        return $this->tpl->fetch($this->layout, ['content' => $content]);
+        $this->tpl->assign('title', $this->view->title);
+        $this->tpl->assign('meta', $this->view->getMetaHtml());
+        $this->tpl->assign('jsHead', $this->view->getJsHtml());
+        $this->tpl->assign('jsEndBody', $this->view->getJsHtml(true));
+
+        return $this->tpl->fetch($this->layout, ['content' => $view]);
     }
 
     public function getTpl($tpl, $data = [])

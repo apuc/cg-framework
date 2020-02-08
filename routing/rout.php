@@ -9,6 +9,7 @@ App::$collector->get('products', function(){
     return 'Create Product';
 });
 App::$collector->get('/items/{id}', ['workspace\controllers\MainController', 'actionItems']);
+App::$collector->get('/user/{id}', ['workspace\controllers\MainController', 'actionUser']);
 App::$collector->get('/forms/{id}', ['workspace\controllers\FormsController', 'actionShow']);
 
 App::$collector->crud('/news', ['workspace\controllers\NewsController']);

@@ -7,13 +7,17 @@ use core\Controller;
 use core\Debug;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use workspace\models\User;
+use workspace\traits\SmartTitle;
 
 class MainController extends Controller
 {
 
     public function actionIndex()
     {
-        return $this->render('main/index.tpl', ['title' => 'Название страницы 123', 'h1' => 'Проект ' . App::$config['app_name']]);
+        //$this->view->setTitle('по новому методу');
+        $this->view->addMeta('keywords', 'главная', ['some' => 'text']);
+        $this->view->registerJs('/resources/js/bodyScript.js', [], true);
+        return $this->render('main/index.tpl', ['h1' => 'Проект ' . App::$config['app_name']]);
     }
 
     public function actionItems($id)
@@ -25,6 +29,12 @@ class MainController extends Controller
     {
         $users = User::all();
         Debug::dd($users);
+    }
+
+    public function actionUser($id)
+    {
+        $user = User::where('id', $id)->first();
+        return $this->render('main/user.tpl', ['model' => $user]);
     }
 
 }
