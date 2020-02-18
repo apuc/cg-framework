@@ -16,7 +16,7 @@ class NewsController extends Controller
         echo 'news index';
     }
 
-    public function actionStore(Debug $debug)
+    public function actionStore()
     {
         echo 'news store';
     }

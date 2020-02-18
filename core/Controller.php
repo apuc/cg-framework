@@ -9,6 +9,8 @@ class Controller
 
     public $tpl;
     public $layout = 'layouts/main.tpl';
+    public $viewPath = '/views/';
+    private $defaultViewPath = '/views/';
 
     /**
      * @var View
@@ -20,7 +22,7 @@ class Controller
         $this->tpl = new \Smarty();
         $this->view = new View();
 
-        $this->tpl->template_dir = WORKSPACE_DIR . '/views/';
+        $this->tpl->template_dir = WORKSPACE_DIR . $this->viewPath;
         $this->tpl->compile_dir = WORKSPACE_DIR . '/views_c/';
         $this->tpl->config_dir = ROOT_DIR . '/cache';
         $this->tpl->cache_dir = ROOT_DIR . '/config';
@@ -44,6 +46,10 @@ class Controller
         $this->tpl->assign('jsHead', $this->view->getJsHtml());
         $this->tpl->assign('jsEndBody', $this->view->getJsHtml(true));
 
+        if(!$this->tpl->templateExists($this->layout)){
+            $this->tpl->template_dir = WORKSPACE_DIR . $this->defaultViewPath;
+        }
+
         return $this->tpl->fetch($this->layout, ['content' => $view]);
     }
 
@@ -54,6 +60,11 @@ class Controller
         }
 
         return $this->tpl->fetch($tpl);
+    }
+
+    protected function setViewPath($dir)
+    {
+        $this->tpl->template_dir = WORKSPACE_DIR . $dir;
     }
 
 }
