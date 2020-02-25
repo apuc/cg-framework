@@ -35,6 +35,11 @@ class App
     static $responseType = ResponseType::TEXT_HTML;
     static $header;
 
+    /**
+     * @var $db Database
+     */
+    static $db;
+
     public function setConfig($configListFile = 'list.php')
     {
         App::$configList = (include  (CONFIG_DIR . '/' . $configListFile));
@@ -57,7 +62,7 @@ class App
 
     public function run()
     {
-        new Database();
+        App::$db = new Database();
         $dispatcher =  new Dispatcher(App::$collector->getData());
         $response = $dispatcher->dispatch($_SERVER['REQUEST_METHOD'], parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
         header('Content-Type: ' . App::$responseType);

@@ -18,7 +18,7 @@ class ConsoleApp extends App
             echo "Not found \n";
             exit();
         }
-        new Database();
+        App::$db = new Database();
         $dispatcher = new Dispatcher(App::$collector->getData());
         $response = $dispatcher->dispatch('GET', $rout);
         echo $response;

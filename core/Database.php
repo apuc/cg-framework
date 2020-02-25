@@ -9,15 +9,22 @@
 namespace core;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Database\Schema\Builder;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
 
 class Database
 {
+    /** @var Builder $capsule */
+    public $schema;
+
+    /** @var Capsule $capsule */
+    public $capsule;
+
     function __construct()
     {
-        $capsule = new Capsule;
-        $capsule->addConnection([
+        $this->capsule = new Capsule;
+        $this->capsule->addConnection([
             'driver' => App::$config['db']['driver'],
             'host' => App::$config['db']['host'],
             'database' => App::$config['db']['db_name'],
@@ -29,10 +36,12 @@ class Database
         ]);
         // Setup the Eloquent ORM…
 
-        $capsule->setEventDispatcher(new Dispatcher(new Container));
+        $this->capsule->setEventDispatcher(new Dispatcher(new Container));
 
-        $capsule->setAsGlobal();
+        $this->capsule->setAsGlobal();
 
-        $capsule->bootEloquent();
+        $this->capsule->bootEloquent();
+
+        $this->schema = $this->capsule->schema();
     }
 }
