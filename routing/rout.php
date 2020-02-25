@@ -12,4 +12,6 @@ App::$collector->get('/items/{id}', ['workspace\controllers\MainController', 'ac
 App::$collector->get('/user/{id}', ['workspace\controllers\MainController', 'actionUser']);
 App::$collector->get('/forms/{id}', ['workspace\controllers\FormsController', 'actionShow']);
 
+App::$collector->get('admin', ['workspace\modules\adminpanel\controllers\AdminController', 'actionIndex']);
+
 App::$collector->crud('/news', ['workspace\controllers\NewsController']);
