@@ -14,4 +14,6 @@ App::$collector->get('/forms/{id}', ['workspace\controllers\FormsController', 'a
 
 App::$collector->get('admin', ['workspace\modules\adminpanel\controllers\AdminController', 'actionIndex']);
 
+App::$collector->post('/api', ['workspace\controllers\ApiController', 'actionGet']);
+
 App::$collector->crud('/news', ['workspace\controllers\NewsController']);
