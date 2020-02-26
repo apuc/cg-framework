@@ -21,7 +21,7 @@ class MigrationController extends ConsoleController
     //create migrations table
     public function actionCreateMigrationTable()
     {
-        App::$db->schema->create('migrations', function (Blueprint $table) {
+        App::$db->schema->create('migration', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('migration', 255);
             $table->integer('batch');
@@ -55,5 +55,13 @@ class MigrationController extends ConsoleController
 
         $m = new Migrator($dmr, App::$db->capsule->getDatabaseManager(), new Filesystem());
         $m->run(WORKSPACE_DIR . '/console/migrations/');
+    }
+
+    public function actionRollback()
+    {
+        $dmr = new DatabaseMigrationRepository(App::$db->capsule->getDatabaseManager(), 'migration');
+
+        $m = new Migrator($dmr, App::$db->capsule->getDatabaseManager(), new Filesystem());
+        $m->rollback(WORKSPACE_DIR . '/console/migrations/');
     }
 }
