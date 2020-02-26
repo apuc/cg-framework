@@ -37,7 +37,12 @@ class MigrationController extends ConsoleController
             }
             $m = new CgMigrationCreator(new Filesystem());
 
-            $m->create($this->argv['name'], WORKSPACE_DIR . '/console/migrations', isset($this->argv['table']) ?: null, true);
+            $m->create(
+                $this->argv['name'],
+                WORKSPACE_DIR . '/console/migrations',
+                isset($this->argv['table']) ? $this->argv['table'] : null,
+                !isset($this->argv['update'])
+            );
         } catch (\Exception $e) {
             $this->out->r('Message: ' .$e->getMessage(), 'red');
         }
