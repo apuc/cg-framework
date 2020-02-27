@@ -27,6 +27,11 @@ class App
     /**
      * @var array
      */
+    static $migrationsPaths = [];
+
+    /**
+     * @var array
+     */
     static $config = [];
 
     /**
@@ -38,7 +43,15 @@ class App
      * @var array
      */
     static $configList;
+
+    /**
+     * @var string
+     */
     static $responseType = ResponseType::TEXT_HTML;
+
+    /**
+     * @var $header Header
+     */
     static $header;
 
     /**
@@ -53,7 +66,6 @@ class App
         foreach (App::$configList as $item) {
             App::$config = array_merge(App::$config, (include(CONFIG_DIR . '/' . $item)));
         }
-        $this->setModConfig();
         App::$header = new Header();
         App::$collector = new CgRouteCollector();
         return $this;
@@ -65,12 +77,12 @@ class App
         foreach ($this->routList as $item) {
             include(ROUTING_DIR . '/' . $item);
         }
-        $this->setModRouting();
         return $this;
     }
 
     public function run()
     {
+        $this->setMods();
         App::$db = new Database();
         $dispatcher = new Dispatcher(App::$collector->getData());
         $response = $dispatcher->dispatch($_SERVER['REQUEST_METHOD'], parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
@@ -99,7 +111,7 @@ class App
         }
     }
 
-    protected function setModConfig()
+    protected function setMods()
     {
         $filesystem = new Filesystem();
         foreach (App::$activeMods as $key => $mod) {
@@ -108,6 +120,12 @@ class App
                 $manifest = json_decode(file_get_contents($modulePath . "/manifest.json"), true);
                 if (isset($manifest['configFile'])) {
                     App::$config = array_merge(App::$config, (include($modulePath . '/' . $manifest['configFile'])));
+                }
+                if (isset($manifest['routFile'])) {
+                    include($modulePath . '/' . $manifest['routFile']);
+                }
+                if (isset($manifest['migrationPath'])){
+                    App::$migrationsPaths[] = WORKSPACE_DIR . "/modules/" . $key . "/" . $manifest['migrationPath'];
                 }
             }
         }

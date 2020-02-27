@@ -3,5 +3,6 @@
   "version": "0.1",
   "description": "adminlte module",
   "configFile": "config/adm.php",
-  "routFile": "routing/rout.php"
+  "routFile": "routing/rout.php",
+  "migrationPath": "console/migrations"
 }
