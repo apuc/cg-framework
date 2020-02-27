@@ -1,0 +1,7 @@
+{
+  "name": "adminlte",
+  "version": "0.1",
+  "description": "adminlte module",
+  "configFile": "config/adm.php",
+  "routFile": "routing/rout.php"
+}

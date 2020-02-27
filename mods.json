@@ -1,0 +1,10 @@
+{
+  "adminlte": {
+    "version": "0.1",
+    "status": "active"
+  },
+  "test": {
+    "version": "0.2",
+    "status": "inactive"
+  }
+}
