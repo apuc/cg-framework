@@ -30,11 +30,12 @@ class ApiController extends Controller
     public function actionSetOptions()
     {
         App::$header->add('Access-Control-Allow-Origin', '*');
+        //App::$header->add('Content-type', 'application/json');
 
         $json = file_get_contents('php://input');
         $data = json_decode($json);
-        Debug::prn($json);
 
+        
         if($data)
             foreach ($data as $value)
                 foreach ($value as $val) {
