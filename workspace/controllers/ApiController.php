@@ -35,6 +35,7 @@ class ApiController extends Controller
         $json = file_get_contents('php://input');
         $data = json_decode($json);
 
+        
         if($data)
             foreach ($data as $value)
                 foreach ($value as $val) {
