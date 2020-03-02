@@ -29,6 +29,7 @@ class Test extends Migration
      */
     public function down()
     {
+        
         \core\App::$db->schema->dropIfExists('test');
     }
 }

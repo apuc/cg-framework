@@ -21,11 +21,17 @@ class MigrationController extends ConsoleController
     //create migrations table
     public function actionCreateMigrationTable()
     {
-        App::$db->schema->create('migration', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('migration', 255);
-            $table->integer('batch');
-        });
+        try {
+            App::$db->schema->create('migration', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->string('migration', 255);
+                $table->integer('batch');
+            });
+            $this->out->r("Success", 'green');
+        }
+        catch (\Exception $e){
+            $this->out->r($e->getMessage(), 'red');
+        }
     }
 
     // create migrations
@@ -37,12 +43,15 @@ class MigrationController extends ConsoleController
             }
             $m = new CgMigrationCreator(new Filesystem());
 
-            $m->create(
+            $path = isset($this->argv['path']) ? $this->argv['path'] : 'console/migrations';
+
+            $res = $m->create(
                 $this->argv['name'],
-                WORKSPACE_DIR . '/console/migrations',
+                WORKSPACE_DIR . '/' . $path,
                 isset($this->argv['table']) ? $this->argv['table'] : null,
                 !isset($this->argv['update'])
             );
+            $this->out->r(basename($res) . " created", 'green');
         } catch (\Exception $e) {
             $this->out->r('Message: ' .$e->getMessage(), 'red');
         }
@@ -51,17 +60,38 @@ class MigrationController extends ConsoleController
     //execute migrations
     public function actionRun()
     {
-        $dmr = new DatabaseMigrationRepository(App::$db->capsule->getDatabaseManager(), 'migration');
+        try {
+            $dmr = new DatabaseMigrationRepository(App::$db->capsule->getDatabaseManager(), 'migration');
 
-        $m = new Migrator($dmr, App::$db->capsule->getDatabaseManager(), new Filesystem());
-        $m->run(WORKSPACE_DIR . '/console/migrations/');
+            $m = new Migrator($dmr, App::$db->capsule->getDatabaseManager(), new Filesystem());
+            $migrationPaths = array_merge(App::$migrationsPaths, [WORKSPACE_DIR . '/console/migrations']);
+            $res = $m->run($migrationPaths);
+            foreach ($res as $re){
+                $this->out->r(basename($re), 'green');
+            }
+        }
+        catch (\Exception $e){
+            $this->out->r('Message: ' .$e->getMessage(), 'red');
+        }
+
+
     }
 
     public function actionRollback()
     {
-        $dmr = new DatabaseMigrationRepository(App::$db->capsule->getDatabaseManager(), 'migration');
+        try {
+            $dmr = new DatabaseMigrationRepository(App::$db->capsule->getDatabaseManager(), 'migration');
 
-        $m = new Migrator($dmr, App::$db->capsule->getDatabaseManager(), new Filesystem());
-        $m->rollback(WORKSPACE_DIR . '/console/migrations/');
+            $m = new Migrator($dmr, App::$db->capsule->getDatabaseManager(), new Filesystem());
+            $migrationPaths = array_merge(App::$migrationsPaths, [WORKSPACE_DIR . '/console/migrations']);
+            $res = $m->rollback($migrationPaths);
+            foreach ($res as $re){
+                $this->out->r(basename($re), 'green');
+            }
+        }
+        catch (\Exception $e){
+            $this->out->r('Message: ' .$e->getMessage(), 'red');
+        }
+
     }
 }

@@ -1,0 +1,9 @@
+{
+  "name": "adminlte",
+  "version": "0.1",
+  "class": "workspace\\modules\\adminlte\\Adminlte",
+  "description": "adminlte module",
+  "configFile": "config/adm.php",
+  "routFile": "routing/rout.php",
+  "migrationPath": "console/migrations"
+}

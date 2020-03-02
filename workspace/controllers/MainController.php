@@ -8,6 +8,7 @@ use core\Debug;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use workspace\models\User;
 use workspace\traits\SmartTitle;
+use workspace\widgets\Main;
 
 class MainController extends Controller
 {
@@ -15,8 +16,11 @@ class MainController extends Controller
     public function actionIndex()
     {
         //$this->view->setTitle('по новому методу');
+        //Debug::prn(App::$config);
+        //Main::widget()->run();
         $this->view->addMeta('keywords', 'главная', ['some' => 'text']);
         $this->view->registerJs('/resources/js/bodyScript.js', [], true);
+        //$this->view->registerCss('/resources/css/new.css');
         return $this->render('main/index.tpl', ['h1' => 'Проект ' . App::$config['app_name']]);
     }
 
