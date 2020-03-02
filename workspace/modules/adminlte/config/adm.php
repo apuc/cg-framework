@@ -2,7 +2,7 @@
 
 return [
     'adminlte-module' => 'success',
-    'leftMenu' => [
+    'adminLeftMenu' => [
         [
             'title' => 'Пользователи',
             'url' => '#',

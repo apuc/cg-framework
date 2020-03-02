@@ -119,7 +119,7 @@ class App
             if ($filesystem->exists($modulePath . "/manifest.json")) {
                 $manifest = json_decode(file_get_contents($modulePath . "/manifest.json"), true);
                 if (isset($manifest['configFile'])) {
-                    App::$config = array_merge(App::$config, (include($modulePath . '/' . $manifest['configFile'])));
+                    App::$config = array_merge_recursive(App::$config, (include($modulePath . '/' . $manifest['configFile'])));
                 }
                 if (isset($manifest['routFile'])) {
                     include($modulePath . '/' . $manifest['routFile']);
