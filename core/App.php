@@ -111,6 +111,11 @@ class App
         }
     }
 
+    public static function mergeConfig($config)
+    {
+        App::$config = array_merge_recursive(App::$config, $config);
+    }
+
     protected function setMods()
     {
         $filesystem = new Filesystem();
@@ -119,13 +124,16 @@ class App
             if ($filesystem->exists($modulePath . "/manifest.json")) {
                 $manifest = json_decode(file_get_contents($modulePath . "/manifest.json"), true);
                 if (isset($manifest['configFile'])) {
-                    App::$config = array_merge_recursive(App::$config, (include($modulePath . '/' . $manifest['configFile'])));
+                    App::$config = array_merge(App::$config, (include($modulePath . '/' . $manifest['configFile'])));
                 }
                 if (isset($manifest['routFile'])) {
                     include($modulePath . '/' . $manifest['routFile']);
                 }
-                if (isset($manifest['migrationPath'])){
+                if (isset($manifest['migrationPath'])) {
                     App::$migrationsPaths[] = WORKSPACE_DIR . "/modules/" . $key . "/" . $manifest['migrationPath'];
+                }
+                if (isset($manifest['class'])) {
+                    call_user_func_array([$manifest['class'], 'run'], []);
                 }
             }
         }

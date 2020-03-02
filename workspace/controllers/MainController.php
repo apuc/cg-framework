@@ -8,6 +8,7 @@ use core\Debug;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use workspace\models\User;
 use workspace\traits\SmartTitle;
+use workspace\widgets\Main;
 
 class MainController extends Controller
 {
@@ -16,6 +17,7 @@ class MainController extends Controller
     {
         //$this->view->setTitle('по новому методу');
         //Debug::prn(App::$config);
+        //Main::widget()->run();
         $this->view->addMeta('keywords', 'главная', ['some' => 'text']);
         $this->view->registerJs('/resources/js/bodyScript.js', [], true);
         //$this->view->registerCss('/resources/css/new.css');
