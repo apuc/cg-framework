@@ -9,6 +9,7 @@ class View
     public $title = 'No title';
     public $meta = [];
     public $js = [];
+    public $css = [];
 
     public function setTitle($title)
     {
@@ -35,13 +36,28 @@ class View
         $this->js[] = ['src' => $js, 'params' => $params, 'endOfBody' => $endOfBody];
     }
 
+    public function registerCss($css, $params = [])
+    {
+        $this->css[] = ['href' => $css, 'params' => $params];
+    }
+
+    public function getCssHtml()
+    {
+        $cssHtml = '';
+        foreach ((array)$this->css as $css){
+            $params = $this->generateAdditionalParams($css['params']);
+            $cssHtml .= "<link href='" . $css['href'] . "' rel='stylesheet' ". $params .">";
+        }
+        return $cssHtml;
+    }
+
     public function getJsHtml($endOfBody = false)
     {
         $jsHtml = '';
-        foreach ((array)$this->js as $j){
+        foreach ((array)$this->js as $j) {
             $params = $this->generateAdditionalParams($j['params']);
-            if($j['endOfBody'] === $endOfBody){
-                $jsHtml .= "<script src='". $j['src'] ."' " . $params . " ></script>" . "\n";
+            if ($j['endOfBody'] === $endOfBody) {
+                $jsHtml .= "<script src='" . $j['src'] . "' " . $params . " ></script>" . "\n";
             }
         }
         return $jsHtml;

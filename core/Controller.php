@@ -24,8 +24,8 @@ class Controller
 
         $this->tpl->template_dir = WORKSPACE_DIR . $this->viewPath;
         $this->tpl->compile_dir = WORKSPACE_DIR . '/views_c/';
-        $this->tpl->config_dir = ROOT_DIR . '/cache';
-        $this->tpl->cache_dir = ROOT_DIR . '/config';
+        $this->tpl->config_dir = ROOT_DIR . '/config';
+        $this->tpl->cache_dir = ROOT_DIR . '/cache';
 
         $this->tpl->assign('res_dir', RESOURCES_DIR);
         $this->tpl->assign('workspace_dir', WORKSPACE_DIR);
@@ -43,6 +43,7 @@ class Controller
 
         $this->tpl->assign('title', $this->view->title);
         $this->tpl->assign('meta', $this->view->getMetaHtml());
+        $this->tpl->assign('css', $this->view->getCssHtml());
         $this->tpl->assign('jsHead', $this->view->getJsHtml());
         $this->tpl->assign('jsEndBody', $this->view->getJsHtml(true));
 

@@ -18,6 +18,7 @@ class MainController extends Controller
         //Debug::prn(App::$config);
         $this->view->addMeta('keywords', 'главная', ['some' => 'text']);
         $this->view->registerJs('/resources/js/bodyScript.js', [], true);
+        //$this->view->registerCss('/resources/css/new.css');
         return $this->render('main/index.tpl', ['h1' => 'Проект ' . App::$config['app_name']]);
     }
 
