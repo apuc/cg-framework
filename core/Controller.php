@@ -19,47 +19,28 @@ class Controller
 
     public function __construct()
     {
-        $this->tpl = new \Smarty();
         $this->view = new View();
 
-        $this->tpl->template_dir = WORKSPACE_DIR . $this->viewPath;
-        $this->tpl->compile_dir = WORKSPACE_DIR . '/views_c/';
-        $this->tpl->config_dir = ROOT_DIR . '/cache';
-        $this->tpl->cache_dir = ROOT_DIR . '/config';
-
-        $this->tpl->assign('res_dir', RESOURCES_DIR);
-        $this->tpl->assign('workspace_dir', WORKSPACE_DIR);
-        $this->tpl->assign('title', $this->view->title);
+        $this->view->setViewPath(WORKSPACE_DIR . $this->viewPath);
     }
 
     public function render($tpl, $data = [])
     {
-        $this->tpl->assign('view', $this->view);
-        foreach ((array)$data as $key => $datum) {
-            $this->tpl->assign($key, $datum);
-        }
+        $this->view->tpl->assign('view', $this->view);
 
-        $view = $this->tpl->fetch($tpl);
+        $view = $this->view->getTpl($tpl, $data);
 
-        $this->tpl->assign('title', $this->view->title);
-        $this->tpl->assign('meta', $this->view->getMetaHtml());
-        $this->tpl->assign('jsHead', $this->view->getJsHtml());
-        $this->tpl->assign('jsEndBody', $this->view->getJsHtml(true));
+        $this->view->tpl->assign('title', $this->view->title);
+        $this->view->tpl->assign('meta', $this->view->getMetaHtml());
+        $this->view->tpl->assign('css', $this->view->getCssHtml());
+        $this->view->tpl->assign('jsHead', $this->view->getJsHtml());
+        $this->view->tpl->assign('jsEndBody', $this->view->getJsHtml(true));
 
-        if(!$this->tpl->templateExists($this->layout)){
+        if(!$this->view->tpl->templateExists($this->layout)){
             $this->tpl->template_dir = WORKSPACE_DIR . $this->defaultViewPath;
         }
 
-        return $this->tpl->fetch($this->layout, ['content' => $view]);
-    }
-
-    public function getTpl($tpl, $data = [])
-    {
-        foreach ((array)$data as $key => $datum) {
-            $this->tpl->assign($key, $datum);
-        }
-
-        return $this->tpl->fetch($tpl);
+        return $this->view->tpl->fetch($this->layout, ['content' => $view]);
     }
 
     protected function setViewPath($dir)
