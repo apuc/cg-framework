@@ -15,6 +15,7 @@ class MainController extends Controller
     public function actionIndex()
     {
         //$this->view->setTitle('по новому методу');
+        //Debug::prn(App::$migrationsPaths);
         $this->view->addMeta('keywords', 'главная', ['some' => 'text']);
         $this->view->registerJs('/resources/js/bodyScript.js', [], true);
         return $this->render('main/index.tpl', ['h1' => 'Проект ' . App::$config['app_name']]);

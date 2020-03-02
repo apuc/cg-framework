@@ -14,6 +14,7 @@ class ConsoleApp extends App
 
     public function run()
     {
+        $this->setMods();
         if(!$rout = $this->getRout()){
             echo "Not found \n";
             exit();

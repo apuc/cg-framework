@@ -3,13 +3,11 @@
 
 namespace workspace\controllers;
 
-
 use core\App;
 use core\Controller;
-use core\Debug;
 use workspace\models\Article;
 use workspace\models\Settings;
-use Illuminate\Support\Facades\DB;
+
 
 class ApiController extends Controller
 {
@@ -30,12 +28,10 @@ class ApiController extends Controller
     public function actionSetOptions()
     {
         App::$header->add('Access-Control-Allow-Origin', '*');
-        //App::$header->add('Content-type', 'application/json');
 
         $json = file_get_contents('php://input');
         $data = json_decode($json);
 
-        
         if($data)
             foreach ($data as $value)
                 foreach ($value as $val) {
