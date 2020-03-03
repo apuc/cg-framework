@@ -4,11 +4,16 @@
 namespace workspace\modules\adminlte\controllers;
 
 
+use core\App;
 use core\Controller;
 
 class AdminController extends Controller
 {
-    public $viewPath = '/modules/adminlte/views/';
+    protected function init()
+    {
+        $this->viewPath = '/modules/adminlte/views/';
+        $this->layoutPath = App::$config['adminLayoutPath'];
+    }
 
     public function actionIndex()
     {

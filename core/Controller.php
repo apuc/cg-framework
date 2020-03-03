@@ -8,7 +8,8 @@ class Controller
 {
 
     public $tpl;
-    public $layout = 'layouts/main.tpl';
+    public $layout = 'main.tpl';
+    public $layoutPath = null;
     public $viewPath = '/views/';
     private $defaultViewPath = '/views/';
 
@@ -19,6 +20,8 @@ class Controller
 
     public function __construct()
     {
+        $this->init();
+
         $this->view = new View();
 
         $this->view->setViewPath(WORKSPACE_DIR . $this->viewPath);
@@ -36,9 +39,16 @@ class Controller
         $this->view->tpl->assign('jsHead', $this->view->getJsHtml());
         $this->view->tpl->assign('jsEndBody', $this->view->getJsHtml(true));
 
-        if(!$this->view->tpl->templateExists($this->layout)){
-            $this->tpl->template_dir = WORKSPACE_DIR . $this->defaultViewPath;
+        $layoutPath = WORKSPACE_DIR;
+        if ($this->layoutPath) {
+            $layoutPath .= $this->layoutPath;
+        } elseif (isset(App::$config['layoutPath'])) {
+            $layoutPath .= App::$config['layoutPath'];
+        } else {
+            $layoutPath = WORKSPACE_DIR . $this->defaultViewPath . 'layouts/';
         }
+
+        $this->view->tpl->template_dir = $layoutPath;
 
         return $this->view->tpl->fetch($this->layout, ['content' => $view]);
     }
@@ -46,6 +56,11 @@ class Controller
     protected function setViewPath($dir)
     {
         $this->tpl->template_dir = WORKSPACE_DIR . $dir;
+    }
+
+    protected function init()
+    {
+
     }
 
 }

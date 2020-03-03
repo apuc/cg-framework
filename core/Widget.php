@@ -11,11 +11,14 @@ class Widget
      */
     public $view;
 
+    public $viewPath = '/widgets/views/';
+    private $defaultViewPath = '/widgets/views/';
+
     public function __construct()
     {
         $this->view = new View();
 
-        $this->view->setViewPath(WORKSPACE_DIR . '/widgets/views/');
+        $this->view->setViewPath(WORKSPACE_DIR . $this->viewPath);
     }
 
     public function run(){}

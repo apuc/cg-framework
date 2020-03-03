@@ -11,9 +11,22 @@ class Adminlte
 
     public static function run()
     {
+        $config['adminTopMenu'] = [
+            [
+                'title' => 'Home',
+                'url' => '#',
+                'icon' => '',
+            ],
+            [
+                'title' => 'Contact',
+                'url' => 'page',
+                'icon' => '',
+            ],
+        ];
+
         $config['adminLeftMenu'] = [
             [
-                'title' => 'Пользователи',
+                'title' => 'Статьи',
                 'url' => '#',
                 'icon' => '<i class="nav-icon fas fa-copy"></i>',
                 'sub' => [
@@ -28,11 +41,17 @@ class Adminlte
                 ]
             ],
             [
-                'title' => 'Страница',
+                'title' => 'Статистика',
+                'url' => 'page',
+                'icon' => '<i class="nav-icon fas fa-copy"></i>',
+            ],
+            [
+                'title' => 'Настройки',
                 'url' => 'page',
                 'icon' => '<i class="nav-icon fas fa-copy"></i>',
             ],
         ];
+        App::$config['adminLayoutPath'] = '/modules/adminlte/views/layouts/';
         App::mergeConfig($config);
     }
 
