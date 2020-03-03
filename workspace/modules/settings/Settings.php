@@ -9,11 +9,11 @@ class Settings
 {
     public static function run()
     {
-        $config['settings'] = [
+        $config['adminLeftMenu'] = [
             [
-                'title' => '',
-                'url' => '',
-                'icon' => '',
+                'title' => 'Настройки',
+                'url' => 'settings',
+                'icon' => '<i class="nav-icon fas fa-copy"></i>',
             ],
         ];
 

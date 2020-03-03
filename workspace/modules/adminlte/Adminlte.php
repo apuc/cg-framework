@@ -45,12 +45,8 @@ class Adminlte
                 'url' => 'page',
                 'icon' => '<i class="nav-icon fas fa-copy"></i>',
             ],
-            [
-                'title' => 'Настройки',
-                'url' => 'settings',
-                'icon' => '<i class="nav-icon fas fa-copy"></i>',
-            ],
         ];
+        App::$config['adminLayoutPath'] = '/modules/adminlte/views/layouts/';
         App::mergeConfig($config);
     }
 }
