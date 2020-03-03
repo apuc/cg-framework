@@ -6,5 +6,9 @@
   "test": {
     "version": "0.2",
     "status": "inactive"
+  },
+  "settings": {
+    "version": "0.1",
+    "status": "active"
   }
 }

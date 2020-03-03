@@ -6,9 +6,9 @@ namespace core;
 
 class Controller
 {
-
     public $tpl;
     public $layout = 'layouts/main.tpl';
+    public $layoutPath = 'layouts/main.tpl';
     public $viewPath = '/views/';
     private $defaultViewPath = '/views/';
 

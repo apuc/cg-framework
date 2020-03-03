@@ -9,11 +9,11 @@
 return [
     'app_name' => 'CG',
     'adminLeftMenu' => [
-        [
-            'title' => 'Страница 1',
-            'url' => 'page_1',
-            'icon' => '<i class="nav-icon fas fa-copy"></i>',
-        ],
+//       [
+//            'title' => 'Страница 1',
+//            'url' => 'page_1',
+//            'icon' => '<i class="nav-icon fas fa-copy"></i>',
+//        ],
     ]
 ];
 /* Пример настройки локальной базы
