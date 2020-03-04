@@ -46,6 +46,7 @@ class SettingsController extends Controller
 
     public function actionView($id)
     {
-
+        return $this->render('settings/view.tpl',
+            ['h1' => 'Settings', 'id' => $id]);
     }
 }

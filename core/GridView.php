@@ -39,11 +39,11 @@ class GridView extends Widget
             }
         }
 
+        $crud_view = "<a href='settings-crud' style='color: black; text-decoration:none;'><i class=\"nav-icon fas fa-eye\"></i></a>";
         $crud_edit = "<a href='#' style='color: black; text-decoration:none;'><i class=\"nav-icon fas fa-edit\"></i></a>";
-        $crud_view = "<a href='#' style='color: black; text-decoration:none;'><i class=\"nav-icon fas fa-eye\"></i></a>";
         $crud_delete = "<a href='#' style='color: black; text-decoration:none;'><i class=\"nav-icon fas fa-trash\"></i></a>";
-        $crud = $crud_edit .' '. $crud_view .' '. $crud_delete;
-        $crud_head = '<i class="nav-icon fas fa-edit"></i> <i class="nav-icon fas fa-eye"></i> <i class="nav-icon fas fa-trash"></i>';
+        $crud = $crud_view .' '. $crud_edit .' '. $crud_delete;
+        $crud_head = '<i class="nav-icon fas fa-eye"></i> <i class="nav-icon fas fa-edit"></i> <i class="nav-icon fas fa-trash"></i>';
 
         if(isset($table_class))
             $table = '<table class="'.$table_class.'">';
@@ -94,10 +94,10 @@ class GridView extends Widget
                     $table .= '<td>';
 
                     if(in_array('crud_view', $fields))
-                        $table .= $crud_view.' ';
+                        $table .= "<a href='settings-crud/".$value->id."' style='color: black; text-decoration:none;'><i class=\"nav-icon fas fa-eye\"></i></a>".' ';
 
                     if(in_array('crud_edit', $fields))
-                        $table .= $crud_edit.' ';
+                        $table .= "<a href='settings-crud/".$value->id."' style='color: black; text-decoration:none;'><i class=\"nav-icon fas fa-edit\"></i></a>".' ';
 
                     if(in_array('crud_delete', $fields))
                         $table .= $crud_delete.' ';
