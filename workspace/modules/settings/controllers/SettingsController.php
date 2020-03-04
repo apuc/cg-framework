@@ -23,7 +23,7 @@ class SettingsController extends Controller
         $settings = Settings::all();
 
         $options = [
-            ['show' => ['val', 'key']]
+            ['fields' => ['#', 'crud', 'all']],
         ];
         return $this->render('settings/settings.tpl',
             ['h1' => 'Settings', 'settings' => $settings, 'options' => $options]);
