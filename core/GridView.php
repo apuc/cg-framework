@@ -6,62 +6,55 @@ namespace core;
 
 class GridView extends Widget
 {
+    public $actionsBtn = [
+        'view' => ['class' => '', 'id' => '', 'icon' => '<i class="nav-icon fas fa-eye"></i>', 'url' => '{id}'],
+        'edit' => ['class' => '', 'id' => '', 'icon' => '<i class="nav-icon fas fa-edit"></i>', 'url' => '/update/{id}'],
+        'delete' => ['class' => '', 'id' => '', 'icon' => '<i class="nav-icon fas fa-trash"></i>', 'url' => '/delete/{id}'],
+    ];
+
     protected $model;
     protected $options;
     /*
            available params for $options:
-           ['fields' => ['#', 'crud_view', 'crud_edit', 'crud_delete', 'crud', 'model_attr_1', ..., 'model_attr_m']],
-           ['table_class' => ['class_1 class_2 ... class_m']],
-           ['thead_class' => ['class_1 class_2 ... class_m']],
+           'fields' => ['#', 'crud_view', 'crud_edit', 'crud_delete', 'crud', 'model_attr_1', ..., 'model_attr_m'],
+           'table_class' => 'class_1 class_2 ... class_m',
+           'thead_class' => 'class_1 class_2 ... class_m',
+           'url' => 'url'
      */
 
     public function run()
     {
-        foreach ($this->options as $option) {
-            if(isset($option['fields'])) {
-                $fields = array();
-                foreach ($option as $value) {
-                    for($i = 0; $i < count($value); $i++) {
-                       array_push($fields, $value[$i]);
-                    }
-                }
-            } elseif(isset($option['table_class'])) {
-                $table_class = '';
-                foreach ($option as $value)
-                    for($i = 0; $i < count($value); $i++)
-                        $table_class .= $value[$i];
-            }
-            elseif(isset($option['thead_class'])) {
-                $thead_class = '';
-                foreach ($option as $value)
-                    for($i = 0; $i < count($value); $i++)
-                        $thead_class .= $value[$i];
-            }
-        }
+        $this->view->registerJs(RESOURCES_DIR . '/js/gridView.js');
 
-        $crud_view = "<a href='settings-crud' style='color: black; text-decoration:none;'><i class=\"nav-icon fas fa-eye\"></i></a>";
-        $crud_edit = "<a href='#' style='color: black; text-decoration:none;'><i class=\"nav-icon fas fa-edit\"></i></a>";
-        $crud_delete = "<a href='#' style='color: black; text-decoration:none;'><i class=\"nav-icon fas fa-trash\"></i></a>";
-        $crud = $crud_view .' '. $crud_edit .' '. $crud_delete;
-        $crud_head = '<i class="nav-icon fas fa-eye"></i> <i class="nav-icon fas fa-edit"></i> <i class="nav-icon fas fa-trash"></i>';
+        return self::getTable();
+    }
 
-        if(isset($table_class))
-            $table = '<table class="'.$table_class.'">';
+    public function getTable()
+    {
+        Debug::dd($this->options);
+        //переделать получение параметров
+
+        //разделить на методы
+        $fields = array();
+        if(isset($this->options['fields']))
+            foreach ($this->options['fields'] as $field)
+                array_push($fields, $field);
+
+        if(isset($this->options['table_class']))
+            $table = '<table class="'.$this->options['table_class'].'">';
         else  $table = '<table class="table table-striped custom-table">';
 
-        if(isset($thead_class))
-            $table .= '<thead class="'.$thead_class.'">';
+        if(isset($this->options['thead_class']))
+            $table .= '<thead class="'.$this->options['thead_class'].'">';
         else  $table .= '<thead class="thead-dark">';
         $table .= '<tr>';
 
-        if(!isset($fields)) {
-            return self::tableWithoutOptions($table, $crud_head, $crud);
-        } else {
+        if(isset($fields)) {
             if(in_array('#', $fields))
                 $table .= '<th scope="col">#</th>';
             if(in_array('crud_view', $fields) || in_array('crud_edit', $fields)
                 || in_array('crud_delete', $fields) || in_array('crud', $fields))
-                $table .= '<th scope="col">'.$crud_head.'</th>';
+                $table .= '<th scope="col"><i class="nav-icon fas fa-eye"></i> <i class="nav-icon fas fa-edit"></i> <i class="nav-icon fas fa-trash"></i></th>';
 
             if(in_array('all', $fields))
                 foreach ($this->model as $value) {
@@ -85,75 +78,59 @@ class GridView extends Widget
             $j = 1;
             foreach ($this->model as $value) {
                 $attrs = get_object_vars($value);
-                if (in_array('#', $fields)) {
-                    $table .= '<td>'.$j.'</td>';
-                    $j++;
-                }
+                if (in_array('#', $fields))
+                    $table .= '<td>'.$j++.'</td>';
+
                 if(in_array('crud_view', $fields) || in_array('crud_edit', $fields)
                     || in_array('crud_delete', $fields) || in_array('crud', $fields)) {
+
                     $table .= '<td>';
 
-                    if(in_array('crud_view', $fields))
-                        $table .= "<a href='settings-crud/".$value->id."' style='color: black; text-decoration:none;'><i class=\"nav-icon fas fa-eye\"></i></a>".' ';
-
-                    if(in_array('crud_edit', $fields))
-                        $table .= "<a href='settings-crud/".$value->id."' style='color: black; text-decoration:none;'><i class=\"nav-icon fas fa-edit\"></i></a>".' ';
-
-                    if(in_array('crud_delete', $fields))
-                        $table .= $crud_delete.' ';
-
-                    if(in_array('crud', $fields))
-                        $table .= $crud;
+                    foreach ($this->actionsBtn as $item)
+                        $table .= $this->createBtn($item, $this->options['url'], $value->id);
 
                     $table .= '</td>';
                 }
-                foreach ($attrs['fillable'] as $attr) {
+                foreach ($attrs['fillable'] as $attr)
                     if(in_array('all', $fields))
                         $table .= '<td>' . $value->$attr . '</td>';
-                    else {
+                    else
                         if(in_array($attr, $fields))
                             $table .= '<td>' . $value->$attr . '</td>';
-                    }
-                }
                 $table .= '</tr>';
             }
             $table .= '</table>';
         }
+
         return $table;
     }
 
-    public function tableWithoutOptions($table, $crud_head, $crud)
+    public function addActionBtn($data)
     {
-        $table .= '<th scope="col">#</th>';
-        $table .= '<th scope="col">'.$crud_head.'</th>';
-        foreach ($this->model as $value) {
-            $attrs = get_object_vars($value);
-            foreach ($attrs['fillable'] as $attr) {
-                $table .= '<th>'.$attr.'</th>';
-            }
-            break;
-        }
-        $table .= '</tr></thead>';
+        $this->actionsBtn = array_merge($this->actionsBtn, $data);
 
-        $i = 1;
-        foreach ($this->model as $value) {
-            $attrs = get_object_vars($value);
-            $table .= '<tr><th>'.$i.'</th>';
-            $i++;
-            $table .= '<td>'.$crud.'</td>';
-            foreach ($attrs['fillable'] as $attr) {
-                $table .= '<td>'.$value->$attr.'</td>';
-            }
-            $table .= '</tr>';
-        }
-        $table .= '</table>';
-        return $table;
+        return $this;
+    }
+
+    public function deleteActionBtn($key)
+    {
+        unset($this->actionsBtn[$key]);
+
+        return $this;
+    }
+
+    protected function createBtn($btn, $url, $id)
+    {
+        $uri = $url . str_replace('{id}', $id, $btn['url']);
+
+        return '<a class="'. $btn['class'] .'" id="'. $btn['id'] .'" href="'. $uri .'">' . $btn['icon'] . '</a>';
     }
 
     public function setParams($data = [], $options = [])
     {
         $this->model = $data;
         $this->options = $options;
+
         return $this;
     }
 }

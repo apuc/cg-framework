@@ -60,6 +60,7 @@
     <script src="/workspace/modules/adminlte/resources/dist/js/pages/dashboard.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="/workspace/modules/adminlte/resources/dist/js/demo.js"></script>
+    <script src="/resources/js/gridView.js"></script>
 {/capture}
 
 {capture name=meta}

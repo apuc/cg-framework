@@ -20,13 +20,24 @@ class SettingsController extends Controller
 
     public function actionIndex()
     {
-        $settings = Settings::all();
+        $model = Settings::all();
 
+        //продумать передачу праметров
         $options = [
-            ['fields' => ['#', 'crud', 'all']],
+            'actions' => ['view', 'edit', 'delete'],
+            'fields' => ['#', [
+                'key',
+                'category' => [
+                    'label' => 'Value',
+                    'value' => function($model) {
+                        return $model->value;
+                    }
+                ]
+            ]],
+            'baseUri' => 'settings',
         ];
         return $this->render('settings/settings.tpl',
-            ['h1' => 'Settings', 'settings' => $settings, 'options' => $options]);
+            ['h1' => 'Settings', 'model' => $model, 'options' => $options]);
     }
 
     public function actionStore()
@@ -37,6 +48,7 @@ class SettingsController extends Controller
     public function actionEdit($id)
     {
 
+        return $this->render('settings/edit.tpl', ['h1' => 'Edit', 'id' => $id]);
     }
 
     public function actionDelete($id)
