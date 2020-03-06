@@ -6,18 +6,17 @@ namespace workspace\modules\settings\controllers;
 
 use core\App;
 use core\Controller;
-use core\Debug;
 use workspace\models\Settings;
 
 class SettingsController extends Controller
 {
+    public $viewPath = '/modules/settings/views/';
+
     protected function init()
     {
         $this->viewPath = '/modules/settings/views/';
         $this->layoutPath = App::$config['adminLayoutPath'];
     }
-
-    public $viewPath = '/modules/settings/views/';
 
     public function actionIndex()
     {
@@ -44,12 +43,40 @@ class SettingsController extends Controller
 
     public function actionStore()
     {
-
+        return $this->render('settings/store.tpl', ['h1' => 'Create']);
     }
 
     public function actionEdit($id)
     {
-        return $this->render('settings/edit.tpl', ['h1' => 'Edit', 'id' => $id]);
+        $settings = Settings::where('id', $id)->first();
+
+        if(isset($_POST['key']) && isset($_POST['value'])) {
+            $current_settings = Settings::where('key', $_POST['key'])->first();
+            $current_settings->key = $_POST['key'];
+            $current_settings->value = $_POST['value'];
+            $current_settings->save();
+
+            $model = Settings::all();
+
+            $options = [
+                'serial' => '#',
+                'fields' => [
+                    [
+                        'key' => 'Ключ',
+                        'category' => [
+                            'label' => 'Значение',
+                            'value' => function($model) {
+                                return $model->value;
+                            }
+                        ]
+                    ]
+                ],
+                'baseUri' => 'settings',
+            ];
+            return $this->render('settings/settings.tpl',
+                ['h1' => 'Settings', 'model' => $model, 'options' => $options]);
+        } else
+            return $this->render('settings/edit.tpl', ['h1' => 'Edit', 'id' => $id, 'settings' => $settings]);
     }
 
     public function actionDelete($id)
