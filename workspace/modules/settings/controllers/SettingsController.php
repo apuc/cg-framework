@@ -6,6 +6,7 @@ namespace workspace\modules\settings\controllers;
 
 use core\App;
 use core\Controller;
+use core\Debug;
 use workspace\models\Settings;
 
 class SettingsController extends Controller
@@ -22,18 +23,19 @@ class SettingsController extends Controller
     {
         $model = Settings::all();
 
-        //продумать передачу праметров
         $options = [
-            'actions' => ['view', 'edit', 'delete'],
-            'fields' => ['#', [
-                'key',
-                'category' => [
-                    'label' => 'Value',
-                    'value' => function($model) {
-                        return $model->value;
-                    }
+            'serial' => '#',
+            'fields' => [
+                [
+                    'key' => 'Ключ',
+                    'category' => [
+                        'label' => 'Значение',
+                        'value' => function($model) {
+                            return $model->value;
+                        }
+                    ]
                 ]
-            ]],
+            ],
             'baseUri' => 'settings',
         ];
         return $this->render('settings/settings.tpl',
@@ -47,7 +49,6 @@ class SettingsController extends Controller
 
     public function actionEdit($id)
     {
-
         return $this->render('settings/edit.tpl', ['h1' => 'Edit', 'id' => $id]);
     }
 
@@ -58,7 +59,20 @@ class SettingsController extends Controller
 
     public function actionView($id)
     {
-        return $this->render('settings/view.tpl',
-            ['h1' => 'Settings', 'id' => $id]);
+        $model = Settings::where('id', $id)->first();
+
+        $options = [
+            'fields' => [
+                'key' => 'key',
+                'category' => [
+                    'label' => 'value',
+                    'value' => function($model) {
+                        return $model->value;
+                    }
+                ]
+            ],
+        ];
+
+        return $this->render('settings/view.tpl', ['h1' => 'View', 'id' => $id, 'model' => $model, 'options' => $options]);
     }
 }
