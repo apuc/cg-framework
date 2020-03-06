@@ -2,7 +2,7 @@
 
 use core\App;
 
-App::$collector->get('/', ['workspace\controllers\MainController', 'actionIndex']);
+App::$collector->get('/', [workspace\controllers\MainController::class, 'actionIndex']);
 App::$collector->get('/users', ['workspace\controllers\MainController', 'actionUsers']);
 App::$collector->get('/send-form', ['workspace\controllers\SendController', 'actionIndex']);
 App::$collector->get('products', function(){
