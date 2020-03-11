@@ -1,4 +1,4 @@
-
-{core\BreadCrumbs::widget()->setParams($module, $name)->run()}
+{$h1}
+{$id}
 
 {core\DetailView::widget()->setParams($model, $options)->run()}

@@ -38,50 +38,7 @@ class SettingsController extends Controller
             'baseUri' => 'settings',
         ];
         return $this->render('settings/settings.tpl',
-            ['h1' => 'Settings', 'model' => $model, 'options' => $options]);
-    }
-
-    public function actionStore()
-    {
-        return $this->render('settings/store.tpl', ['h1' => 'Create']);
-    }
-
-    public function actionEdit($id)
-    {
-        $settings = Settings::where('id', $id)->first();
-
-        if(isset($_POST['key']) && isset($_POST['value'])) {
-            $current_settings = Settings::where('key', $_POST['key'])->first();
-            $current_settings->key = $_POST['key'];
-            $current_settings->value = $_POST['value'];
-            $current_settings->save();
-
-            $model = Settings::all();
-
-            $options = [
-                'serial' => '#',
-                'fields' => [
-                    [
-                        'key' => 'Ключ',
-                        'category' => [
-                            'label' => 'Значение',
-                            'value' => function($model) {
-                                return $model->value;
-                            }
-                        ]
-                    ]
-                ],
-                'baseUri' => 'settings',
-            ];
-            return $this->render('settings/settings.tpl',
-                ['h1' => 'Settings', 'model' => $model, 'options' => $options]);
-        } else
-            return $this->render('settings/edit.tpl', ['h1' => 'Edit', 'id' => $id, 'settings' => $settings]);
-    }
-
-    public function actionDelete($id)
-    {
-
+            ['module' => 'Settings', 'model' => $model, 'options' => $options]);
     }
 
     public function actionView($id)
@@ -100,6 +57,40 @@ class SettingsController extends Controller
             ],
         ];
 
-        return $this->render('settings/view.tpl', ['h1' => 'View', 'id' => $id, 'model' => $model, 'options' => $options]);
+        return $this->render('settings/view.tpl', ['module' => 'settings', 'name' => $model->key, 'model' => $model, 'options' => $options]);
+    }
+
+    public function actionStore()
+    {
+        if(isset($_POST['key']) && isset($_POST['value'])) {
+            $settings = new Settings();
+            $settings->key = $_POST['key'];
+            $settings->value = $_POST['value'];
+            $settings->save();
+
+            $this->redirect('settings');
+        } else
+            return $this->render('settings/store.tpl', [ 'module' => '<a href="/settings">Settings</a>',
+                'view' => 'Create']);
+    }
+
+    public function actionEdit($id)
+    {
+        $settings = Settings::where('id', $id)->first();
+
+        if(isset($_POST['key']) && isset($_POST['value'])) {
+            $settings->key = $_POST['key'];
+            $settings->value = $_POST['value'];
+            $settings->save();
+
+            $this->redirect('settings');
+        } else
+            return $this->render('settings/edit.tpl', [ 'module' => '<a href="/settings">Settings</a>',
+                'view' => 'Edit', 'id' => $id, 'settings' => $settings]);
+    }
+
+    public function actionDelete()
+    {
+        Settings::where('id', $_POST['id'])->delete();
     }
 }

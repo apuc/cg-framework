@@ -52,6 +52,17 @@ class Controller
         return $this->view->tpl->fetch($this->layout, ['content' => $view]);
     }
 
+    public function redirect($url)
+    {
+        $baseUrl = sprintf(
+            "%s://%s",
+            isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
+            $_SERVER['SERVER_NAME']
+        );
+        header('Location: '.$baseUrl.':8000/'.$url);
+        die();
+    }
+
     protected function setViewPath($dir)
     {
         $this->tpl->template_dir = WORKSPACE_DIR . $dir;

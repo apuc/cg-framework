@@ -9,12 +9,13 @@ class GridView extends Widget
     public $actionsBtn = [
         'view' => ['class' => 'custom-link', 'id' => '', 'icon' => '<i class="nav-icon fas fa-eye"></i>', 'url' => '/{id}'],
         'edit' => ['class' => 'custom-link', 'id' => '', 'icon' => '<i class="nav-icon fas fa-edit"></i>', 'url' => '/update/{id}'],
-        'delete' => ['class' => 'custom-link', 'id' => '', 'icon' => '<i class="nav-icon fas fa-trash"></i>', 'url' => '/delete/{id}'],
+        'delete' => ['class' => 'custom-link __delete', 'id' => 'delete', 'icon' => '<i class="nav-icon fas fa-trash"></i>', 'url' => '/delete/{id}'],
     ];
 
     protected $model;
     protected $options;
-    /*
+
+    /**
         available params for $options:
             'serial' => '#',
             'actions' => 'view, edit, delete',
@@ -96,8 +97,9 @@ class GridView extends Widget
     protected function createBtn($btn, $url, $id)
     {
         $uri = $url . str_replace('{id}', $id, $btn['url']);
+        $data_url = $url . str_replace('{id}', '', $btn['url']);
 
-        return '<a class="'. $btn['class'] .'" id="'. $btn['id'] .'" href="'. $uri .'">' . $btn['icon'] . '</a> ';
+        return '<a class="'. $btn['class'] .'" id="'. $btn['id'] .'" href="'. $uri .'" data-id="'.$id.'" data-url="'.$data_url.'">' . $btn['icon'] . '</a> ';
     }
 
     public function setParams($data = [], $options = [])

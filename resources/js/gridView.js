@@ -1,28 +1,20 @@
 jQuery(document).ready(function ($) {
-    // $( ".view" ).click(function() {
-    //     let url = $(this).attr('id');
-    //     window.location.replace(url);
-    // });
-
-    $( ".edit" ).click(function() {
-        let url = $(this).attr('id');
-        window.location.replace(url);
-    });
-
-    $( ".delete" ).click(function() {
-        let url = $(this).attr('id');
+    $( ".__delete" ).click(function(e) {
+        e.preventDefault();
+        let id = $(this).attr('data-id');
+        let url = $(this).attr('data-url');
+        console.log(url);
 
         $.ajax({
-            url: 'delete',
-            type: 'DELETE',
+            url: url,
+            type: 'POST',
             data: {
-                url: url
+                id: id
             },
-            success: function (res) {
-                console.log(res);
+            success: function () {
+                window.location.reload();
             },
-            error: function (res) {
-                console.log(res);
+            error: function () {
             }
         });
     });

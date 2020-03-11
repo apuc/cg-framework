@@ -1,5 +1,4 @@
-{$h1}
-{$id}
+{$module} > {$view}: {$id}
 
 <div class="container">
     <form class="form-horizontal" name="edit_form" id="edit_form" method="post" action="/settings/update/{$id}">
@@ -9,7 +8,7 @@
         </div>
         <div class="form-group">
             <label for="lastname">Value:</label>
-            <input type="text" name="value" id="value" class="form-control" required="required" value="{$settings->value}" />
+            <textarea rows="7" name="value" id="value" class="form-control" required="required">{$settings->value}</textarea>
         </div>
         <div class="form-group">
             <input type="submit" name="submit" id="submit_button" class="btn btn-default" value="Submit">
