@@ -22,7 +22,7 @@ class BreadCrumbs extends Widget
         $separator = self::getField('separator', ' / ');
 
         $bc = ''; $i = 0;
-        foreach ($this->options['fields'] as $field)
+        foreach ($this->options['items'] as $field)
             ((isset($field['text']) && $field['text'])
                 ? ((isset($field['url']) && $field['url'])
                     ? $bc .= (($i++) ? $separator : '').'<a href="/'.$field['url'].'">'.$field['text'].'</a>'

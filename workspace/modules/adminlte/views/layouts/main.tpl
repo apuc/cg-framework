@@ -113,7 +113,8 @@
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
-               {$content}
+                {core\BreadCrumbs::widget()->setParams($bc_options)->run()}
+                {$content}
             </div><!-- /.container-fluid -->
         </section>
         <!-- /.content -->

@@ -39,40 +39,34 @@ class GridView extends Widget
         $table .= self::setTableSettings($table, 'thead', 'thead_class', 'thead-dark');
 
         $table .= '<tr>';
-        if(isset($this->options['serial']))
-            $table .= '<th scope="col">'.$this->options['serial'].'</th>';
-        if(isset($this->actionsBtn))
-            $table .= '<th scope="col"></th>';
+        (isset($this->options['serial'])) ? $table .= '<th scope="col">'.$this->options['serial'].'</th>' : $table .= '';
+        (isset($this->actionsBtn)) ? $table .= '<th scope="col"></th>' : $table .= '';
 
         foreach ($this->options['fields'] as $field)
-            $fields_keys_array = array_keys($field);
+            foreach ($field as $key => $value)
+                $table .= '<th scope="col">'
+                    . ((isset($this->options['fields'][0][$key]['label']))
+                        ? $this->options['fields'][0][$key]['label']
+                        : $this->options['fields'][0][$key]) . '</th>';
 
-        foreach ($fields_keys_array as $field)
-            if(isset($this->options['fields'][0][$field]['label']))
-                $table .= '<th scope="col">'.$this->options['fields'][0][$field]['label'].'</th>';
-            else
-                $table .= '<th scope="col">'.$this->options['fields'][0][$field].'</th>';
         $table .= '</tr>';
         $table .= '</thead>';
 
-        $serial = 1;
-        foreach ($this->model as $value) {
+        foreach ($this->model as $serial => $value) {
             $table .= '<tr>';
-            if (isset($this->options['serial']))
-                $table .= '<td>'.$serial++.'</td>';
+
+            (isset($this->options['serial'])) ? $table .= '<td>' . ++$serial . '</td>' :  $table .= '';
 
             $table .= '<td>';
             foreach ($this->actionsBtn as $item)
                 $table .= $this->createBtn($item, $this->options['baseUri'], $value->id);
             $table .= '</td>';
 
-            foreach ($this->options['fields'][0] as $option) {
-                $key = array_search($option, $this->options['fields'][0]); //key of current element
-                if(isset($value->$key)) //if model contains key of current element
-                    $table .= '<td>'.$value->$key.'</td>';
-                else //if key of current element is calculated value
-                    $table .= '<td>'.call_user_func($this->options['fields'][0][$key]['value'], $value).'</td>';
-            }
+            foreach ($this->options['fields'][0] as $key => $option)
+                $table .= '<td>' . ((isset($value->$key))
+                        ? $value->$key
+                        : call_user_func($this->options['fields'][0][$key]['value'], $value)) . '</td>';
+
             $table .= '</tr>';
         }
         $table .= '</table>';
@@ -112,9 +106,7 @@ class GridView extends Widget
 
     public function setTableSettings($table, $tag, $class, $default_class)
     {
-        if(isset($this->options[$class]))
-            $table .= '<'.$tag.' class="'.$this->options[$class].'">';
-        else  $table .= '<'.$tag.' class="'.$default_class.'">';
+        $table .= '<'.$tag.' class="'. ((isset($this->options[$class])) ? $this->options[$class] : $default_class) . '">';
 
         return $table;
     }
