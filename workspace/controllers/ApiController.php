@@ -55,4 +55,14 @@ class ApiController extends Controller
         $current_settings = json_encode($current_settings);
         return $current_settings;
     }
+
+    public function actionEdit()
+    {
+        header($_POST['url']);
+    }
+
+    public function actionDelete()
+    {
+        return 'Data: '.$_POST['url'];
+    }
 }

@@ -14,5 +14,4 @@ class LeftMenu extends Widget
     {
         echo $this->view->getTpl('leftMenu.tpl');
     }
-
 }

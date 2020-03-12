@@ -18,6 +18,6 @@ App::$collector->post('/get-article', ['workspace\controllers\ApiController', 'a
 App::$collector->post('/set-options', ['workspace\controllers\ApiController', 'actionSetOptions']);
 App::$collector->get('/get-options', ['workspace\controllers\ApiController', 'actionGetOptions']);
 
-App::$collector->crud('/news', ['workspace\controllers\NewsController']);
+//App::$collector->crud('/news', ['workspace\controllers\NewsController']);
 
 App::$collector->get('themes', ['workspace\modules\themes\controllers\ThemesController', 'actionIndex']);
