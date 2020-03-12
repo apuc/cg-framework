@@ -39,8 +39,17 @@ class ArticleController extends Controller
             'baseUri' => 'article',
         ];
 
+        $bc_options = [
+            'class' => 'bc',
+            'separator' => ' > ',
+            'main' => 'AdminPanel',
+            'main_url' => 'adminlte',
+            'module' => 'Articles',
+            'module_url' => 'article',
+        ];
+
         return $this->render('article/article.tpl',
-            ['h1' => 'Статьи', 'model' => $model, 'options' => $options]);
+            ['h1' => 'Статьи', 'model' => $model, 'options' => $options, 'bc_options' => $bc_options]);
     }
 
     public function actionView($id)
@@ -61,11 +70,38 @@ class ArticleController extends Controller
             ],
         ];
 
-        return $this->render('article/view.tpl', ['h1' => 'View', 'id' => $id, 'model' => $model, 'options' => $options]);
+        $bc_options = [
+            'class' => '',
+            'separator' => ' > ',
+            'main' => 'AdminPanel',
+            'main_url' => 'adminlte',
+            'module' => 'Articles',
+            'module_url' => 'article',
+            'item' => function($id) {
+                $model = Article::where('id', $id)->first();
+
+                return $model->name;
+            },
+            'item_id' => $id,
+            'action' => 'View'
+        ];
+
+        return $this->render('article/view.tpl',
+            ['h1' => 'View', 'id' => $id, 'model' => $model, 'options' => $options, 'bc_options' => $bc_options]);
     }
 
     public function actionStore()
     {
+        $bc_options = [
+            'class' => '',
+            'separator' => ' > ',
+            'main' => 'AdminPanel',
+            'main_url' => 'adminlte',
+            'module' => 'Articles',
+            'module_url' => 'article',
+            'action' => 'Create'
+        ];
+
         if(isset($_POST['name']) && isset($_POST['text'])) {
             $article = new Article();
             $article->name = $_POST['name'];
@@ -81,13 +117,30 @@ class ArticleController extends Controller
             foreach ($language as $value)
                 $lang[$value->id] = $value->name;
 
-            return $this->render('article/store.tpl', ['h1' => 'Create', 'language' => $lang]);
+            return $this->render('article/store.tpl',
+                ['h1' => 'Create', 'language' => $lang, 'bc_options' => $bc_options]);
         }
     }
 
     public function actionEdit($id)
     {
         $article = Article::where('id', $id)->first();
+
+        $bc_options = [
+            'class' => '',
+            'separator' => ' > ',
+            'main' => 'AdminPanel',
+            'main_url' => 'adminlte',
+            'module' => 'Articles',
+            'module_url' => 'article',
+            'item' => function($id) {
+                $model = Article::where('id', $id)->first();
+
+                return $model->name;
+            },
+            'item_id' => $id,
+            'action' => 'Edit'
+        ];
 
         if(isset($_POST['name']) && isset($_POST['text'])) {
             $article->name = $_POST['name'];
@@ -102,7 +155,8 @@ class ArticleController extends Controller
             foreach ($language as $value)
                 $lang[$value->id] = $value->name;
 
-            return $this->render('article/edit.tpl', ['h1' => 'Edit', 'id' => $id, 'article' => $article, 'language' => $lang]);
+            return $this->render('article/edit.tpl',
+                ['h1' => 'Edit', 'id' => $id, 'article' => $article, 'language' => $lang, 'bc_options' => $bc_options]);
         }
 
     }

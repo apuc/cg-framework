@@ -1,4 +1,5 @@
-{$h1}
+{core\BreadCrumbs::widget()->setParams($bc_options)->run()}
+<div class="h1">{$h1}</div>
 
 <div class="container">
     <form class="form-horizontal" name="create_form" id="create_form" method="post" action="/article/create">

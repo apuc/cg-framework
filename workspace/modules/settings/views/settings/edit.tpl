@@ -1,4 +1,5 @@
-{$module} > {$view}: {$id}
+{core\BreadCrumbs::widget()->setParams($bc_options)->run()}
+<div class="h1">{$h1}</div>
 
 <div class="container">
     <form class="form-horizontal" name="edit_form" id="edit_form" method="post" action="/settings/update/{$id}">
