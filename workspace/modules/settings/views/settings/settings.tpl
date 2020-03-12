@@ -1,4 +1,3 @@
-{core\BreadCrumbs::widget()->setParams($bc_options)->run()}
 <div class="h1">{$h1}</div>
 
 <a href="/settings/create" class="btn btn-dark">Create</a>

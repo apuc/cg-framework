@@ -41,7 +41,7 @@ class SettingsController extends Controller
         $bc_options = [
             'class' => 'bc',
             'separator' => ' > ',
-            'fields' => [
+            'items' => [
                 [
                     'text' => 'AdminPanel',
                     'url' => 'adminlte'
@@ -74,7 +74,7 @@ class SettingsController extends Controller
         $bc_options = [
             'class' => '',
             'separator' => ' > ',
-            'fields' => [
+            'items' => [
                 [
                     'text' => 'AdminPanel',
                     'url' => 'adminlte'
@@ -97,7 +97,7 @@ class SettingsController extends Controller
         $bc_options = [
             'class' => '',
             'separator' => ' > ',
-            'fields' => [
+            'items' => [
                 [
                     'text' => 'AdminPanel',
                     'url' => 'adminlte'
@@ -130,7 +130,7 @@ class SettingsController extends Controller
         $bc_options = [
             'class' => '',
             'separator' => ' > ',
-            'fields' => [
+            'items' => [
                 [
                     'text' => 'AdminPanel',
                     'url' => 'adminlte'
