@@ -28,17 +28,11 @@ class DetailView extends Widget
         $table .= self::setTableSettings($table, 'thead', 'thead_class', 'thead-dark');
         $table .= '<tr><th scope="col">Ключ</th><th scope="col">Значение</th></tr></thead>';
 
-        foreach ($this->options['fields'] as $option) {
-            $table .= '<tr>';
-            $key = array_search($option, $this->options['fields']); //key of current element
-            if(isset($this->model->$key)) //if model contains key of current element
-                $table .= '<td>'.$this->options['fields'][$key].'</td>'
-                        . '<td>'.$this->model->$key.'</td>';
-            else //if key of current element is calculated value
-                $table .= '<td>'.$this->options['fields'][$key]['label'].'</td>'
-                        . '<td>'.call_user_func($this->options['fields'][$key]['value'], $this->model).'</td>';
-            $table .= '</tr>';
-        }
+        foreach ($this->options['fields'] as $key => $option)
+            (isset($this->model->$key))
+                ? $table .= '<tr><td>'.$this->options['fields'][$key].'</td><td>'.$this->model->$key.'</td></tr>'
+                : $table .= '<tr><td>'.$this->options['fields'][$key]['label'].'</td><td>'.call_user_func($this->options['fields'][$key]['value'], $this->model).'</td></tr>';
+
         $table .= '</table>';
 
         return $table;
@@ -46,9 +40,7 @@ class DetailView extends Widget
 
     public function setTableSettings($table, $tag, $class, $default_class)
     {
-        if(isset($this->options[$class]))
-            $table .= '<'.$tag.' class="'.$this->options[$class].'">';
-        else  $table .= '<'.$tag.' class="'.$default_class.'">';
+        $table .= '<'.$tag.' class="'. ((isset($this->options[$class])) ? $this->options[$class] : $default_class) . '">';
 
         return $table;
     }
