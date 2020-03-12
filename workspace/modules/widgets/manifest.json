@@ -1,0 +1,9 @@
+{
+  "name": "widgets",
+  "version": "0.1",
+  "class": "workspace\\modules\\widgets\\Widgets",
+  "description": "widgets module",
+  "configFile": "config/widgets.php",
+  "routFile": "routing/rout.php",
+  "migrationPath": "console/migrations"
+}

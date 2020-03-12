@@ -113,14 +113,14 @@
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
-               {$content}
+                {core\BreadCrumbs::widget()->setParams($bc_options)->run()}
+                {$content}
             </div><!-- /.container-fluid -->
         </section>
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
     <footer class="main-footer">
-        <div class="float-right d-none d-sm-inline-block">
             <b>Version</b> 3.0.2
         </div>
     </footer>

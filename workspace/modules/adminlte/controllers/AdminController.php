@@ -17,7 +17,16 @@ class AdminController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('admin/index.tpl', ['h1' => 'AdminLte']);
-    }
+        $bc_options = [
+            'class' => '',
+            'separator' => ' > ',
+            'items' => [
+                [
+                    'text' => 'AdminPanel',
+                ],
+            ],
+        ];
 
+        return $this->render('admin/index.tpl', ['h1' => 'AdminLte', 'bc_options' => $bc_options]);
+    }
 }

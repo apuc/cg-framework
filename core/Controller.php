@@ -6,7 +6,6 @@ namespace core;
 
 class Controller
 {
-
     public $tpl;
     public $layout = 'main.tpl';
     public $layoutPath = null;
@@ -51,6 +50,17 @@ class Controller
         $this->view->tpl->template_dir = $layoutPath;
 
         return $this->view->tpl->fetch($this->layout, ['content' => $view]);
+    }
+
+    public function redirect($url)
+    {
+        $baseUrl = sprintf(
+            "%s://%s",
+            isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
+            $_SERVER['SERVER_NAME']
+        );
+        header('Location: '.$baseUrl.':8000/'.$url);
+        die();
     }
 
     protected function setViewPath($dir)
