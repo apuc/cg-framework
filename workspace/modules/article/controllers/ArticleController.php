@@ -42,10 +42,15 @@ class ArticleController extends Controller
         $bc_options = [
             'class' => 'bc',
             'separator' => ' > ',
-            'main' => 'AdminPanel',
-            'main_url' => 'adminlte',
-            'module' => 'Articles',
-            'module_url' => 'article',
+            'fields' => [
+                [
+                    'text' => 'AdminPanel',
+                    'url' => 'adminlte'
+                ],
+                [
+                    'text' => 'Articles',
+                ],
+            ],
         ];
 
         return $this->render('article/article.tpl',
@@ -73,17 +78,19 @@ class ArticleController extends Controller
         $bc_options = [
             'class' => '',
             'separator' => ' > ',
-            'main' => 'AdminPanel',
-            'main_url' => 'adminlte',
-            'module' => 'Articles',
-            'module_url' => 'article',
-            'item' => function($id) {
-                $model = Article::where('id', $id)->first();
-
-                return $model->name;
-            },
-            'item_id' => $id,
-            'action' => 'View'
+            'fields' => [
+                [
+                    'text' => 'AdminPanel',
+                    'url' => 'adminlte'
+                ],
+                [
+                    'text' => 'Articles',
+                    'url' => 'article'
+                ],
+                [
+                    'text' => $model->name,
+                ],
+            ],
         ];
 
         return $this->render('article/view.tpl',
@@ -95,11 +102,19 @@ class ArticleController extends Controller
         $bc_options = [
             'class' => '',
             'separator' => ' > ',
-            'main' => 'AdminPanel',
-            'main_url' => 'adminlte',
-            'module' => 'Articles',
-            'module_url' => 'article',
-            'action' => 'Create'
+            'fields' => [
+                [
+                    'text' => 'AdminPanel',
+                    'url' => 'adminlte'
+                ],
+                [
+                    'text' => 'Articles',
+                    'url' => 'article'
+                ],
+                [
+                    'text' => 'Create',
+                ],
+            ],
         ];
 
         if(isset($_POST['name']) && isset($_POST['text'])) {
@@ -129,17 +144,23 @@ class ArticleController extends Controller
         $bc_options = [
             'class' => '',
             'separator' => ' > ',
-            'main' => 'AdminPanel',
-            'main_url' => 'adminlte',
-            'module' => 'Articles',
-            'module_url' => 'article',
-            'item' => function($id) {
-                $model = Article::where('id', $id)->first();
-
-                return $model->name;
-            },
-            'item_id' => $id,
-            'action' => 'Edit'
+            'fields' => [
+                [
+                    'text' => 'AdminPanel',
+                    'url' => 'adminlte'
+                ],
+                [
+                    'text' => 'Articles',
+                    'url' => 'article'
+                ],
+                [
+                    'text' => $article->name,
+                    'url' => 'article/'.$id
+                ],
+                [
+                    'text' => 'Edit',
+                ],
+            ],
         ];
 
         if(isset($_POST['name']) && isset($_POST['text'])) {
