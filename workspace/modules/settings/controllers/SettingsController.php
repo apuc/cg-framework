@@ -41,10 +41,15 @@ class SettingsController extends Controller
         $bc_options = [
             'class' => 'bc',
             'separator' => ' > ',
-            'main' => 'AdminPanel',
-            'main_url' => 'adminlte',
-            'module' => 'Settings',
-            'module_url' => 'settings',
+            'fields' => [
+                [
+                    'text' => 'AdminPanel',
+                    'url' => 'adminlte'
+                ],
+                [
+                    'text' => 'Settings',
+                ],
+            ],
         ];
 
         return $this->render('settings/settings.tpl', ['h1' => 'Settings', 'model' => $model, 'options' => $options, 'bc_options' => $bc_options]);
@@ -69,17 +74,19 @@ class SettingsController extends Controller
         $bc_options = [
             'class' => '',
             'separator' => ' > ',
-            'main' => 'AdminPanel',
-            'main_url' => 'adminlte',
-            'module' => 'Settings',
-            'module_url' => 'settings',
-            'item' => function($id) {
-                $model = Settings::where('id', $id)->first();
-
-                return $model->key;
-            },
-            'item_id' => $id,
-            'action' => 'View'
+            'fields' => [
+                [
+                    'text' => 'AdminPanel',
+                    'url' => 'adminlte'
+                ],
+                [
+                    'text' => 'Settings',
+                    'url' => 'settings'
+                ],
+                [
+                    'text' => $model->key,
+                ],
+            ],
         ];
 
         return $this->render('settings/view.tpl', ['h1' => $model->key, 'model' => $model, 'options' => $options, 'bc_options' => $bc_options]);
@@ -90,11 +97,19 @@ class SettingsController extends Controller
         $bc_options = [
             'class' => '',
             'separator' => ' > ',
-            'main' => 'AdminPanel',
-            'main_url' => 'adminlte',
-            'module' => 'Settings',
-            'module_url' => 'settings',
-            'action' => 'Create'
+            'fields' => [
+                [
+                    'text' => 'AdminPanel',
+                    'url' => 'adminlte'
+                ],
+                [
+                    'text' => 'Settings',
+                    'url' => 'settings'
+                ],
+                [
+                    'text' => 'Create',
+                ],
+            ],
         ];
 
         if(isset($_POST['key']) && isset($_POST['value'])) {
@@ -115,17 +130,23 @@ class SettingsController extends Controller
         $bc_options = [
             'class' => '',
             'separator' => ' > ',
-            'main' => 'AdminPanel',
-            'main_url' => 'adminlte',
-            'module' => 'Settings',
-            'module_url' => 'settings',
-            'item' => function($id) {
-                $model = Settings::where('id', $id)->first();
-
-                return $model->key;
-            },
-            'item_id' => $id,
-            'action' => 'Edit'
+            'fields' => [
+                [
+                    'text' => 'AdminPanel',
+                    'url' => 'adminlte'
+                ],
+                [
+                    'text' => 'Settings',
+                    'url' => 'settings'
+                ],
+                [
+                    'text' => $settings->key,
+                    'url' => 'settings/'.$id
+                ],
+                [
+                    'text' => 'Edit',
+                ],
+            ],
         ];
 
         if(isset($_POST['key']) && isset($_POST['value'])) {
