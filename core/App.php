@@ -59,6 +59,11 @@ class App
      */
     static $db;
 
+    /**
+     * @var $breadcrumbs BreadCrumbs
+     */
+    static $breadcrumbs;
+
     public function setConfig($configListFile = 'list.php')
     {
         $this->activeMod();
@@ -68,6 +73,7 @@ class App
         }
         App::$header = new Header();
         App::$collector = new CgRouteCollector();
+        App::$breadcrumbs = new BreadCrumbs();
         return $this;
     }
 

@@ -15,19 +15,28 @@ class BreadCrumbs extends Widget
         return $this;
     }
 
+    public function addItem(array $data)
+    {
+        if($data && isset($data['text']))
+            $this->options['items'][] = $data;
+    }
+
     public function getBC()
     {
-        $class_name = self::getField('class');
+        $class_name = $this->getField('class');
         $class = ($class_name) ? 'class="'.$class_name.'"' : '';
-        $separator = self::getField('separator', ' / ');
+        $separator = $this->getField('separator', ' / ');
 
         $bc = ''; $i = 0;
         foreach ($this->options['items'] as $field)
-            ((isset($field['text']) && $field['text'])
-                ? ((isset($field['url']) && $field['url'])
-                    ? $bc .= (($i++) ? $separator : '').'<a href="/'.$field['url'].'">'.$field['text'].'</a>'
-                    : $bc .= (($i++) ? $separator : '').$field['text'])
-                : '');
+            if(isset($field['text']) && $field['text'])
+                $bc .= (($i++) ? $separator : '') . '<span '
+                    . ((isset($field['class']) && $field['class'])
+                        ? ' class="'.$field['class'].'">'
+                        : '>')
+                    . ((isset($field['url']) && $field['url'])
+                        ? '<a href="/' . $field['url'] . '">' . $field['text'] . '</a></span>'
+                        : $field['text'].'</span>');
 
         return '<div ' . $class .'>' . $bc .'</div>';
     }
@@ -39,6 +48,6 @@ class BreadCrumbs extends Widget
 
     public function run()
     {
-       return self::getBC();
+       return $this->getBC();
     }
 }
