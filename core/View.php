@@ -11,9 +11,11 @@ class View
     public $js = [];
     public $css = [];
     public $tpl;
+    public static $instance;
 
     public function __construct()
     {
+        self::$instance = $this;
         $this->tpl = new \Smarty();
 
         $this->tpl->template_dir = WORKSPACE_DIR . '/views/';
@@ -24,6 +26,13 @@ class View
         $this->tpl->assign('res_dir', RESOURCES_DIR);
         $this->tpl->assign('workspace_dir', WORKSPACE_DIR);
         $this->tpl->assign('title', $this->title);
+    }
+
+    public static function get() {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+        return self::$instance;
     }
 
     public function getTpl($tpl, $data = [])
@@ -84,7 +93,7 @@ class View
                 $jsHtml .= "<script src='" . $j['src'] . "' " . $params . " ></script>" . "\n";
             }
         }
-        return $jsHtml;
+        echo $jsHtml;
     }
 
     public function setViewPath($dir)

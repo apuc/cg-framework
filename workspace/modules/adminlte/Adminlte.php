@@ -41,7 +41,10 @@ class Adminlte
 //                ]
 //            ],
         ];
+
         App::$config['adminLayoutPath'] = '/modules/adminlte/views/layouts/';
         App::mergeConfig($config);
+
+        App::$breadcrumbs->addSetting('class', 'breadcrumbs');
     }
 }

@@ -60,7 +60,7 @@ class App
     static $db;
 
     /**
-     * @var $breadcrumbs BreadCrumbs
+     * @var $breadcrumbs BCContainer
      */
     static $breadcrumbs;
 
@@ -73,7 +73,7 @@ class App
         }
         App::$header = new Header();
         App::$collector = new CgRouteCollector();
-        App::$breadcrumbs = new BreadCrumbs();
+        App::$breadcrumbs = new BCContainer();
         return $this;
     }
 

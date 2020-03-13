@@ -8,17 +8,11 @@ class BreadCrumbs extends Widget
 {
     public $options;
 
-    public function setParams($options = [])
+    public function setParams()
     {
-       $this->options = $options;
+       $this->options = App::$breadcrumbs->getItems();
 
         return $this;
-    }
-
-    public function addItem(array $data)
-    {
-        if($data && isset($data['text']))
-            $this->options['items'][] = $data;
     }
 
     public function getBC()
@@ -27,16 +21,17 @@ class BreadCrumbs extends Widget
         $class = ($class_name) ? 'class="'.$class_name.'"' : '';
         $separator = $this->getField('separator', ' / ');
 
-        $bc = ''; $i = 0;
-        foreach ($this->options['items'] as $field)
-            if(isset($field['text']) && $field['text'])
-                $bc .= (($i++) ? $separator : '') . '<span '
-                    . ((isset($field['class']) && $field['class'])
-                        ? ' class="'.$field['class'].'">'
+        $bc = ''; $j = 0;
+        $amount = count($this->options['items']);
+        for ($i = 0; $i < $amount; $i++)
+            if(isset($this->options['items'][$i]['text']) && $this->options['items'][$i]['text'])
+                $bc .= (($j++) ? $separator : '') . '<span '
+                    . ((isset($this->options['items'][$i]['class']) && $this->options['items'][$i]['class'])
+                        ? ' class="'.$this->options['items'][$i]['class'].'">'
                         : '>')
-                    . ((isset($field['url']) && $field['url'])
-                        ? '<a href="/' . $field['url'] . '">' . $field['text'] . '</a></span>'
-                        : $field['text'].'</span>');
+                    . ((isset($this->options['items'][$i]['url']) && $this->options['items'][$i]['url'] && isset($this->options['items'][$i + 1]['text']))
+                        ? '<a href="/' . $this->options['items'][$i]['url'] . '">' . $this->options['items'][$i]['text'] . '</a></span>'
+                        : $this->options['items'][$i]['text'].'</span>');
 
         return '<div ' . $class .'>' . $bc .'</div>';
     }
@@ -48,6 +43,8 @@ class BreadCrumbs extends Widget
 
     public function run()
     {
-       return $this->getBC();
+        $this->setParams();
+
+        return $this->getBC();
     }
 }

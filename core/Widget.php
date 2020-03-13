@@ -16,7 +16,7 @@ class Widget
 
     public function __construct()
     {
-        $this->view = new View();
+        $this->view = View::get();
 
         $this->view->setViewPath(WORKSPACE_DIR . $this->viewPath);
     }
