@@ -19,9 +19,9 @@ class Controller
 
     public function __construct()
     {
-        $this->init();
+        $this->view = View::get();
 
-        $this->view = new View();
+        $this->init();
 
         $this->view->setViewPath(WORKSPACE_DIR . $this->viewPath);
     }

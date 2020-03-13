@@ -3,6 +3,6 @@
     text-decoration: none;
 }
 
-.bc {
-    padding: 10px 0;
+.breadcrumbs {
+    text-align: right;
 }

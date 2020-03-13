@@ -1,3 +1,4 @@
+{core\App::$breadcrumbs->addItem(['text' => 'Create'])}
 <div class="h1">{$h1}</div>
 
 <div class="container">

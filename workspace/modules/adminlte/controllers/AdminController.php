@@ -13,6 +13,7 @@ class AdminController extends Controller
     {
         $this->viewPath = '/modules/adminlte/views/';
         $this->layoutPath = App::$config['adminLayoutPath'];
+        App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);
     }
 
     public function actionIndex()

@@ -15,6 +15,8 @@ class ArticleController extends Controller
     {
         $this->viewPath = '/modules/article/views/';
         $this->layoutPath = App::$config['adminLayoutPath'];
+        App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);
+        App::$breadcrumbs->addItem(['text' => 'Articles', 'url' => 'article']);
     }
 
     public function actionIndex()
@@ -39,22 +41,7 @@ class ArticleController extends Controller
             'baseUri' => 'article',
         ];
 
-        $bc_options = [
-            'class' => 'bc',
-            'separator' => ' > ',
-            'items' => [
-                [
-                    'text' => 'AdminPanel',
-                    'url' => 'adminlte'
-                ],
-                [
-                    'text' => 'Articles',
-                ],
-            ],
-        ];
-
-        return $this->render('article/article.tpl',
-            ['h1' => 'Статьи', 'model' => $model, 'options' => $options, 'bc_options' => $bc_options]);
+        return $this->render('article/article.tpl', ['h1' => 'Статьи', 'model' => $model, 'options' => $options]);
     }
 
     public function actionView($id)
@@ -75,48 +62,11 @@ class ArticleController extends Controller
             ],
         ];
 
-        $bc_options = [
-            'class' => '',
-            'separator' => ' > ',
-            'items' => [
-                [
-                    'text' => 'AdminPanel',
-                    'url' => 'adminlte'
-                ],
-                [
-                    'text' => 'Articles',
-                    'url' => 'article'
-                ],
-                [
-                    'text' => $model->name,
-                ],
-            ],
-        ];
-
-        return $this->render('article/view.tpl',
-            ['h1' => 'View', 'id' => $id, 'model' => $model, 'options' => $options, 'bc_options' => $bc_options]);
+        return $this->render('article/view.tpl', ['model' => $model, 'options' => $options]);
     }
 
     public function actionStore()
     {
-        $bc_options = [
-            'class' => '',
-            'separator' => ' > ',
-            'items' => [
-                [
-                    'text' => 'AdminPanel',
-                    'url' => 'adminlte'
-                ],
-                [
-                    'text' => 'Articles',
-                    'url' => 'article'
-                ],
-                [
-                    'text' => 'Create',
-                ],
-            ],
-        ];
-
         if(isset($_POST['name']) && isset($_POST['text'])) {
             $article = new Article();
             $article->name = $_POST['name'];
@@ -132,41 +82,18 @@ class ArticleController extends Controller
             foreach ($language as $value)
                 $lang[$value->id] = $value->name;
 
-            return $this->render('article/store.tpl',
-                ['h1' => 'Create', 'language' => $lang, 'bc_options' => $bc_options]);
+            return $this->render('article/store.tpl', ['h1' => 'Добавить статью', 'language' => $lang,]);
         }
     }
 
     public function actionEdit($id)
     {
-        $article = Article::where('id', $id)->first();
-
-        $bc_options = [
-            'class' => '',
-            'separator' => ' > ',
-            'items' => [
-                [
-                    'text' => 'AdminPanel',
-                    'url' => 'adminlte'
-                ],
-                [
-                    'text' => 'Articles',
-                    'url' => 'article'
-                ],
-                [
-                    'text' => $article->name,
-                    'url' => 'article/'.$id
-                ],
-                [
-                    'text' => 'Edit',
-                ],
-            ],
-        ];
+        $model = Article::where('id', $id)->first();
 
         if(isset($_POST['name']) && isset($_POST['text'])) {
-            $article->name = $_POST['name'];
-            $article->text = $_POST['text'];
-            $article->save();
+            $model->name = $_POST['name'];
+            $model->text = $_POST['text'];
+            $model->save();
 
             $this->redirect('article');
         } else {
@@ -176,10 +103,8 @@ class ArticleController extends Controller
             foreach ($language as $value)
                 $lang[$value->id] = $value->name;
 
-            return $this->render('article/edit.tpl',
-                ['h1' => 'Edit', 'id' => $id, 'article' => $article, 'language' => $lang, 'bc_options' => $bc_options]);
+            return $this->render('article/edit.tpl', ['h1' => 'Редактировать: ', 'model' => $model, 'languages' => $lang]);
         }
-
     }
 
     public function actionDelete()
