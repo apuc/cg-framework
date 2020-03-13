@@ -6,8 +6,6 @@ namespace core;
 
 class Pagination extends Widget
 {
-    public $options;
-
     public $itemsPerPage;
     public $range;
     public $currentPage;
@@ -20,10 +18,8 @@ class Pagination extends Widget
     private $_pageNumHtml;
     private $_itemHtml;
 
-    public function setParams($total, $options = [])
+    public function setParams($total)
     {
-        $this->options = $options;
-
         (isset($_GET['item'])) ? $this->itemsPerPage = $_GET['item'] : $this->itemsPerPage = 5;
         $this->range = 5;
         (isset($_GET['current'])) ? $this->currentPage  = $_GET['current'] : $this->currentPage = 1;

@@ -10,7 +10,7 @@ class BreadCrumbs extends Widget
 
     public function setParams()
     {
-       $this->options = App::$breadcrumbs->getItems();
+        $this->options = App::$breadcrumbs->getItems();
 
         return $this;
     }

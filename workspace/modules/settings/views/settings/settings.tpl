@@ -2,3 +2,4 @@
 
 <a href="/settings/create" class="btn btn-dark">Create</a>
 {core\GridView::widget()->setParams($model, $options)->run()}
+{*{core\Pagination::widget()->setParams(5)->run()}*}
