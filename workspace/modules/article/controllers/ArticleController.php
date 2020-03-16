@@ -39,6 +39,11 @@ class ArticleController extends Controller
                 ]
             ],
             'baseUri' => 'article',
+            'pagination' => [
+                'per_page' => 3,
+                'class' => '',
+                'class-active' => ''
+            ],
         ];
 
         return $this->render('article/article.tpl', ['h1' => 'Статьи', 'model' => $model, 'options' => $options]);

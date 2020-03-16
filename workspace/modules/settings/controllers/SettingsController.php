@@ -38,6 +38,12 @@ class SettingsController extends Controller
                 ]
             ],
             'baseUri' => 'settings',
+            'pagination' => [
+                'per_page' => 3,
+                'class' => '',
+                'class-active' => '',
+                'class-control' => ''
+            ],
         ];
 
         return $this->render('settings/settings.tpl', ['h1' => 'Настройки', 'model' => $model, 'options' => $options]);
