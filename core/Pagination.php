@@ -6,90 +6,84 @@ namespace core;
 
 class Pagination extends Widget
 {
-    public $options;
+    private $amount_of_data;
+    private $amount_of_buttons;
+    private $per_page;
+    private $page;
+    private $buttons;
+    private $options;
+    private $url;
 
-    public $itemsPerPage;
-    public $range;
-    public $currentPage;
-    public $total;
-    public $textNav;
-    public $itemSelect;
-
-    private $_navigation;
-    private $_link;
-    private $_pageNumHtml;
-    private $_itemHtml;
-
-    public function setParams($total, $options = [])
+    public function setParams($url, $amount_of_data, $options)
     {
+        $this->amount_of_data = $amount_of_data;
         $this->options = $options;
+        $this->url = $url;
+        $this->per_page = (isset($this->options['per_page']) && $this->options['per_page']) ? $this->options['per_page'] : 20;
+        $this->setPage();
 
-        (isset($_GET['item'])) ? $this->itemsPerPage = $_GET['item'] : $this->itemsPerPage = 5;
-        $this->range = 5;
-        (isset($_GET['current'])) ? $this->currentPage  = $_GET['current'] : $this->currentPage = 1;
-        $this->total = $total;
-        $this->textNav = false;
-        $this->itemSelect = array(5, 25, 50, 100, 'All');
-        $this->_navigation = array(
-            'next'=>'Next',
-            'pre' =>'Pre',
-            'ipp' =>'Item per page'
-        );
-        $this->_link = filter_var($_SERVER['PHP_SELF'], FILTER_SANITIZE_STRING);
-
-        $this->_pageNumHtml = $this->_getPageNumbers();
-        $this->_itemHtml = $this->_getItemSelect();
+        $this->amount_of_buttons = ceil($this->amount_of_data / $this->per_page);
+        $this->setButtons();
 
         return $this;
     }
 
-    public function pageNumbers()
-    {
-        return $this->_pageNumHtml;
-    }
-
-    public function itemsPerPage()
-    {
-        return $this->_itemHtml;
-    }
-
-    private function _getPageNumbers()
-    {
-        $html = '<ul>';
-        if($this->textNav && $this->currentPage > 1)
-            echo '<li><a href="'.$this->_link .'?current='.($this->currentPage-1).'">'.$this->_navigation['pre'].'</a></li>';
-
-        if($this->total > $this->range) {
-            $start = ($this->currentPage <= $this->range) ? 1 : ($this->currentPage - $this->range);
-            $end = ($this->total - $this->currentPage >= $this->range) ? ($this->currentPage+$this->range) : $this->total;
-        } else {
-            $start = 1;
-            $end = $this->total;
-        }
-
-        for($i = $start; $i <= $end; $i++)
-            echo '<li><a href="' . $this->_link .'?current=' . $i . '" ' . (($i == $this->currentPage) ? 'class="current"' : '') . '>'.$i.'</a></li>';
-
-        if($this->textNav && $this->currentPage < $this->total)
-            echo '<li><a href="' . $this->_link . '?current=' . ($this->currentPage + 1) . '">' . $this->_navigation['next'] . '</a></li>';
-
-        $html .= '</ul>';
-        return $html;
-    }
-
-    private function  _getItemSelect()
-    {
-        $items = '';
-        $ippArray = $this->itemSelect;
-        foreach($ippArray as $ippOpt)
-            $items .= ($ippOpt == $this->itemsPerPage) ? "<option selected value=\"$ippOpt\">$ippOpt</option>\n" : "<option value=\"$ippOpt\">$ippOpt</option>\n";
-
-        return "<span class=\"paginate\">".$this->_navigation['ipp']."</span>
-            <select class=\"paginate\" onchange=\"window.location='$this->_link?current=1&item='+this[this.selectedIndex].value;return false\">$items</select>\n";
-    }
-
     public function run()
     {
+        return $this->getButtons();
+    }
 
+    public function getAmountOfData()
+    {
+        return $this->amount_of_data;
+    }
+
+    public function getPerPage()
+    {
+        return $this->per_page;
+    }
+
+    public function getPage()
+    {
+        return $this->page;
+    }
+
+    public function setPage()
+    {
+        if(isset($_GET['page']) && $_GET['page'])
+            $this->page = $_GET['page'];
+        else $this->page = 1;
+    }
+
+    public function setButtons()
+    {
+        $start = '<<';
+        $prev = '<';
+        $next = '>';
+        $end = '>>';
+        $class_control = ((isset($this->options['class-control']) && $this->options['class-control']) ? $this->options['class-control'] : 'btn btn-outline-dark');
+
+        $this->buttons = '';
+
+        $this->buttons .= '<div><a href="' .  $this->url . '?page=' . 1 . '" class="' . $class_control .'">' . $start
+            . '</a> <a href="' . $this->url . '?page=' . (($this->page - 1 > 0) ? ($this->page - 1) : 1) .'" class="' . $class_control .'">' . $prev . '</a> ';
+
+        for($i = 1; $i <= $this->amount_of_buttons; $i++) {
+            if($i == $this->page)
+                $this->buttons .= '<a href="' . $this->url . '?page=' . $i . '" class="'
+                    . ((isset($this->options['class-active']) && $this->options['class-active']) ? $this->options['class-active'] : 'btn btn-secondary') . '">'.$i.'</a> ';
+            else
+                $this->buttons .= '<a href="' . $this->url . '?page=' . $i . '" class="'
+                    . ((isset($this->options['class']) && $this->options['class']) ? $this->options['class'] : 'btn btn-dark') . '">'.$i.'</a> ';
+        }
+
+        $this->buttons .= '<a href="' .  $this->url . '?page=' . (($this->page + 1 < $this->amount_of_buttons) ? ($this->page + 1) : $this->amount_of_buttons)
+            . '" class="' . $class_control .'">' . $next . '</a> <a href="' . $this->url . '?page=' . $this->amount_of_buttons .'" class="' . $class_control . '">' . $end . '</a></div>';
+    }
+
+    public function getButtons()
+    {
+        if($this->amount_of_buttons > 1)
+            return $this->buttons;
     }
 }
