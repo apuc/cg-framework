@@ -65,8 +65,9 @@ class Pagination extends Widget
 
         $this->buttons = '';
 
-        $this->buttons .= '<div><a href="' .  $this->url . '?page=' . 1 . '" class="' . $class_control .'">' . $start
-            . '</a> <a href="' . $this->url . '?page=' . (($this->page - 1 > 0) ? ($this->page - 1) : 1) .'" class="' . $class_control .'">' . $prev . '</a> ';
+        if($this->page - 1 > 0)
+            $this->buttons .= '<div><a href="' .  $this->url . '?page=' . 1 . '" class="' . $class_control .'" title="start">'
+                . $start . '</a> <a href="' . $this->url . '?page=' . ($this->page - 1) .'" class="' . $class_control .'" title="previous">' . $prev . '</a> ';
 
         for($i = 1; $i <= $this->amount_of_buttons; $i++) {
             if($i == $this->page)
@@ -77,8 +78,9 @@ class Pagination extends Widget
                     . ((isset($this->options['class']) && $this->options['class']) ? $this->options['class'] : 'btn btn-dark') . '">'.$i.'</a> ';
         }
 
-        $this->buttons .= '<a href="' .  $this->url . '?page=' . (($this->page + 1 < $this->amount_of_buttons) ? ($this->page + 1) : $this->amount_of_buttons)
-            . '" class="' . $class_control .'">' . $next . '</a> <a href="' . $this->url . '?page=' . $this->amount_of_buttons .'" class="' . $class_control . '">' . $end . '</a></div>';
+        if($this->page + 1 <= $this->amount_of_buttons)
+            $this->buttons .= '<a href="' .  $this->url . '?page=' . ($this->page + 1) . '" class="' . $class_control .'" title="next">'
+                . $next . '</a> <a href="' . $this->url . '?page=' . $this->amount_of_buttons .'" class="' . $class_control . '" title="end">' . $end . '</a></div>';
     }
 
     public function getButtons()
