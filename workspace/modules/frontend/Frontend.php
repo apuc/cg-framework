@@ -1,18 +1,18 @@
 <?php
 
-namespace workspace\modules\settings;
+namespace workspace\modules\frontend;
 
 
 use core\App;
 
-class Settings
+class Frontend
 {
     public static function run()
     {
         $config['adminLeftMenu'] = [
             [
-                'title' => 'Settings',
-                'url' => '/settings',
+                'title' => 'Frontend',
+                'url' => '/',
                 'icon' => '<i class="nav-icon fas fa-copy"></i>',
             ],
         ];

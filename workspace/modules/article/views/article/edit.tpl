@@ -23,7 +23,6 @@
                     {else}
                         <option value="{$key}">{$item}</option>
                     {/if}
-
                 {/foreach}
             </select>
         </div>

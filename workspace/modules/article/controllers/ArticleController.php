@@ -26,16 +26,14 @@ class ArticleController extends Controller
         $options = [
             'serial' => '#',
             'fields' => [
-                [
-                    'name' => 'Заголовок',
-                    'text' => 'Статья',
-                    'language' => [
-                        'label' => 'Язык',
-                        'value' => function($model) {
-                            $language = Language::where('id', $model->language_id)->first();
-                            return $language->name;
-                        }
-                    ]
+                'name' => 'Заголовок',
+                'text' => 'Статья',
+                'language' => [
+                    'label' => 'Язык',
+                    'value' => function($model) {
+                        $language = Language::where('id', $model->language_id)->first();
+                        return $language->name;
+                    }
                 ]
             ],
             'baseUri' => 'article',

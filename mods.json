@@ -7,6 +7,14 @@
     "version": "0.2",
     "status": "inactive"
   },
+  "frontend": {
+    "version": "0.1",
+    "status": "active"
+  },
+  "themes": {
+    "version": "0.1",
+    "status": "active"
+  },
   "settings": {
     "version": "0.1",
     "status": "active"

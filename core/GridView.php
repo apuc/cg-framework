@@ -1,5 +1,9 @@
 <?php
 
+namespace workspace\modules\settings;
+
+
+use core\App;
 
 namespace core;
 
@@ -57,12 +61,11 @@ class GridView extends Widget
         (isset($this->options['serial'])) ? $table .= '<th scope="col">'.$this->options['serial'].'</th>' : $table .= '';
         (isset($this->actionsBtn)) ? $table .= '<th scope="col"></th>' : $table .= '';
 
-        foreach ($this->options['fields'] as $field)
-            foreach ($field as $key => $value)
-                $table .= '<th scope="col">'
-                    . ((isset($this->options['fields'][0][$key]['label']))
-                        ? $this->options['fields'][0][$key]['label']
-                        : $this->options['fields'][0][$key]) . '</th>';
+        foreach ($this->options['fields'] as $key => $field)
+            $table .= '<th scope="col">'
+                . ((isset($this->options['fields'][$key]['label']))
+                    ? $this->options['fields'][$key]['label']
+                    : $this->options['fields'][$key]) . '</th>';
 
         $table .= '</tr>';
         $table .= '</thead>';
@@ -85,10 +88,10 @@ class GridView extends Widget
                 $table .= $this->createBtn($item, $this->options['baseUri'], $this->model[$i]->id);
             $table .= '</td>';
 
-            foreach ($this->options['fields'][0] as $key => $option)
+            foreach ($this->options['fields'] as $key => $option)
                 $table .= '<td>' . ((isset($this->model[$i]->$key))
                         ? $this->model[$i]->$key
-                        : call_user_func($this->options['fields'][0][$key]['value'], $this->model[$i])) . '</td>';
+                        : call_user_func($this->options['fields'][$key]['value'], $this->model[$i])) . '</td>';
 
             $table .= '</tr>';
         }

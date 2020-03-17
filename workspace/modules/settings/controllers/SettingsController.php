@@ -27,23 +27,15 @@ class SettingsController extends Controller
         $options = [
             'serial' => '#',
             'fields' => [
-                [
-                    'key' => 'Ключ',
-                    'category' => [
-                        'label' => 'Значение',
-                        'value' => function($model) {
-                            return $model->value;
-                        }
-                    ]
+                'key' => 'Ключ',
+                'category' => [
+                    'label' => 'Значение',
+                    'value' => function($model) {
+                        return $model->value;
+                    }
                 ]
             ],
-            'baseUri' => 'settings',
-            'pagination' => [
-                'per_page' => 3,
-                'class' => '',
-                'class-active' => '',
-                'class-control' => ''
-            ],
+            'baseUri' => 'settings'
         ];
 
         return $this->render('settings/settings.tpl', ['h1' => 'Настройки', 'model' => $model, 'options' => $options]);

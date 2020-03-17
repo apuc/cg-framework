@@ -54,12 +54,13 @@ class Controller
 
     public function redirect($url)
     {
-        $baseUrl = sprintf(
-            "%s://%s",
-            isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
-            $_SERVER['SERVER_NAME']
+        $protocol = sprintf(
+            "%s://",
+            isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http'
+            //$_SERVER['SERVER_NAME']
         );
-        header('Location: '.$baseUrl.':8000/'.$url);
+
+        header('Location: ' . $protocol . App::$config['baseUrl'] . ':8000/' . $url);
         die();
     }
 
