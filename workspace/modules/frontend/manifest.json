@@ -1,0 +1,9 @@
+{
+  "name": "frontend",
+  "version": "0.1",
+  "class": "workspace\\modules\\frontend\\Frontend",
+  "description": "frontend module",
+  "configFile": "config/frontend.php",
+  "routFile": "routing/rout.php",
+  "migrationPath": "console/migrations"
+}

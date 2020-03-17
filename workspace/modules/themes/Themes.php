@@ -1,18 +1,18 @@
 <?php
 
-namespace workspace\modules\settings;
+namespace workspace\modules\themes;
 
 
 use core\App;
 
-class Settings
+class Themes
 {
     public static function run()
     {
         $config['adminLeftMenu'] = [
             [
-                'title' => 'Settings',
-                'url' => '/settings',
+                'title' => 'Themes',
+                'url' => '/themes',
                 'icon' => '<i class="nav-icon fas fa-copy"></i>',
             ],
         ];

@@ -23,7 +23,7 @@ class Pagination extends Widget
         $this->setPage();
 
         $this->amount_of_buttons = ceil($this->amount_of_data / $this->per_page);
-        $this->setButtons();
+        $this->generateButtons();
 
         return $this;
     }
@@ -55,7 +55,7 @@ class Pagination extends Widget
         else $this->page = 1;
     }
 
-    public function setButtons()
+    public function generateButtons()
     {
         $start = '<<';
         $prev = '<';
