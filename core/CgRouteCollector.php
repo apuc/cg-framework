@@ -24,7 +24,6 @@ class CgRouteCollector extends RouteCollector
         $this->addRoute(Route::GET, $route . '/{id}', array_merge($handler, ['actionView']), $filters);
         $this->addRoute(Route::ANY, $route . '/create', array_merge($handler, ['actionStore']), $filters);
         $this->addRoute(Route::POST, $route . '/delete', array_merge($handler, ['actionDelete']), $filters);
-
         return $this->addRoute(Route::ANY, $route . '/update/{id}', array_merge($handler, ['actionEdit']), $filters);
     }
 
