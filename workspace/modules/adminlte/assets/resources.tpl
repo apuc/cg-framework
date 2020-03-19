@@ -19,11 +19,11 @@
     <link rel="stylesheet" href="/workspace/modules/adminlte/resources/plugins/summernote/summernote-bs4.css">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
     <link rel="stylesheet" href="/resources/css/main.css">
 {/capture}
 
 {capture name=js_head}
-    <script src="/resources/js/script.js"></script>
 {/capture}
 
 {capture name=js_body}
@@ -63,6 +63,7 @@
     <script src="/workspace/modules/adminlte/resources/dist/js/demo.js"></script>
     <!-- GridView -->
     <script src="/resources/js/gridView.js"></script>
+    <script src="/resources/js/main.js"></script>
 {/capture}
 
 {capture name=meta}

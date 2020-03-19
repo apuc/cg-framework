@@ -65,4 +65,15 @@ class ApiController extends Controller
     {
         return 'Data: '.$_POST['url'];
     }
+
+    public function actionDownload()
+    {
+        $ch = curl_init('http://news_parser.loc/themes/' . 'theme2.zip');
+        $fp = fopen( WORKSPACE_DIR . '/modules/themes/themes/theme2.zip', 'wb');
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+    }
 }

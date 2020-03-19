@@ -15,3 +15,4 @@ App::$collector->get('admin', ['workspace\modules\adminpanel\controllers\AdminCo
 App::$collector->post('/get-article', ['workspace\controllers\ApiController', 'actionGetArticle']);
 App::$collector->post('/set-options', ['workspace\controllers\ApiController', 'actionSetOptions']);
 App::$collector->get('/get-options', ['workspace\controllers\ApiController', 'actionGetOptions']);
+App::$collector->post('/download', ['workspace\controllers\ApiController', 'actionDownload']);
