@@ -110,6 +110,11 @@ class ThemesController extends Controller
         rmdir(WORKSPACE_DIR . '/modules/themes/themes/' . $dirs[$_POST['id']]);
     }
 
+    public function actionDownload()
+    {
+
+    }
+
     public function formThemeModel($id, $dir)
     {
         $protocol = sprintf("%s://",isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http');
