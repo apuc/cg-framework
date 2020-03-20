@@ -1,1 +1,1 @@
-<div class="h1">Default Theme</div>
+<h1>Default Theme</h1>

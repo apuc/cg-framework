@@ -59,7 +59,7 @@ class GridView extends Widget
 
         $table .= '<tr>';
         (isset($this->options['serial'])) ? $table .= '<th scope="col">'.$this->options['serial'].'</th>' : $table .= '';
-        (isset($this->actionsBtn)) ? $table .= '<th scope="col"></th>' : $table .= '';
+        (isset($this->actionsBtn[0])) ? $table .= '<th scope="col"></th>' : $table .= '';
 
         foreach ($this->options['fields'] as $key => $field)
             $table .= '<th scope="col">'
@@ -83,10 +83,12 @@ class GridView extends Widget
 
             (isset($this->options['serial'])) ? $table .= '<td>' . ($i + 1) . '</td>' :  $table .= '';
 
-            $table .= '<td>';
-            foreach ($this->actionsBtn as $item)
-                $table .= $this->createBtn($item, $this->options['baseUri'], $this->model[$i]->id);
-            $table .= '</td>';
+            if(isset($this->actionsBtn[0])) {
+                $table .= '<td>';
+                foreach ($this->actionsBtn as $item)
+                    $table .= $this->createBtn($item, $this->options['baseUri'], $this->model[$i]->id);
+                $table .= '</td>';
+            }
 
             foreach ($this->options['fields'] as $key => $option)
                 $table .= '<td>' . ((isset($this->model[$i]->$key))
