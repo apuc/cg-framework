@@ -38,7 +38,7 @@ class ArticleController extends Controller
             ],
             'baseUri' => 'article',
             'pagination' => [
-                'per_page' => 3,
+                'per_page' => 25,
                 'class' => '',
                 'class-active' => ''
             ],

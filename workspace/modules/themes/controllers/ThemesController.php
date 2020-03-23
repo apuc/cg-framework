@@ -46,7 +46,10 @@ class ThemesController extends Controller
                 'action' => [
                     'label' => 'Действие',
                     'value' => function($model) {
-                        if($model->status == 'скачано')
+                        $theme = Settings::where('key', 'theme')->first();
+                        if($theme->value == $model->theme)
+                            return '<a class="custom-link" title="Установленная тема" id="'. $model->id .'" href="/" data-theme="'.$model->theme.'"><i class="nav-icon fas fa-check"></i></a> ';
+                        elseif($model->status == 'скачано')
                             return '<a class="custom-link action" title="Установить тему" id="'. $model->id .'" href="#" data-theme="'.$model->theme.'"><i class="nav-icon fas fa-cogs"></i></a> ';
                         else
                             return '<a class="custom-link download" title="Скачать тему" id="'. $model->id .'" href="#" data-theme="'.$model->theme.'"><i class="nav-icon fas fa-download"></i></a> ';
