@@ -27,9 +27,36 @@ class ThemesController extends Controller
         foreach ($dirs as $key => $value)
             array_push($model, $this->formThemeModel($key, $value));
 
+        App::$header->add('Access-Control-Allow-Origin', '*');
+        $json = file_get_contents('https://news-parser.craft-group.xyz/api/api/templates');
+        $data = json_decode($json);
+
+        $diff = array_udiff($data, $model,
+            function ($a, $b) {
+                return strcmp($a->theme, $b->theme);
+            }
+        );
+
+        foreach ($diff as $value)
+            array_push($model, $value);
+
         $options = [
+            'serial' => '#',
             'fields' => [
+                'action' => [
+                    'label' => 'Действие',
+                    'value' => function($model) {
+                        $theme = Settings::where('key', 'theme')->first();
+                        if($theme->value == $model->theme)
+                            return '<a class="custom-link" title="Установленная тема" id="'. $model->id .'" href="/" data-theme="'.$model->theme.'"><i class="nav-icon fas fa-check"></i></a> ';
+                        elseif($model->status == 'скачано')
+                            return '<a class="custom-link action" title="Установить тему" id="'. $model->id .'" href="#" data-theme="'.$model->theme.'"><i class="nav-icon fas fa-cogs"></i></a> ';
+                        else
+                            return '<a class="custom-link download" title="Скачать тему" id="'. $model->id .'" href="#" data-theme="'.$model->theme.'"><i class="nav-icon fas fa-download"></i></a> ';
+                    }
+                ],
                 'theme' => 'Тема',
+                'status' => 'Статус',
                 'version' => 'Версия',
                 'description' => 'Описание',
                 'img' => 'Превью'
@@ -37,7 +64,8 @@ class ThemesController extends Controller
             'baseUri' => 'themes'
         ];
 
-        return $this->render('themes/index.tpl', ['h1' => 'Index', 'theme' => $theme, 'model' => $model, 'options' => $options]);
+        return $this->render('themes/index.tpl',
+            ['h1' => 'Index', 'theme' => $theme, 'model' => $model, 'options' => $options]);
     }
 
     public function actionView($id)
@@ -68,7 +96,8 @@ class ThemesController extends Controller
             $model->save();
 
             $this->redirect('themes');
-        } else {
+        }
+        else {
             $dirs = $this->getDirs();
 
             $themes_array = array();
@@ -110,11 +139,6 @@ class ThemesController extends Controller
         rmdir(WORKSPACE_DIR . '/modules/themes/themes/' . $dirs[$_POST['id']]);
     }
 
-    public function actionDownload()
-    {
-
-    }
-
     public function formThemeModel($id, $dir)
     {
         $protocol = sprintf("%s://",isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http');
@@ -124,7 +148,7 @@ class ThemesController extends Controller
         $manifest = json_decode($manifest_json, true);
 
         $img = '<img src="' .$protocol . App::$config['baseUrl'] . ':8000/workspace/modules/themes/themes/' . $dir . '/preview.jpg" class="img" />';
-        return new \Theme($id, $dir, $manifest['description'], $img, $manifest['version']);
+        return new \Theme($id, $dir, $manifest['description'], $img, $manifest['version'], 'скачано');
     }
 
     public function getDirs()

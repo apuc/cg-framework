@@ -7,12 +7,24 @@ use core\App;
 use core\Controller;
 use workspace\models\Article;
 use workspace\models\Settings;
+use ZipArchive;
 
 
 class ApiController extends Controller
 {
+    public function actionTemplates()
+    {
+        App::$header->add('Access-Control-Allow-Origin', '*');
+
+        $json = file_get_contents('php://input');
+
+        return json_decode($json);
+    }
+
     public function actionGetArticle()
     {
+        App::$header->add('Access-Control-Allow-Origin', '*');
+
         $json = file_get_contents('php://input');
         $data = json_decode($json);
 
@@ -68,12 +80,35 @@ class ApiController extends Controller
 
     public function actionDownload()
     {
-        $ch = curl_init('http://news_parser.loc/themes/' . 'theme2.zip');
-        $fp = fopen( WORKSPACE_DIR . '/modules/themes/themes/theme2.zip', 'wb');
+        $file = $_POST['theme'] . '.zip';
+        $path = WORKSPACE_DIR . '/modules/themes/themes/';
+
+        $ch = curl_init('http://news_parser.loc/themes/' . $file);
+        $fp = fopen( $path . $file, 'wb');
         curl_setopt($ch, CURLOPT_FILE, $fp);
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_exec($ch);
         curl_close($ch);
         fclose($fp);
+
+        $zip = new ZipArchive;
+        $res = $zip->open($path . $file);
+        if ($res === TRUE) {
+            $zip->extractTo($path);
+            $zip->close();
+        }
+        unlink($path . $file);
+    }
+
+    public function actionSetTheme()
+    {
+        $model = Settings::where('key', 'theme')->first();
+
+        if(isset($_POST['theme'])) {
+            $model->value = $_POST['theme'];
+            $model->save();
+
+            $this->redirect('themes');
+        }
     }
 }

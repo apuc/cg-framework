@@ -9,7 +9,8 @@
         "ext-json": "*",
         "phpquery/phpquery": "^0.0.2",
         "symfony/filesystem": "^5.0",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "ext-zip": "*"
     },
     "autoload": {
         "classmap": [
