@@ -20,6 +20,18 @@
             </select>
         </div>
         <div class="form-group">
+            <label for="category_id">Категория:</label>
+            <select class="form-control" name="category_id" id="category_id">
+                {foreach from=$categories key=key item=item}
+                    <option value="{$key}">{$item}</option>
+                {/foreach}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="image">Имя картинки:</label>
+            <input type="text" name="image" id="image" class="form-control" required="required" />
+        </div>
+        <div class="form-group">
             <input type="submit" name="submit" id="submit_button" class="btn btn-default" value="Submit">
         </div>
     </form>

@@ -25,6 +25,15 @@ class CategoriesController extends Controller
         $options = [
             'serial' => '#',
             'fields' => [
+                'action' => [
+                    'label' => 'Действие',
+                    'value' => function($model) {
+
+                       return '<a class="custom-link" id="'. $model->id .'" href="categories/'. $model->id .'" data-id="'.$model->id.'" data-url="categories"><i class="nav-icon fas fa-eye"></i></a> '
+                           . '<a class="custom-link" id="'. $model->id .'" href="categories/update/'. $model->id .'" data-id="'.$model->id.'" data-url="categories"><i class="nav-icon fas fa-edit"></i></a> '
+                           . '<a class="custom-link" id="'. $model->id .'" href="categories/delete/'. $model->id .'" data-id="'.$model->id.'" data-url="categories"><i class="nav-icon fas fa-trash"></i></a>';
+                    }
+                ],
                'category' => 'Категория'
             ],
             'baseUri' => 'categories'

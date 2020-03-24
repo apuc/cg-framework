@@ -5,6 +5,7 @@ namespace workspace\modules\article\controllers;
 use core\App;
 use core\Controller;
 use workspace\models\Article;
+use workspace\models\Category;
 use workspace\models\Language;
 
 class ArticleController extends Controller
@@ -26,6 +27,14 @@ class ArticleController extends Controller
         $options = [
             'serial' => '#',
             'fields' => [
+                'action' => [
+                    'label' => 'Действие',
+                    'value' => function($model) {
+                        return '<a class="custom-link" id="'. $model->id .'" href="article/'. $model->id .'" data-id="'.$model->id.'" data-url="article"><i class="nav-icon fas fa-eye"></i></a> '
+                            . '<a class="custom-link" id="'. $model->id .'" href="article/update/'. $model->id .'" data-id="'.$model->id.'" data-url="article"><i class="nav-icon fas fa-edit"></i></a> '
+                            . '<a class="custom-link" id="'. $model->id .'" href="article/delete/'. $model->id .'" data-id="'.$model->id.'" data-url="article"><i class="nav-icon fas fa-trash"></i></a>';
+                    }
+                ],
                 'name' => 'Заголовок',
                 'text' => 'Статья',
                 'language' => [
@@ -58,10 +67,18 @@ class ArticleController extends Controller
                 'language' => [
                     'label' => 'Язык',
                     'value' => function($model) {
-                        $language = Language::where('id', $model->language_id)->first();
-                        return $language->name;
+                        $loc_model = Language::where('id', $model->language_id)->first();
+                        return $loc_model->name;
                     }
                 ],
+                'category' => [
+                    'label' => 'Категория',
+                    'value' => function($model) {
+                        $loc_model = Category::where('id', $model->category_id)->first();
+                        return $loc_model->category;
+                    }
+                ],
+                'image' => 'Картинка'
             ],
         ];
 
@@ -72,20 +89,15 @@ class ArticleController extends Controller
     {
         if(isset($_POST['name']) && isset($_POST['text'])) {
             $article = new Article();
-            $article->name = $_POST['name'];
-            $article->text = $_POST['text'];
-            $article->language_id = $_POST['language_id'];
-            $article->save();
+            $this->saveArticle($article);
 
             $this->redirect('article');
         } else {
-            $language = Language::all();
+            $languages = $this->getArray(Language::all(), 'name');
+            $categories = $this->getArray(Category::all(), 'category');
 
-            $lang = array();
-            foreach ($language as $value)
-                $lang[$value->id] = $value->name;
-
-            return $this->render('article/store.tpl', ['h1' => 'Добавить статью', 'language' => $lang,]);
+            return $this->render('article/store.tpl',
+                ['h1' => 'Добавить статью', 'language' => $languages, 'categories' => $categories]);
         }
     }
 
@@ -94,24 +106,39 @@ class ArticleController extends Controller
         $model = Article::where('id', $id)->first();
 
         if(isset($_POST['name']) && isset($_POST['text'])) {
-            $model->name = $_POST['name'];
-            $model->text = $_POST['text'];
-            $model->save();
+            $this->saveArticle($model);
 
             $this->redirect('article');
         } else {
-            $language = Language::all();
+            $languages = $this->getArray(Language::all(), 'name');
+            $categories = $this->getArray(Category::all(), 'category');
 
-            $lang = array();
-            foreach ($language as $value)
-                $lang[$value->id] = $value->name;
-
-            return $this->render('article/edit.tpl', ['h1' => 'Редактировать: ', 'model' => $model, 'languages' => $lang]);
+            return $this->render('article/edit.tpl',
+                ['h1' => 'Редактировать: ', 'model' => $model, 'languages' => $languages, 'categories' => $categories]);
         }
     }
 
     public function actionDelete()
     {
         Article::where('id', $_POST['id'])->delete();
+    }
+
+    public function saveArticle($model) {
+        $model->name = $_POST['name'];
+        $model->text = $_POST['text'];
+        $model->language_id = $_POST['language_id'];
+        $model->category_id = $_POST['category_id'];
+        $model->image_name = $_POST['image'];
+        $model->image = '<img src="/workspace/modules/themes/themes/the-news-reporter/assets/images/'.$_POST['image'].'" />';
+        $model->save();
+    }
+
+    public function getArray($model, $field)
+    {
+        $array = array();
+        foreach ($model as $value)
+            $array[$value->id] = $value->$field;
+
+        return $array;
     }
 }
