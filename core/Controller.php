@@ -60,7 +60,7 @@ class Controller
             $_SERVER['SERVER_NAME']
         );
 
-        header('Location: ' . $uri . $url);
+        header('Location: ' . $uri . '/' . $url);
         die();
     }
 
