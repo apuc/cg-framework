@@ -28,14 +28,6 @@ class ArticleController extends Controller
         $options = [
             'serial' => '#',
             'fields' => [
-                'action' => [
-                    'label' => 'Действие',
-                    'value' => function($model) {
-                        return '<a class="custom-link" id="'. $model->id .'" href="article/'. $model->id .'" data-id="'.$model->id.'" data-url="article"><i class="nav-icon fas fa-eye"></i></a> '
-                            . '<a class="custom-link" id="'. $model->id .'" href="article/update/'. $model->id .'" data-id="'.$model->id.'" data-url="article"><i class="nav-icon fas fa-edit"></i></a> '
-                            . '<a class="custom-link" id="'. $model->id .'" href="article/delete/'. $model->id .'" data-id="'.$model->id.'" data-url="article"><i class="nav-icon fas fa-trash"></i></a>';
-                    }
-                ],
                 'name' => 'Заголовок',
                 'text' => 'Статья',
                 'language' => [
