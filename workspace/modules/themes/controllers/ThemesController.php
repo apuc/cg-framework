@@ -141,13 +141,17 @@ class ThemesController extends Controller
 
     public function formThemeModel($id, $dir)
     {
-        $protocol = sprintf("%s://",isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http');
+        $uri = sprintf(
+            "%s://%s",
+            isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
+            $_SERVER['SERVER_NAME']
+        );
 
         $manifest_json = file_get_contents(WORKSPACE_DIR . '/modules/themes/themes/' . $dir . '/manifest.json');
 
         $manifest = json_decode($manifest_json, true);
 
-        $img = '<img src="' .$protocol . App::$config['baseUrl'] . ':8000/workspace/modules/themes/themes/' . $dir . '/preview.jpg" class="img" />';
+        $img = '<img src="' . $uri . '/workspace/modules/themes/themes/' . $dir . '/preview.jpg" class="img" />';
         return new \Theme($id, $dir, $manifest['description'], $img, $manifest['version'], 'скачано');
     }
 
