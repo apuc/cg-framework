@@ -83,13 +83,7 @@ class ApiController extends Controller
         $file = $_POST['theme'] . '.zip';
         $path = WORKSPACE_DIR . '/modules/themes/themes/';
 
-        $url = sprintf(
-            "%s://%s",
-            isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
-            $_SERVER['SERVER_NAME']
-        );
-
-        $ch = curl_init($url . '/themes/' . $file);
+        $ch = curl_init('http://news_parser.craft-group.xyz/themes/' . $file);
         $fp = fopen( $path . $file, 'wb');
         curl_setopt($ch, CURLOPT_FILE, $fp);
         curl_setopt($ch, CURLOPT_HEADER, 0);
