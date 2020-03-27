@@ -41,4 +41,49 @@ class MainController extends Controller
         return $this->render('main/user.tpl', ['model' => $user]);
     }
 
+    public function actionSignUp()
+    {
+        if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])) {
+            $model = new User();
+            $model->username = $_POST['username'];
+            $model->email = $_POST['email'];
+            $model->role = 2;
+            $model->password_hash = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            $model->save();
+
+            $_SESSION['role'] = $model->role;
+            $_SESSION['username'] = $model->username;
+//            $_SESSION['allowed'] = ['adminlte' => [1]];
+
+            $this->redirect('');
+        } else {
+            return $this->render('main/sign-up.tpl');
+        }
+    }
+
+    public function actionSignIn()
+    {
+        if (isset($_POST['username']) && isset($_POST['password'])) {
+            $model = User::where('username', $_POST['username'])->first();
+
+            if(password_verify ($_POST['password'], $model->password_hash)) {
+                $_SESSION['role'] = $model->role;
+                $_SESSION['username'] = $model->username;
+                App::$rout_filter->setRole($model->role);
+
+                $this->redirect('adminlte');
+            } else {
+                $this->redirect('sign-in');
+            }
+        } else {
+            return $this->render('main/sign-in.tpl');
+        }
+    }
+
+    public function actionLogout()
+    {
+        session_destroy();
+        $this->redirect('');
+    }
+
 }
