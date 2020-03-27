@@ -2,7 +2,9 @@
 
 namespace workspace\modules\frontend\controllers;
 
+use core\App;
 use core\Controller;
+use core\Debug;
 use workspace\models\ArticleCategory;
 use workspace\models\Category;
 use workspace\models\Settings;
@@ -19,9 +21,19 @@ class FrontendController extends Controller
         $categories = Category::all();
         $article_category = ArticleCategory::all();
 
+        if(isset($_SESSION['username']) && isset($_SESSION['role'])) {
+            $username = $_SESSION['username'];
+            $role = $_SESSION['role'];
+        }
+        else {
+            $username = '';
+            $role = '';
+        }
+
         try {
             return $this->render($theme->value . '/index.tpl',
-                ['articles' => $articles, 'categories' => $categories, 'article_category' => $article_category, 'amount' => 3, 'popular' => 10]);
+                ['articles' => $articles, 'categories' => $categories, 'article_category' => $article_category,
+                    'amount' => 3, 'popular' => 10, 'username' => $username, 'role' => $role]);
         } catch (\Exception $e) {
             return $this->render('default/index.tpl');
         }

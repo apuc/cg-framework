@@ -4,13 +4,13 @@ namespace workspace\modules\themes\controllers;
 
 use core\App;
 use core\Controller;
-use core\Debug;
 use workspace\models\Settings;
 
 class ThemesController extends Controller
 {
     protected function init()
     {
+        if(!isset($_SESSION['role']) || $_SESSION['role'] != 1) $this->redirect('');
         $this->viewPath = '/modules/themes/views/';
         $this->layoutPath = App::$config['adminLayoutPath'];
         App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);

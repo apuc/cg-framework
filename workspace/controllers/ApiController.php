@@ -6,6 +6,7 @@ namespace workspace\controllers;
 use core\App;
 use core\Controller;
 use workspace\models\Article;
+use workspace\models\Category;
 use workspace\models\Settings;
 use ZipArchive;
 
@@ -28,13 +29,18 @@ class ApiController extends Controller
         $json = file_get_contents('php://input');
         $data = json_decode($json);
 
-        if($data) {
-            $a = new Article();
-            $a->name = $data->title;
-            $a->text = $data->article;
-            $a->language_id = $data->language_id;
-            $a->save();
-        }
+        $category = Category::where('category', $data->categories[0])->first();
+
+        $model = new Article();
+        $model->name = $data->name;
+        $model->text = $data->text;
+        $model->language_id = $data->language_id;
+        $model->category_id = $category->id;
+        $model->image_name = $data->image;
+        $model->image = '<img src="/workspace/modules/themes/themes/the-news-reporter/assets/images/'. $data->image .'" />';
+        $model->save();
+
+        return 'success';
     }
 
     public function actionSetOptions()

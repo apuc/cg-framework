@@ -26,5 +26,9 @@
   "categories": {
     "version": "0.1",
     "status": "active"
+  },
+  "users": {
+    "version": "0.1",
+    "status": "active"
   }
 }

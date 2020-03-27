@@ -1,8 +1,19 @@
 {capture name=css}
+    <link href="/resources/css/bootstrap.css" rel="stylesheet" type="text/css">
+{*    <link href="/resources/css/bootstrap.css.map" rel="stylesheet" type="text/css">*}
+{*    <link href="/resources/css/bootstrap.min.css" rel="stylesheet" type="text/css">*}
+{*    <link href="/resources/css/bootstrap-grid.css" rel="stylesheet" type="text/css">*}
+{*    <link href="/resources/css/bootstrap-grid.min.css" rel="stylesheet" type="text/css">*}
+{*    <link href="/resources/css/bootstrap-reboot.css" rel="stylesheet" type="text/css">*}
+{*    <link href="/resources/css/bootstrap-reboot.min.css" rel="stylesheet" type="text/css">*}
     <link href="/resources/css/style.css" rel="stylesheet" type="text/css">
 {/capture}
 
 {capture name=js_head}
+{*    <script src="/resources/js/bootstrap.js"></script>*}
+{*    <script src="/resources/js/bootstrap.min.js"></script>*}
+{*    <script src="/resources/js/bootstrap.bundle.js"></script>*}
+{*    <script src="/resources/js/bootstrap.bundle.min.js"></script>*}
     <script src="/resources/js/script.js"></script>
 {/capture}
 

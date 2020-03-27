@@ -9,10 +9,20 @@
             <li><a href="/">Home</a></li>
             <li><a href="/about">About</a></li>
             <li><a href="">Subscribe</a></li>
+            {if $role}
+                <li><a href="/logout">Logout</a></li>
+            {else}
+                <li><a href="/sign-in">Sign In</a></li>
+                <li><a href="/sign-up">Sign Up</a></li>
+            {/if}
         </ul>
     </div>
     <div class="social_plus_search floatright">
-        <div class="social"></div>
+        {if $username}
+            <div class="social">Hi, {$username}</div>
+        {else}
+            <div class="social"></div>
+        {/if}
         <div class="search">
             <form action="#" method="post" id="search_form">
                 <input type="text" value="Search news" id="s" />

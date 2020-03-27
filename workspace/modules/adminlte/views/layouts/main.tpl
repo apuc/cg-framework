@@ -99,6 +99,7 @@
                 </div>
                 <div class="info">
                     <a href="#" class="d-block">Admin</a>
+                    <div class="logout-line"><a href="/logout">Logout</a></div>
                 </div>
             </div>
 

@@ -14,6 +14,8 @@ class SettingsController extends Controller
 
     protected function init()
     {
+        if(!isset($_SESSION['role']) || $_SESSION['role'] != 1) $this->redirect('');
+
         $this->viewPath = '/modules/settings/views/';
         $this->layoutPath = App::$config['adminLayoutPath'];
         App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);

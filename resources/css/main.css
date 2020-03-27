@@ -15,3 +15,11 @@
     height: 100px;
     width: 200px;
 }
+
+.logout-line {
+    border-top-style: solid;
+    border-top-color: lightgrey;
+    border-top-width: 1px;
+    margin-top: 10px;
+    padding-top: 5px;
+}

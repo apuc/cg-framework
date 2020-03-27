@@ -27,6 +27,11 @@ class CgRouteCollector extends RouteCollector
         return $this->addRoute(Route::ANY, $route . '/update/{id}', array_merge($handler, ['actionEdit']), $filters);
     }
 
+    public function authorization($route, $handler, array $filters = [])
+    {
+
+    }
+
     public function exclude($action)
     {
     }
