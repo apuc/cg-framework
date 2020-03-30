@@ -19,9 +19,9 @@ class Article extends Migration
             $table->string('name', 255);
             $table->text('text');
             $table->integer('language_id');
-            $table->integer('category_id');
             $table->string('image_name', 255);
             $table->string('image', 255);
+            $table->integer('parent_id');
             $table->timestamps();
         });
     }

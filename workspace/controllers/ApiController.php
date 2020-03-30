@@ -6,14 +6,13 @@ namespace workspace\controllers;
 use core\App;
 use core\Controller;
 use workspace\models\Article;
-use workspace\models\Category;
 use workspace\models\Settings;
 use ZipArchive;
 
 
 class ApiController extends Controller
 {
-    public function actionTemplates()
+    public function getDataFromJson()
     {
         App::$header->add('Access-Control-Allow-Origin', '*');
 
@@ -22,33 +21,47 @@ class ApiController extends Controller
         return json_decode($json);
     }
 
-    public function actionGetArticle()
+    public function actionTemplates()
     {
-        App::$header->add('Access-Control-Allow-Origin', '*');
+        return $this->getDataFromJson();
+    }
 
-        $json = file_get_contents('php://input');
-        $data = json_decode($json);
+    public function actionStoreArticle()
+    {
+        $data = $this->getDataFromJson();
 
-        $category = Category::where('category', $data->categories[0])->first();
+        $existing = Article::where('parent_id', $data->parent_id)->first();
 
-        $model = new Article();
-        $model->name = $data->name;
-        $model->text = $data->text;
-        $model->language_id = $data->language_id;
-        $model->category_id = $category->id;
-        $model->image_name = $data->image;
-        $model->image = '<img src="/workspace/modules/themes/themes/the-news-reporter/assets/images/'. $data->image .'" />';
-        $model->save();
+        if(!$existing) {
+            $model = new Article();
+            Article::saveData($model, $data);
 
-        return 'success';
+            return 'The article successfully added!';
+        } else
+            return 'The article already exist!';
+
+    }
+
+    public function actionUpdateArticle()
+    {
+        $data = $this->getDataFromJson();
+
+        $existing = Article::where('parent_id', $data->parent_id)->first();
+        if($existing) {
+            Article::saveData($existing, $data);
+
+            return 'The article successfully updated!';
+        } else {
+            $model = new Article();
+            Article::saveData($model, $data);
+
+            return 'The article didn\'t exist and was successfully added!';
+        }
     }
 
     public function actionSetOptions()
     {
-        App::$header->add('Access-Control-Allow-Origin', '*');
-
-        $json = file_get_contents('php://input');
-        $data = json_decode($json);
+        $data = $this->getDataFromJson();
 
         if($data)
             foreach ($data as $value)

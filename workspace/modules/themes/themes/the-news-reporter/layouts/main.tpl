@@ -4,18 +4,20 @@
         <a class="more" href="/category/{$category->id}">more</a>
         {$i = 0}
         {foreach from=$articles item=item}
-            {if $item->category_id == $category->id}
-                {if $i++ < $amount}
-                    <div class="single_left_coloum floatleft">
-                        {$item->image}
-                        <h3> {$item->name} </h3>
-                        <div class="article_text_small"><p> {$item->text} </p></div>
-                        <a class="readmore" href="/read/{$item->id}">read more</a>
-                    </div>
-                {else}
-                    {break}
+            {foreach from=$article_category item=ac}
+                {if $ac->article_id == $item->id && $ac->category_id == $category->id}
+                    {if $i++ < $amount}
+                        <div class="single_left_coloum floatleft">
+                            {$item->image}
+                            <h3> {$item->name} </h3>
+                            <div class="article_text_small"><p> {$item->text} </p></div>
+                            <a class="readmore" href="/read/{$item->id}">read more</a>
+                        </div>
+                    {else}
+                        {break}
+                    {/if}
                 {/if}
-            {/if}
+            {/foreach}
         {/foreach}
     </div>
 {/foreach}
