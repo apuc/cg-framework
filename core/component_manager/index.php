@@ -13,6 +13,9 @@ $cm->getComponentInfo('adminlte');*/
 $cm->download('adminlte');*/
 
 /*$cm = new \lib\CM();
+$cm->updateCurrentVersion('adminlte');*/
+
+/*$cm = new \lib\CM();
 $cm->save('datatables',['version' => '0.2', 'status' => 'active']);*/
 
 /*$cm = new \lib\CM();
@@ -31,22 +34,19 @@ var_dump($cm->checkVersion('adminlte'));*/
 var_dump($cm->getVersions('adminlte'));*/
 
 /*$cm = new \lib\CM();
+var_dump($cm->getAllVersions());*/
+
+/*$cm = new \lib\CM();
 var_dump($cm->getSlugLoc());*/
 
 /*$cm = new \lib\CM();
 var_dump($cm->getComponentsInfo());*/
 
 /*$cm = new \lib\CM();
-var_dump($cm->getAllVersions());*/
-
-/*$cm = new \lib\CM();
 var_dump($cm->getByStatus('active'));*/
 
 /*$cm = new \lib\CM();
 $cm->isInstalled('adminlte');*/
-
-/*$cm = new \lib\CM();
-$cm->updateCurrentVersion('adminlte');*/
 
 /*$cm = new \lib\CM();
 $cm->getIsInstalled('adminlte');*/

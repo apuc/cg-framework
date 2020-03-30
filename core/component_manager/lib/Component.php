@@ -2,7 +2,8 @@
 
 namespace core\component_manager\lib;
 
-class Component implements \interfaces\Component
+
+class Component implements \core\component_manager\interfaces\Component
 {
     public $version;
     public $name;
@@ -26,5 +27,4 @@ class Component implements \interfaces\Component
             $this->{$key} = $datum;
         }
     }
-
 }

@@ -2,9 +2,10 @@
 
 namespace core\component_manager\lib;
 
-use interfaces\Rep;
-use traits\Delete;
-use traits\Unpack;
+use core\component_manager\interfaces\Rep;
+use core\component_manager\traits\Delete;
+use core\component_manager\traits\Unpack;
+
 
 class CmService
 {
