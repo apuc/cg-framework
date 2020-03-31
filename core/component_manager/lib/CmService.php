@@ -155,28 +155,23 @@ class CmService
      */
     public function download(string $slug): bool
     {
-        $url = Config::get()->byKey('url');
-        $url = $url . '/components/' . $slug . '/manifest.zip';
-        $path = Config::get()->byKey('modulePath');
-        if (!is_dir('download/modules/' . $slug)) {
-            mkdir('download/modules/' . $slug, 0775);
-        }
-        $path = $path . $slug;
-        $this->rep->download($url, $path);
-        if (!is_dir('unpack/modules/' . $slug)) {
-            mkdir('unpack/modules/' . $slug , 0775);
-        }
-        $data = ['version' => $this->getVersion($slug),
-            'status' => 'active'];
+        $filename = $slug . '.zip';
+        $url = Config::get()->byKey('url') . '/components/' . $slug . '/' . $this->getVersion($slug). '/' . $filename;
+
+        $this->rep->download($url, Config::get()->byKey('modulePath') . $filename);
+
+        $data = ['version' => $this->getVersion($slug), 'status' => 'active'];
+
         $this->mod->save($slug, $data);
-        $url = $path . '/' . 'manifest.zip';
-        if ($this->unpack($url, $path)) {
-            $folder = '/download';
-            $this->delete($url, $path, $folder);
+
+        $url_loc = Config::get()->byKey('modulePath') . $filename;
+
+        if ($this->unpack($url_loc, Config::get()->byKey('modulePath'))) {
+            unlink(ROOT_DIR . $url_loc);
+
             return true;
-        } else {
+        } else
             return false;
-        }
     }
 
     /**
@@ -190,6 +185,7 @@ class CmService
         $folder = '/unpack';
         $delete = $this->delete($url, $path, $folder);
         $modDelete =  $this->modDeleteFromJson($slug);
+
         return (true ?: $delete and $modDelete ?: false);
     }
 

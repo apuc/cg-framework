@@ -9,3 +9,5 @@ App::$collector->console('migration/create', ['workspace\console\controllers\Mig
 App::$collector->console('migration/rollback', ['workspace\console\controllers\MigrationController', 'actionRollback']);
 
 App::$collector->console('mod/list', ['workspace\console\controllers\ModController', 'actionList']);
+
+App::$collector->console('cm/download', ['workspace\console\controllers\CmController', 'actionDownload']);

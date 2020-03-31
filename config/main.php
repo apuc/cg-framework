@@ -9,11 +9,11 @@
 return [
     'app_name' => 'CG',
     'adminLeftMenu' => [
-//       [
-//            'title' => 'Страница 1',
-//            'url' => 'page_1',
-//            'icon' => '<i class="nav-icon fas fa-copy"></i>',
-//        ],
+    ],
+    'component_manager' => [
+        'repType' => '\\core\\component_manager\\lib\\CurlRep',
+        'url' => 'https://rep.craft-group.xyz',
+        'modulePath' => '/workspace/modules/',
     ]
 ];
 /* Пример настройки локальной базы

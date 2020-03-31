@@ -3,6 +3,8 @@
 namespace core\component_manager\lib;
 
 
+use core\App;
+
 class Config
 {
     /**
@@ -18,7 +20,7 @@ class Config
      * Config constructor.
      */
     public function __construct(){
-        $this->data = include ROOT_DIR . '/config/config.php';
+        $this->data = App::$config['component_manager'];
     }
 
     /**

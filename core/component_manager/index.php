@@ -1,64 +1,51 @@
 <?php
+
+use core\component_manager\lib\CM;
+use core\component_manager\lib\CmService;
+use core\component_manager\lib\Mod;
+
 require __DIR__ . '/init.php';
 
-/*$cm = new \lib\CmService();
-$cm->getComponentInfo('adminlte');*/
+$cms = new CmService();
+$cmm = new Mod();
+$cm = new CM();
 
-/*$cm = new \lib\Mod();*/
+$cms->getComponentInfo('adminlte');
 
-//$cm = new \lib\CM();
-//var_dump($cm->service->rep->getRep());
+$cm->service->rep->getRep();
 
-/*$cm = new \lib\CM();
-$cm->download('adminlte');*/
+$cm->download('adminlte');
 
-/*$cm = new \lib\CM();
-$cm->updateCurrentVersion('adminlte');*/
+$cm->updateCurrentVersion('adminlte');
 
-/*$cm = new \lib\CM();
-$cm->save('datatables',['version' => '0.2', 'status' => 'active']);*/
+$cm->save('datatables',['version' => '0.2', 'status' => 'active']);
 
-/*$cm = new \lib\CM();
-$cm->modDeleteFromJson('datatables');*/
+$cm->modDeleteFromJson('datatables');
 
-/*$cm = new \lib\CM();
-$cm->modChangeStatus('datatables', ['status' => 'inactive']);*/
+$cm->modChangeStatus('datatables', ['status' => 'inactive']);
 
-/*$cm = new \lib\CM();
-$cm->modChangeVersion('datatables',['version' => '0.3']);*/
+$cm->modChangeVersion('datatables',['version' => '0.3']);
 
-/*$cm = new \lib\CM();
-var_dump($cm->checkVersion('adminlte'));*/
+$cm->checkVersion('adminlte');
 
-/*$cm = new \lib\CM();
-var_dump($cm->getVersions('adminlte'));*/
+$cm->getVersions('adminlte');
 
-/*$cm = new \lib\CM();
-var_dump($cm->getAllVersions());*/
+$cm->getAllVersions();
 
-/*$cm = new \lib\CM();
-var_dump($cm->getSlugLoc());*/
+$cm->getSlugLoc();
 
-/*$cm = new \lib\CM();
-var_dump($cm->getComponentsInfo());*/
+$cm->getComponentsInfo();
 
-/*$cm = new \lib\CM();
-var_dump($cm->getByStatus('active'));*/
+$cm->getByStatus('active');
 
-/*$cm = new \lib\CM();
-$cm->isInstalled('adminlte');*/
+$cm->isInstalled('adminlte');
 
-/*$cm = new \lib\CM();
-$cm->getIsInstalled('adminlte');*/
+$cm->getIsInstalled('adminlte');
 
-/*$cm = new \lib\CM();
-$cm->getLocMod('adminlte');*/
+$cm->getLocMod('adminlte');
 
-/*$cm = new \lib\CM();
-$cm->deleteMod('adminlte');*/
+$cm->deleteMod('adminlte');
 
-/*$cm = new \lib\CM();
-$cm->modChangeStatusToActive('adminlte');*/
+$cm->modChangeStatusToActive('adminlte');
 
-/*$cm = new \lib\CM();
-$cm->modChangeStatusToInactive('adminlte');*/
+$cm->modChangeStatusToInactive('adminlte');

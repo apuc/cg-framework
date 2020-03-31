@@ -32,16 +32,16 @@ class CurlRep implements Rep
     public function download(string $url, string $path):bool
     {
         $ch = curl_init($url);
-        if (curl_errno($ch)){
+        if (curl_errno($ch))
             return false;
-        }
-        else{
-            $fp = fopen(ROOT_DIR . '/download/' .$path . '/' . 'manifest.zip' ,'wb' );
+        else {
+            $fp = fopen(ROOT_DIR . $path ,'wb' );
             curl_setopt($ch, CURLOPT_FILE, $fp);
             curl_setopt($ch, CURLOPT_HEADER, 0);
             curl_exec($ch);
             curl_close($ch);
             fclose($fp);
+
             return true;
         }
     }
