@@ -23,3 +23,4 @@ App::$collector->post('/set-theme', ['workspace\controllers\ApiController', 'act
 App::$collector->any('sign-up', ['workspace\controllers\MainController', 'actionSignUp']);
 App::$collector->any('sign-in', ['workspace\controllers\MainController', 'actionSignIn']);
 App::$collector->any('logout', ['workspace\controllers\MainController', 'actionLogout']);
+App::$collector->any('modules', ['workspace\controllers\MainController', 'actionModules']);

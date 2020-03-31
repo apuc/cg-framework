@@ -6,6 +6,7 @@ use core\App;
 use core\Controller;
 use core\Debug;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use workspace\models\Modules;
 use workspace\models\User;
 use workspace\traits\SmartTitle;
 use workspace\widgets\Main;
@@ -84,6 +85,31 @@ class MainController extends Controller
     {
         session_destroy();
         $this->redirect('');
+    }
+
+    public function actionModules()
+    {
+        App::$header->add('Access-Control-Allow-Origin', '*');
+        $content = file_get_contents('https://rep.craft-group.xyz/handler.php');
+        $data = json_decode($content);
+
+        $model = array();
+        foreach ($data as $value)
+            array_push($model, new Modules($value));
+
+        $options = [
+            'serial' => '#',
+            'fields' => [
+                'module' => 'Модуль',
+            ],
+            'baseUri' => 'modules'
+        ];
+
+        $this->layoutPath = App::$config['adminLayoutPath'];
+        App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);
+        App::$breadcrumbs->addItem(['text' => 'Modules', 'url' => 'modules']);
+
+        return $this->render('main/modules.tpl', ['model' => $model, 'options' => $options]);
     }
 
 }
