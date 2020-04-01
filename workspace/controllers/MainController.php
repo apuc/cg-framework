@@ -120,8 +120,12 @@ class MainController extends Controller
                 'status' => [
                     'label' => 'Статус',
                     'value' => function($model) {
-                        $mod = new Mod();
-                        return $mod->getModInfo($model->name)['status'];
+                        try {
+                            $mod = new Mod();
+                            return $mod->getModInfo($model->name)['status'];
+                        } catch (\Exception $e) {
+                            return 'не скачан';
+                        }
                     }
                 ],
                 'name' => 'Название',

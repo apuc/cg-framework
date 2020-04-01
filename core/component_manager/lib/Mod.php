@@ -87,7 +87,7 @@ class Mod
         if (file_exists($file))
             $mods = file_get_contents($file);
         else
-            $mods = '{"name":""}';
+            $mods = '{"name":"", "status":"не скачан"}';
 
         return $mod = json_decode($mods, true)[$slug];
     }
