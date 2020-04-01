@@ -5,6 +5,7 @@ namespace core\component_manager\lib;
 use core\component_manager\interfaces\Rep;
 use core\component_manager\traits\Delete;
 use core\component_manager\traits\Unpack;
+use core\Debug;
 
 
 class CmService
@@ -88,9 +89,9 @@ class CmService
 
     /**
      * @param string $slug
-     * @return bool
+     * @return array
      */
-    public function getLocMod(string $slug):bool
+    public function getLocMod(string $slug):array
     {
         return $this->mod->getLocMod($slug);
     }
@@ -166,7 +167,7 @@ class CmService
 
         $url_loc = Config::get()->byKey('modulePath') . $filename;
 
-        if ($this->unpack($url_loc, Config::get()->byKey('modulePath'))) {
+        if ($this->unpack($url_loc, Config::get()->byKey('modulePath'), $slug)) {
             unlink(ROOT_DIR . $url_loc);
 
             return true;

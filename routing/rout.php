@@ -24,3 +24,6 @@ App::$collector->any('sign-up', ['workspace\controllers\MainController', 'action
 App::$collector->any('sign-in', ['workspace\controllers\MainController', 'actionSignIn']);
 App::$collector->any('logout', ['workspace\controllers\MainController', 'actionLogout']);
 App::$collector->any('modules', ['workspace\controllers\MainController', 'actionModules']);
+App::$collector->any('module-download', ['workspace\controllers\MainController', 'actionModuleDownload']);
+App::$collector->any('module-set-active', ['workspace\controllers\MainController', 'actionSetActive']);
+App::$collector->any('module-set-inactive', ['workspace\controllers\MainController', 'actionSetInactive']);

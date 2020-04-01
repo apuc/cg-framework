@@ -3,10 +3,14 @@
 namespace workspace\controllers;
 
 use core\App;
+use core\component_manager\lib\CM;
+use core\component_manager\lib\CmService;
+use core\component_manager\lib\Mod;
 use core\Controller;
 use core\Debug;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use workspace\models\Modules;
+use workspace\models\Settings;
 use workspace\models\User;
 use workspace\traits\SmartTitle;
 use workspace\widgets\Main;
@@ -54,7 +58,6 @@ class MainController extends Controller
 
             $_SESSION['role'] = $model->role;
             $_SESSION['username'] = $model->username;
-//            $_SESSION['allowed'] = ['adminlte' => [1]];
 
             $this->redirect('');
         } else {
@@ -70,7 +73,7 @@ class MainController extends Controller
             if(password_verify ($_POST['password'], $model->password_hash)) {
                 $_SESSION['role'] = $model->role;
                 $_SESSION['username'] = $model->username;
-                App::$rout_filter->setRole($model->role);
+                //App::$rout_filter->setRole($model->role);
 
                 $this->redirect('adminlte');
             } else {
@@ -95,21 +98,73 @@ class MainController extends Controller
 
         $model = array();
         foreach ($data as $value)
-            array_push($model, new Modules($value));
+            if($value->type == 'module')
+                array_push($model, new Modules($value->name, $value->version, $value->description));
 
         $options = [
             'serial' => '#',
             'fields' => [
-                'module' => 'Модуль',
+                'action' => [
+                    'label' => '',
+                    'value' => function($model) {
+                        $cm = new CmService();
+                        $mod = new Mod();
+                        if($cm->isInstalled($model->name) && $mod->getModInfo($model->name)['status'] == 'active')
+                            return '<a class="custom-link module-set-inactive" title="Отключить" id="'.$model->name.'" href="" data-name="'.$model->name.'"><i class="nav-icon fas fa-toggle-on"></i></a> ';
+                        elseif($cm->isInstalled($model->name) && $mod->getModInfo($model->name)['status'] !== 'active')
+                            return '<a class="custom-link module-set-active" title="Включить" id="'.$model->name.'" href="" data-name="'.$model->name.'"><i class="nav-icon fas fa-toggle-off"></i></a> ';
+                        else
+                            return '<a class="custom-link module-download" title="Скачать" id="'.$model->name.'" href="#" data-name="'.$model->name.'"><i class="nav-icon fas fa-download"></i></a> ';
+                    }
+                ],
+                'status' => [
+                    'label' => 'Статус',
+                    'value' => function($model) {
+                        $mod = new Mod();
+                        return $mod->getModInfo($model->name)['status'];
+                    }
+                ],
+                'name' => 'Название',
+                'description' => 'Описание',
+                'version' => 'Версия'
             ],
             'baseUri' => 'modules'
         ];
 
-        $this->layoutPath = App::$config['adminLayoutPath'];
         App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);
         App::$breadcrumbs->addItem(['text' => 'Modules', 'url' => 'modules']);
 
         return $this->render('main/modules.tpl', ['model' => $model, 'options' => $options]);
+    }
+
+    public function actionModuleDownload()
+    {
+        try {
+            $cm = new CM();
+            $cm->download($_POST['slug']);
+        } catch (\Exception $e) {
+            return $e;
+        }
+    }
+
+    public function actionSetActive()
+    {
+        try {
+            $cm = new CM();
+            $cm->modChangeStatusToActive($_POST['slug']);
+        } catch (\Exception $e) {
+            return $e;
+        }
+    }
+
+    public function actionSetInactive()
+    {
+        try {
+            $cm = new CM();
+            $cm->modChangeStatusToInactive($_POST['slug']);
+        } catch (\Exception $e) {
+            return $e;
+        }
     }
 
 }

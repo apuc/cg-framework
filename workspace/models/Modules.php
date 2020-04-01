@@ -6,10 +6,14 @@ namespace workspace\models;
 
 class Modules
 {
-    public $module;
+    public $name;
+    public $version;
+    public $description;
 
-    public function __construct($module)
+    public function __construct($name, $version, $description)
     {
-        $this->module = $module;
+        $this->name = $name;
+        $this->version = $version;
+        $this->description = $description;
     }
 }

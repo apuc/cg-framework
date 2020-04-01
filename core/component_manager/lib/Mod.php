@@ -4,6 +4,7 @@ namespace core\component_manager\lib;
 
 
 use core\component_manager\interfaces\Rep;
+use core\Debug;
 
 class Mod
 {
@@ -61,15 +62,34 @@ class Mod
 
     /**
      * @param string $slug
-     * @return bool
+     * @return array
      */
-    public function getLocMod(string $slug): bool
+    public function getLocMod(string $slug): array
     {
-        $file = ROOT_DIR . "/unpack/modules/" . $slug .  "/manifest.json";
-        if (file_exists($file)){
+        $file = ROOT_DIR . "/workspace/modules/" . $slug .  "/manifest.json";
+
+        if (file_exists($file))
             $mods = file_get_contents($file);
-        }
-        return (true ?: $mod = json_decode($mods, true)?: false);
+        else
+            $mods = '{"name":""}';
+
+        return $mod = json_decode($mods, true);
+    }
+
+    /**
+     * @param string $slug
+     * @return array
+     */
+    public function getModInfo(string $slug): array
+    {
+        $file = ROOT_DIR . "/mods.json";
+
+        if (file_exists($file))
+            $mods = file_get_contents($file);
+        else
+            $mods = '{"name":""}';
+
+        return $mod = json_decode($mods, true)[$slug];
     }
 
     /**

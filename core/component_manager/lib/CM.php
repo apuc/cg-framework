@@ -171,7 +171,7 @@ class CM
 
     /**
      * @param string $slug
-     * @return bool
+     * @return array
      */
     public function getLocMod(string $slug)
     {
