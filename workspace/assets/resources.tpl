@@ -1,4 +1,5 @@
 {capture name=css}
+    <link rel="stylesheet" href="/resources/css/fontawesome-free/css/all.min.css">
     <link href="/resources/css/bootstrap.css" rel="stylesheet" type="text/css">
 {*    <link href="/resources/css/bootstrap.css.map" rel="stylesheet" type="text/css">*}
 {*    <link href="/resources/css/bootstrap.min.css" rel="stylesheet" type="text/css">*}
@@ -14,11 +15,12 @@
 {*    <script src="/resources/js/bootstrap.min.js"></script>*}
 {*    <script src="/resources/js/bootstrap.bundle.js"></script>*}
 {*    <script src="/resources/js/bootstrap.bundle.min.js"></script>*}
-    <script src="/resources/js/script.js"></script>
 {/capture}
 
 {capture name=js_body}
-
+    <script src="/resources/js/jquery/jquery.min.js"></script>
+    <script src="/resources/js/main.js"></script>
+    <script src="/resources/js/gridView.js"></script>
 {/capture}
 
 {capture name=meta}

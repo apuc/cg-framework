@@ -2,9 +2,8 @@
 
 namespace workspace\modules\frontend\controllers;
 
-use core\App;
+
 use core\Controller;
-use core\Debug;
 use workspace\models\ArticleCategory;
 use workspace\models\Category;
 use workspace\models\Settings;
@@ -46,8 +45,17 @@ class FrontendController extends Controller
         $articles = Article::where('category_id', $id)->get();
         $articles = $articles->sortByDesc('updated_at');
 
+        if(isset($_SESSION['username']) && isset($_SESSION['role'])) {
+            $username = $_SESSION['username'];
+            $role = $_SESSION['role'];
+        }
+        else {
+            $username = '';
+            $role = '';
+        }
+
         try {
-            return $this->render($theme->value . '/category.tpl', ['categories' => $categories, 'articles' => $articles]);
+            return $this->render($theme->value . '/category.tpl', ['categories' => $categories, 'articles' => $articles, 'username' => $username, 'role' => $role]);
         } catch (\Exception $e) {
             return $this->render('default/index.tpl', ['h1' => 'Site with']);
         }
@@ -60,9 +68,18 @@ class FrontendController extends Controller
         $categories = Category::all();
         $articles = Article::all()->sortByDesc("updated_at");
 
+        if(isset($_SESSION['username']) && isset($_SESSION['role'])) {
+            $username = $_SESSION['username'];
+            $role = $_SESSION['role'];
+        }
+        else {
+            $username = '';
+            $role = '';
+        }
+
         try {
             return $this->render($theme->value . '/article.tpl',
-                ['article' => $article, 'categories' => $categories, 'articles' => $articles, 'popular' => 10]);
+                ['article' => $article, 'categories' => $categories, 'articles' => $articles, 'popular' => 10, 'username' => $username, 'role' => $role]);
         } catch (\Exception $e) {
             return $this->render('default/index.tpl', ['article' => $article]);
         }
@@ -72,8 +89,17 @@ class FrontendController extends Controller
     {
         $theme = Settings::where('key', 'theme')->first();
 
+        if(isset($_SESSION['username']) && isset($_SESSION['role'])) {
+            $username = $_SESSION['username'];
+            $role = $_SESSION['role'];
+        }
+        else {
+            $username = '';
+            $role = '';
+        }
+
         try {
-            return $this->render($theme->value . '/about.tpl');
+            return $this->render($theme->value . '/about.tpl', ['username' => $username, 'role' => $role]);
         } catch (\Exception $e) {
             return $this->render('default/index.tpl', ['h1' => 'Site with']);
         }
