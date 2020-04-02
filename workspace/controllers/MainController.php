@@ -4,50 +4,31 @@ namespace workspace\controllers;
 
 use core\App;
 use core\component_manager\lib\CM;
-use core\component_manager\lib\CmService;
+use core\component_manager\lib\Config;
 use core\component_manager\lib\Mod;
 use core\Controller;
 use core\Debug;
-use Illuminate\Database\Capsule\Manager as Capsule;
+use workspace\classes\Button;
 use workspace\models\Modules;
 use workspace\models\Settings;
 use workspace\models\User;
-use workspace\traits\SmartTitle;
-use workspace\widgets\Main;
 
 class MainController extends Controller
 {
 
     public function actionIndex()
     {
-        //$this->view->setTitle('по новому методу');
-        //Debug::prn(App::$config);
-        //Main::widget()->run();
+        $this->view->setTitle('Main Page');
         $this->view->addMeta('keywords', 'главная', ['some' => 'text']);
+        $this->view->registerCss('/resources/css/main.css');
         $this->view->registerJs('/resources/js/bodyScript.js', [], true);
-        //$this->view->registerCss('/resources/css/new.css');
+
         return $this->render('main/index.tpl', ['h1' => 'Проект ' . App::$config['app_name']]);
-    }
-
-    public function actionItems($id)
-    {
-        return $this->render('main/index.tpl', ['title' => 'Название страницы ' . $id, 'h1' => 'Item ' . $id]);
-    }
-
-    public function actionUsers()
-    {
-        $users = User::all();
-        Debug::dd($users);
-    }
-
-    public function actionUser($id)
-    {
-        $user = User::where('id', $id)->first();
-        return $this->render('main/user.tpl', ['model' => $user]);
     }
 
     public function actionSignUp()
     {
+        $this->view->setTitle('Sign Up');
         if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])) {
             $model = new User();
             $model->username = $_POST['username'];
@@ -67,13 +48,13 @@ class MainController extends Controller
 
     public function actionSignIn()
     {
+        $this->view->setTitle('Sign In');
         if (isset($_POST['username']) && isset($_POST['password'])) {
             $model = User::where('username', $_POST['username'])->first();
 
-            if(password_verify ($_POST['password'], $model->password_hash)) {
+            if (password_verify($_POST['password'], $model->password_hash)) {
                 $_SESSION['role'] = $model->role;
                 $_SESSION['username'] = $model->username;
-                //App::$rout_filter->setRole($model->role);
 
                 $this->redirect('adminlte');
             } else {
@@ -98,7 +79,7 @@ class MainController extends Controller
 
         $model = array();
         foreach ($data as $value)
-            if($value->type == 'module')
+            if ($value->type == 'module')
                 array_push($model, new Modules($value->name, $value->version, $value->description));
 
         $options = [
@@ -106,26 +87,35 @@ class MainController extends Controller
             'fields' => [
                 'action' => [
                     'label' => '',
-                    'value' => function($model) {
-                        $cm = new CmService();
+                    'value' => function ($model) {
                         $mod = new Mod();
-                        if($cm->isInstalled($model->name) && $mod->getModInfo($model->name)['status'] == 'active')
-                            return '<a class="custom-link module-set-inactive" title="Отключить" id="'.$model->name.'" href="" data-name="'.$model->name.'"><i class="nav-icon fas fa-toggle-on"></i></a> ';
-                        elseif($cm->isInstalled($model->name) && $mod->getModInfo($model->name)['status'] !== 'active')
-                            return '<a class="custom-link module-set-active" title="Включить" id="'.$model->name.'" href="" data-name="'.$model->name.'"><i class="nav-icon fas fa-toggle-off"></i></a> ';
+                        $button = new Button();
+
+                        if ($mod->getModInfo($model->name)['status'] == 'active')
+                            return $button->button('module-set-inactive', 'Отключить', $model->name, $model->name, 'toggle-on');
+                        elseif ($mod->getModInfo($model->name)['status'] == 'inactive')
+                            return $button->button('module-set-active', 'Включить', $model->name, $model->name, 'toggle-off');
                         else
-                            return '<a class="custom-link module-download" title="Скачать" id="'.$model->name.'" href="#" data-name="'.$model->name.'"><i class="nav-icon fas fa-download"></i></a> ';
+                            return $button->button('module-download', 'Скачать', $model->name, $model->name, 'download');
+                    }
+                ],
+                'delete' => [
+                    'label' => '',
+                    'value' => function ($model) {
+                        $mod = new Mod();
+                        $button = new Button();
+
+                        if ($mod->getModInfo($model->name)['status'] == 'inactive')
+                            return $button->button('fixed-width module-delete', 'Удалить', $model->name, $model->name, 'trash');
+                        else
+                            return '<div class="fixed-width"></div>';
                     }
                 ],
                 'status' => [
                     'label' => 'Статус',
-                    'value' => function($model) {
-                        try {
-                            $mod = new Mod();
-                            return $mod->getModInfo($model->name)['status'];
-                        } catch (\Exception $e) {
-                            return 'не скачан';
-                        }
+                    'value' => function ($model) {
+                        $mod = new Mod();
+                        return '<div class="fixed-width">' . $mod->getModInfo($model->name)['status'] . '</div>';
                     }
                 ],
                 'name' => 'Название',
@@ -166,6 +156,32 @@ class MainController extends Controller
         try {
             $cm = new CM();
             $cm->modChangeStatusToInactive($_POST['slug']);
+        } catch (\Exception $e) {
+            return $e;
+        }
+    }
+
+    public function actionSetActiveTheme()
+    {
+        try {
+            $cm = new CM();
+            $theme = Settings::where('key', 'theme')->first();
+            $cm->modChangeStatusToInactive($theme->value);
+            $cm->modChangeStatusToActive($_POST['slug']);
+            $theme->value = $_POST['slug'];
+            $theme->save();
+        } catch (\Exception $e) {
+            return $e;
+        }
+    }
+
+    public function actionModuleDelete()
+    {
+        try {
+            $cm = new CM();
+            $mod = new Mod();
+            $mod->deleteDirectory(ROOT_DIR . Config::get()->byKey($mod->getModInfo($_POST['slug'])['type'] . 'Path') . $_POST['slug']);
+            $cm->modDeleteFromJson($_POST['slug']);
         } catch (\Exception $e) {
             return $e;
         }

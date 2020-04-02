@@ -19,7 +19,8 @@ class Config
     /**
      * Config constructor.
      */
-    public function __construct(){
+    public function __construct()
+    {
         $this->data = App::$config['component_manager'];
     }
 
@@ -28,9 +29,9 @@ class Config
      */
     public static function get()
     {
-        if (self::$instance === null) {
+        if (self::$instance === null)
             self::$instance = new self();
-        }
+
         return self::$instance;
     }
 
@@ -40,9 +41,9 @@ class Config
      */
     public function byKey(string $key) : ?string
     {
-        if(isset($this->data[$key])){
+        if(isset($this->data[$key]))
             return $this->data[$key];
-        }
+
         return null;
     }
 }

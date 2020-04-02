@@ -23,8 +23,7 @@ class Component implements \core\component_manager\interfaces\Component
      */
     public function load(array $data = [])
     {
-        foreach ((array)$data as $key => $datum){
+        foreach ((array)$data as $key => $datum)
             $this->{$key} = $datum;
-        }
     }
 }

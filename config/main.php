@@ -14,7 +14,7 @@ return [
         'repType' => '\\core\\component_manager\\lib\\CurlRep',
         'url' => 'https://rep.craft-group.xyz',
         'modulePath' => '/workspace/modules/',
-        'themePath' => '/workspace/modules/themes/themes'
+        'themePath' => '/workspace/modules/themes/themes/'
     ]
 ];
 /* Пример настройки локальной базы

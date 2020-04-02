@@ -52,11 +52,10 @@ class Mod
     public function getByStatus(string $status)
     {
        $allStatus = [];
-        foreach ($this->mod as $key => $value) {
-            if (in_array($status, $value)){
+        foreach ($this->mod as $key => $value)
+            if (in_array($status, $value))
                 $allStatus[$key] = $value;
-            }
-        }
+
         return $allStatus;
     }
 
@@ -66,7 +65,9 @@ class Mod
      */
     public function getLocMod(string $slug): array
     {
-        $file = ROOT_DIR . "/workspace/modules/" . $slug .  "/manifest.json";
+        $type = $this->getModInfo($slug)['type'];
+
+        $file = ROOT_DIR . Config::get()->byKey($type . 'Path') . $slug .  "/manifest.json";
 
         if (file_exists($file))
             $mods = file_get_contents($file);
@@ -83,13 +84,13 @@ class Mod
     public function getModInfo(string $slug): array
     {
         $file = ROOT_DIR . "/mods.json";
+        $json = file_get_contents($file);
+        $mods = json_decode($json, true);
 
-        if (file_exists($file))
-            $mods = file_get_contents($file);
+        if (isset($mods[$slug]))
+            return $mods[$slug];
         else
-            $mods = '{"name":"", "status":"не скачан"}';
-
-        return $mod = json_decode($mods, true)[$slug];
+            return ['status' => 'not downloaded', 'type' => ''];
     }
 
     /**
@@ -98,9 +99,9 @@ class Mod
     public function getAllVersions()
     {
         $onlyVersion = [];
-        foreach ($this->mod as $key => $value) {
+        foreach ($this->mod as $key => $value)
             $onlyVersion[] = $value['version'];
-        }
+
         return $onlyVersion;
     }
 
@@ -111,6 +112,7 @@ class Mod
     public function getSlug(string $slug)
     {
         $slug = array_search($slug, $this->getAllSlug());
+
         return $this->getAllSlug()[$slug];
     }
 
@@ -120,9 +122,9 @@ class Mod
     public function getAllSlug()
     {
         $onlySlug = [];
-        foreach ($this->mod as $key => $value) {
+        foreach ($this->mod as $key => $value)
              $onlySlug[] = $key;
-        }
+
         return $onlySlug;
     }
 
@@ -133,9 +135,8 @@ class Mod
      */
     public function save(string $slug, array $data = []): bool
     {
-        foreach ($data as $key => $value) {
+        foreach ($data as $key => $value)
             $this->mod[$slug][$key] = $value;
-        }
 
         return file_put_contents($this->file, json_encode($this->mod));
     }
@@ -147,8 +148,8 @@ class Mod
     public function delete(string $slug): bool
     {
         unset($this->mod[$slug]);
-        return file_put_contents($this->file, json_encode($this->mod));
 
+        return file_put_contents($this->file, json_encode($this->mod));
     }
 
     /**
@@ -169,5 +170,22 @@ class Mod
     public function changeVersion(string $slug, array $data = []): bool
     {
         return $this->save($slug, $data);
+    }
+
+    /**
+     * @param string $dir
+     * @return bool
+     */
+
+    public function deleteDirectory($dir) {
+        if (!file_exists($dir)) return true;
+        if (!is_dir($dir)) return unlink($dir);
+
+        foreach (scandir($dir) as $item) {
+            if ($item == '.' || $item == '..') continue;
+            if (!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) return false;
+        }
+
+        return rmdir($dir);
     }
 }

@@ -748,6 +748,7 @@ return array(
     'core\\console\\Out' => $baseDir . '/core/console/Out.php',
     'core\\interfaces\\CrudControllerInterface' => $baseDir . '/core/interfaces/CrudControllerInterface.php',
     'samejack\\PHP\\PHP_ArgvParser' => $vendorDir . '/samejack/php-argv/src/PHP/ArgvParser.php',
+    'workspace\\classes\\Button' => $baseDir . '/workspace/classes/Button.php',
     'workspace\\console\\controllers\\CmController' => $baseDir . '/workspace/console/controllers/CmController.php',
     'workspace\\console\\controllers\\MigrationController' => $baseDir . '/workspace/console/controllers/MigrationController.php',
     'workspace\\console\\controllers\\ModController' => $baseDir . '/workspace/console/controllers/ModController.php',
