@@ -907,6 +907,7 @@ class ComposerStaticInit3f803850d33cd506c4f59e7c241701d7
         'core\\console\\Out' => __DIR__ . '/../..' . '/core/console/Out.php',
         'core\\interfaces\\CrudControllerInterface' => __DIR__ . '/../..' . '/core/interfaces/CrudControllerInterface.php',
         'samejack\\PHP\\PHP_ArgvParser' => __DIR__ . '/..' . '/samejack/php-argv/src/PHP/ArgvParser.php',
+        'workspace\\classes\\Button' => __DIR__ . '/../..' . '/workspace/classes/Button.php',
         'workspace\\console\\controllers\\CmController' => __DIR__ . '/../..' . '/workspace/console/controllers/CmController.php',
         'workspace\\console\\controllers\\MigrationController' => __DIR__ . '/../..' . '/workspace/console/controllers/MigrationController.php',
         'workspace\\console\\controllers\\ModController' => __DIR__ . '/../..' . '/workspace/console/controllers/ModController.php',

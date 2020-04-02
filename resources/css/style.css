@@ -19,3 +19,20 @@ body {
     color: black;
     text-decoration: none;
 }
+
+.module-action {
+    width: 80%;
+    margin: auto;
+}
+
+.info {
+    font-size: 13px;
+}
+
+.transparent {
+    opacity: 0;
+}
+
+.fixed-width {
+    width: 15px;
+}

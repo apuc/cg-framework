@@ -182,12 +182,4 @@ class CM
     {
         return $this->service->deleteMod($slug);
     }
-
-    /**
-     *
-     */
-    private function getConfig()
-    {
-
-    }
 }

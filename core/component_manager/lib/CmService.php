@@ -2,10 +2,10 @@
 
 namespace core\component_manager\lib;
 
+use core\App;
 use core\component_manager\interfaces\Rep;
 use core\component_manager\traits\Delete;
 use core\component_manager\traits\Unpack;
-use core\Debug;
 
 
 class CmService
@@ -38,6 +38,7 @@ class CmService
     public function getVersion(string $slug): ?string
     {
         $component = $this->getComponentInfo($slug);
+
         return $component->version;
     }
 
@@ -65,12 +66,10 @@ class CmService
      */
     public function updateCurrentVersion(string $slug):bool
     {
-        if ($this->checkVersion($slug) === FALSE){
+        if ($this->checkVersion($slug) === FALSE)
             return $this->download($slug);
-        }
-        else{
+        else
             return false;
-        }
     }
 
     /**
@@ -79,12 +78,10 @@ class CmService
      */
     public function getIsInstalled(string $slug):bool
     {
-        if ($this->isInstalled($slug) === FALSE){
+        if ($this->isInstalled($slug) === FALSE)
             return $this->download($slug);
-        }
-        else{
+        else
             return false;
-        }
     }
 
     /**
@@ -134,9 +131,8 @@ class CmService
     public function getComponentsInfo()
     {
         $mods = [];
-        foreach ($this->mod->getAllSlug() as $slug) {
+        foreach ($this->mod->getAllSlug() as $slug)
             $mods[] = array_merge(['slug' => $slug], $this->getVersions($slug));
-        }
 
         return $mods;
     }
@@ -156,18 +152,21 @@ class CmService
      */
     public function download(string $slug): bool
     {
+        App::$header->add('Access-Control-Allow-Origin', '*');
+        $type = file_get_contents('https://rep.craft-group.xyz/type.php?slug=' . $slug);
+
         $filename = $slug . '.zip';
         $url = Config::get()->byKey('url') . '/components/' . $slug . '/' . $this->getVersion($slug). '/' . $filename;
 
-        $this->rep->download($url, Config::get()->byKey('modulePath') . $filename);
+        $this->rep->download($url, Config::get()->byKey($type . 'Path') . $filename);
 
-        $data = ['version' => $this->getVersion($slug), 'status' => 'active'];
+        $data = ['version' => $this->getVersion($slug), 'status' => 'inactive', 'type' => $type];
 
         $this->mod->save($slug, $data);
 
-        $url_loc = Config::get()->byKey('modulePath') . $filename;
+        $url_loc = Config::get()->byKey($type . 'Path') . $filename;
 
-        if ($this->unpack($url_loc, Config::get()->byKey('modulePath'), $slug)) {
+        if ($this->unpack($url_loc, Config::get()->byKey($type . 'Path'), $slug)) {
             unlink(ROOT_DIR . $url_loc);
 
             return true;
@@ -206,7 +205,7 @@ class CmService
      */
     public function modDeleteFromJson(string $slug): bool
     {
-        return $this->mod->delete($slug);
+        return $this->mod-> delete($slug);
     }
 
     /**
@@ -226,6 +225,7 @@ class CmService
     public function modChangeStatusToActive(string $slug): bool
     {
         $data = ['status' => 'active'];
+
         return $this->modChangeStatus($slug, $data);
     }
 
@@ -236,6 +236,7 @@ class CmService
     public function modChangeStatusToInactive(string $slug): bool
     {
         $data = ['status' => 'inactive'];
+
         return $this->modChangeStatus($slug, $data);
     }
 

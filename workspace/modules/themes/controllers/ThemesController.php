@@ -3,7 +3,13 @@
 namespace workspace\modules\themes\controllers;
 
 use core\App;
+use core\component_manager\lib\CmService;
+use core\component_manager\lib\Config;
+use core\component_manager\lib\Mod;
 use core\Controller;
+use core\Debug;
+use workspace\classes\Button;
+use workspace\models\Modules;
 use workspace\models\Settings;
 
 class ThemesController extends Controller
@@ -19,47 +25,71 @@ class ThemesController extends Controller
 
     public function actionIndex()
     {
-        $theme = Settings::where('key', 'theme')->first();
-
-        $dirs = $this->getDirs();
+        App::$header->add('Access-Control-Allow-Origin', '*');
+        $content = file_get_contents('https://rep.craft-group.xyz/handler.php');
+        $data = json_decode($content);
 
         $model = array();
-        foreach ($dirs as $key => $value)
-            array_push($model, $this->formThemeModel($key, $value));
+        foreach ($data as $value)
+            if($value->type == 'theme')
+                array_push($model, new Modules($value->name, $value->version, $value->description));
 
-        App::$header->add('Access-Control-Allow-Origin', '*');
-        $json = file_get_contents('https://news-parser.craft-group.xyz/api/api/templates');
-        $data = json_decode($json);
-
-        $diff = array_udiff($data, $model,
-            function ($a, $b) {
-                return strcmp($a->theme, $b->theme);
-            }
-        );
-
-        foreach ($diff as $value)
-            array_push($model, $value);
+        $theme = Settings::where('key', 'theme')->first();
 
         $options = [
             'serial' => '#',
             'fields' => [
                 'action' => [
-                    'label' => 'Действие',
+                    'label' => '',
                     'value' => function($model) {
-                        $theme = Settings::where('key', 'theme')->first();
-                        if($theme->value == $model->theme)
-                            return '<a class="custom-link" title="Установленная тема" id="'. $model->id .'" href="/" data-theme="'.$model->theme.'"><i class="nav-icon fas fa-check"></i></a> ';
-                        elseif($model->status == 'скачано')
-                            return '<a class="custom-link action" title="Установить тему" id="'. $model->id .'" href="#" data-theme="'.$model->theme.'"><i class="nav-icon fas fa-cogs"></i></a> ';
+                        $mod = new Mod();
+                        $button = new Button();
+
+                        if($mod->getModInfo($model->name)['status'] == 'active')
+                            return $button->button('', 'Активная тема', $model->name, $model->name, 'check-circle');
+                        elseif($mod->getModInfo($model->name)['status'] == 'inactive')
+                            return $button->button('theme-set-active', 'Сделать активной темой', $model->name, $model->name, 'toggle-off');
                         else
-                            return '<a class="custom-link download" title="Скачать тему" id="'. $model->id .'" href="#" data-theme="'.$model->theme.'"><i class="nav-icon fas fa-download"></i></a> ';
+                            return $button->button('module-download', 'Скачать', $model->name, $model->name, 'download');
                     }
                 ],
-                'theme' => 'Тема',
-                'status' => 'Статус',
-                'version' => 'Версия',
+                'delete' => [
+                    'label' => '',
+                    'value' => function ($model) {
+                        $mod = new Mod();
+                        $button = new Button();
+
+                        if ($mod->getModInfo($model->name)['status'] == 'inactive')
+                            return $button->button('fixed-width module-delete', 'Удалить', $model->name, $model->name, 'trash');
+                        else
+                            return '<div class="fixed-width"></div>';
+                    }
+                ],
+                'status' => [
+                    'label' => 'Статус',
+                    'value' => function($model) {
+                        $mod = new Mod();
+                        return '<div class="fixed-width">' . $mod->getModInfo($model->name)['status'] . '</div>';
+                    }
+                ],
+                'name' => 'Название',
                 'description' => 'Описание',
-                'img' => 'Превью'
+                'version' => 'Версия',
+                'img' => [
+                    'label' => "",
+                    'value' => function($model) {
+                        $mod = new Mod();
+                        if($mod->getModInfo($model->name)['status'] != 'not downloaded')
+                            return '<img class="img" src="'.Config::get()->byKey('themePath'). $model->name .'/preview.jpg" />';
+                        else {
+                            $image = 'https://rep.craft-group.xyz/image.php?slug=' . $model->name;
+                            $imageData = base64_encode(file_get_contents($image));
+                            $src = 'data:image/jpg;base64,' . $imageData;
+
+                            return '<img class="img" src="'.$src.'" />';
+                        }
+                    }
+                ]
             ],
             'baseUri' => 'themes'
         ];
