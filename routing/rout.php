@@ -22,5 +22,4 @@ App::$collector->any('modules', ['workspace\controllers\MainController', 'action
 App::$collector->any('module-download', ['workspace\controllers\MainController', 'actionModuleDownload']);
 App::$collector->any('module-set-active', ['workspace\controllers\MainController', 'actionSetActive']);
 App::$collector->any('module-set-inactive', ['workspace\controllers\MainController', 'actionSetInactive']);
-App::$collector->any('theme-set-active', ['workspace\controllers\MainController', 'actionSetActiveTheme']);
 App::$collector->any('module-delete', ['workspace\controllers\MainController', 'actionModuleDelete']);

@@ -7,7 +7,7 @@
 {*    <link href="/resources/css/bootstrap-grid.min.css" rel="stylesheet" type="text/css">*}
 {*    <link href="/resources/css/bootstrap-reboot.css" rel="stylesheet" type="text/css">*}
 {*    <link href="/resources/css/bootstrap-reboot.min.css" rel="stylesheet" type="text/css">*}
-    <link href="/resources/css/style.css" rel="stylesheet" type="text/css">
+    <link href="/resources/css/main.css" rel="stylesheet" type="text/css">
 {/capture}
 
 {capture name=js_head}
