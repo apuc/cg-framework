@@ -1,5 +1,7 @@
 <?php
 
+namespace workspace\classes;
+
 
 class Theme
 {

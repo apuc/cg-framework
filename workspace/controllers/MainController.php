@@ -7,10 +7,8 @@ use core\component_manager\lib\CM;
 use core\component_manager\lib\Config;
 use core\component_manager\lib\Mod;
 use core\Controller;
-use core\Debug;
 use workspace\classes\Button;
-use workspace\models\Modules;
-use workspace\models\Settings;
+use workspace\classes\Modules;
 use workspace\models\User;
 
 class MainController extends Controller
@@ -20,7 +18,6 @@ class MainController extends Controller
     {
         $this->view->setTitle('Main Page');
         $this->view->addMeta('keywords', 'главная', ['some' => 'text']);
-        $this->view->registerCss('/resources/css/main.css');
         $this->view->registerJs('/resources/js/bodyScript.js', [], true);
 
         return $this->render('main/index.tpl', ['h1' => 'Проект ' . App::$config['app_name']]);
@@ -156,20 +153,6 @@ class MainController extends Controller
         try {
             $cm = new CM();
             $cm->modChangeStatusToInactive($_POST['slug']);
-        } catch (\Exception $e) {
-            return $e;
-        }
-    }
-
-    public function actionSetActiveTheme()
-    {
-        try {
-            $cm = new CM();
-            $theme = Settings::where('key', 'theme')->first();
-            $cm->modChangeStatusToInactive($theme->value);
-            $cm->modChangeStatusToActive($_POST['slug']);
-            $theme->value = $_POST['slug'];
-            $theme->save();
         } catch (\Exception $e) {
             return $e;
         }

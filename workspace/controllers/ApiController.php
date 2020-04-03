@@ -37,9 +37,11 @@ class ApiController extends Controller
             Article::saveData($model, $data);
 
             return 'The article successfully added!';
-        } else
-            return 'The article already exist!';
+        } else {
+            Article::saveData($existing, $data);
 
+            return 'The article already exist and was successfully updated!';
+        }
     }
 
     public function actionUpdateArticle()

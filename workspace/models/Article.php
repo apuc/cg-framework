@@ -17,10 +17,10 @@ class Article extends Model
     {
         $model->name = $data->name;
         $model->text = $data->text;
-        $model->language_id = $data->language_id;
         $model->image_name = $data->image;
         $model->image = '<img src="/workspace/modules/themes/themes/the-news-reporter/assets/images/'. $data->image .'" />';
         $model->parent_id = $data->parent_id;
+        $model->language_id = self::getItemId(Language::where('name', $data->language)->first(), new Language(), 'name',  $data->language);
         $model->save();
 
         $existing_categories = array();
@@ -30,18 +30,18 @@ class Article extends Model
                 $existing_categories[$item->category_id] = $item->category_id;
 
         foreach ($data->categories as $value) {
-            $category = Category::where('category', $value)->first();
+            $category_id = self::getItemId(Category::where('category', $value)->first(), new Category(), 'category',  $value);
 
-            if(in_array($category->id, $existing_categories)) {
-                unset($existing_categories[$category->id]);
+            if(in_array($category_id, $existing_categories)) {
+                unset($existing_categories[$category_id]);
                 Debug::prn('existing category');
             }
             else {
                 $ac = new ArticleCategory();
                 $ac->article_id = $model->id;
-                $ac->category_id = $category->id;
+                $ac->category_id = $category_id;
                 $ac->save();
-                unset($existing_categories[$category->id]);
+                unset($existing_categories[$category_id]);
                 Debug::prn('new category');
             }
         }
@@ -52,6 +52,18 @@ class Article extends Model
                 ArticleCategory::destroy($ec->id);
                 Debug::prn('delete category');
             }
+        }
+    }
+
+    public static function getItemId($existing, $new, $field, $item)
+    {
+        if($existing)
+            return $existing->id;
+        else {
+            $new->$field = $item;
+            $new->save();
+
+            return $new->id;
         }
     }
 }

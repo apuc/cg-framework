@@ -1,6 +1,6 @@
 <?php
 
-namespace routing;
+namespace core;
 
 class Filter
 {

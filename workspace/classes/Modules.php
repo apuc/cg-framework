@@ -1,7 +1,6 @@
 <?php
 
-
-namespace workspace\models;
+namespace workspace\classes;
 
 
 class Modules
