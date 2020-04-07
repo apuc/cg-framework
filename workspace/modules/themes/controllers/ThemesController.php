@@ -15,6 +15,7 @@ class ThemesController extends Controller
 {
     protected function init()
     {
+        App::$header->add('Access-Control-Allow-Origin', '*');
         if(!isset($_SESSION['role']) || $_SESSION['role'] != 1) $this->redirect('');
         $this->viewPath = '/modules/themes/views/';
         $this->layoutPath = App::$config['adminLayoutPath'];
@@ -24,7 +25,7 @@ class ThemesController extends Controller
 
     public function actionIndex()
     {
-        App::$header->add('Access-Control-Allow-Origin', '*');
+
         $content = file_get_contents('https://rep.craft-group.xyz/handler.php');
         $data = json_decode($content);
 

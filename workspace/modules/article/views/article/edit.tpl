@@ -30,7 +30,7 @@
             <label for="category_id">Категория:</label>
             <select class="form-control" name="category_id" id="category_id">
                 {foreach from=$categories key=key item=item}
-                    {if $key == $model->category_id}
+                    {if $key == $category_id}
                         <option selected value="{$key}">{$item}</option>
                     {else}
                         <option value="{$key}">{$item}</option>

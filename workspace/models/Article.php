@@ -11,7 +11,28 @@ class Article extends Model
 {
     protected $table = "article";
 
-    public $fillable = ['name', 'text' , 'language_id', 'image_name', 'image', 'parent_id'];
+    public $fillable = ['id', 'name', 'text' , 'language_id', 'image_name', 'image', 'parent_id'];
+
+    public static function saveLocalArticle($model, $data)
+    {
+        $model = self::saveArticleInfo($model, $data);
+
+        $ac = new ArticleCategory();
+        $ac->article_id = $model->id;
+        $ac->category_id = $data->category_id;
+        $ac->save();
+    }
+
+    public static function editLocalArticle($model, $data)
+    {
+        $model = self::saveArticleInfo($model, $data);
+
+        $existing = ArticleCategory::where('article_id', $model->id)->get();
+        foreach ($existing as $item) {
+            $item->category_id = $data->category_id;
+            $item->save();
+        }
+    }
 
     public static function saveData($model, $data)
     {
@@ -31,18 +52,14 @@ class Article extends Model
 
         foreach ($data->categories as $value) {
             $category_id = self::getItemId(Category::where('category', $value)->first(), new Category(), 'category',  $value);
-
-            if(in_array($category_id, $existing_categories)) {
+            if(in_array($category_id, $existing_categories))
                 unset($existing_categories[$category_id]);
-                Debug::prn('existing category');
-            }
             else {
                 $ac = new ArticleCategory();
                 $ac->article_id = $model->id;
                 $ac->category_id = $category_id;
                 $ac->save();
                 unset($existing_categories[$category_id]);
-                Debug::prn('new category');
             }
         }
 
@@ -50,9 +67,21 @@ class Article extends Model
             foreach ($existing_categories as $existing_category) {
                 $ec = ArticleCategory::where('article_id', $model->id)->where('category_id', $existing_category)->first();
                 ArticleCategory::destroy($ec->id);
-                Debug::prn('delete category');
             }
         }
+    }
+
+    public static function saveArticleInfo($model, $data)
+    {
+        $model->name = $data->name;
+        $model->text = $data->text;
+        $model->image_name = $data->image;
+        $model->image = '<img src="/workspace/modules/themes/themes/the-news-reporter/assets/images/'. $data->image .'" />';
+        $model->parent_id = $data->parent_id;
+        $model->language_id = $data->language_id;
+        $model->save();
+
+        return $model;
     }
 
     public static function getItemId($existing, $new, $field, $item)

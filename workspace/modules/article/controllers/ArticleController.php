@@ -5,6 +5,7 @@ use core\App;
 use core\Controller;
 use core\Debug;
 use workspace\models\Article;
+use workspace\models\ArticleCategory;
 use workspace\models\Category;
 use workspace\models\Language;
 
@@ -23,7 +24,7 @@ class ArticleController extends Controller
 
     public function actionIndex()
     {
-        $model = Article::all();
+        $model = Article::all()->sortByDesc("updated_at");
 
         $options = [
             'serial' => '#',
@@ -82,8 +83,10 @@ class ArticleController extends Controller
     {
         if(isset($_POST['name']) && isset($_POST['text'])) {
             $article = new Article();
-            $this->saveArticle($article);
+            $data = new \workspace\classes\Article($article->id, $_POST['name'], $_POST['text'], $_POST['language_id'],
+                '', $_POST['image'], 0, $_POST['category_id']);
 
+            Article::saveLocalArticle($article, $data);
             $this->redirect('article');
         } else {
             $languages = $this->getArray(Language::all(), 'name');
@@ -97,9 +100,16 @@ class ArticleController extends Controller
     public function actionEdit($id)
     {
         $model = Article::where('id', $id)->first();
+        $ac = ArticleCategory::where('article_id', $model->id)->get();
+        foreach ($ac as $item) {
+            $category_id = $item->category_id;
+            break;
+        }
 
         if(isset($_POST['name']) && isset($_POST['text'])) {
-            $this->saveArticle($model);
+            $data = new \workspace\classes\Article($model->id, $_POST['name'], $_POST['text'], $_POST['language_id'],
+                '', $_POST['image'], 0, $_POST['category_id']);
+            Article::editLocalArticle($model, $data);
 
             $this->redirect('article');
         } else {
@@ -107,23 +117,14 @@ class ArticleController extends Controller
             $categories = $this->getArray(Category::all(), 'category');
 
             return $this->render('article/edit.tpl',
-                ['h1' => 'Редактировать: ', 'model' => $model, 'languages' => $languages, 'categories' => $categories]);
+                ['h1' => 'Редактировать: ', 'model' => $model, 'languages' => $languages, 'categories' => $categories,
+                    'category_id' => $category_id]);
         }
     }
 
     public function actionDelete()
     {
         Article::where('id', $_POST['id'])->delete();
-    }
-
-    public function saveArticle($model) {
-        $model->name = $_POST['name'];
-        $model->text = $_POST['text'];
-        $model->language_id = $_POST['language_id'];
-        $model->category_id = $_POST['category_id'];
-        $model->image_name = $_POST['image'];
-        $model->image = '<img src="/workspace/modules/themes/themes/the-news-reporter/assets/images/'.$_POST['image'].'" />';
-        $model->save();
     }
 
     public function getArray($model, $field)

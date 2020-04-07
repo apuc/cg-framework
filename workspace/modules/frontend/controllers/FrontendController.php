@@ -4,6 +4,7 @@ namespace workspace\modules\frontend\controllers;
 
 
 use core\Controller;
+use core\Debug;
 use workspace\models\ArticleCategory;
 use workspace\models\Category;
 use workspace\models\Settings;
@@ -42,8 +43,17 @@ class FrontendController extends Controller
     {
         $theme = Settings::where('key', 'theme')->first();
         $categories = Category::all();
-        $articles = Article::where('category_id', $id)->get();
-        $articles = $articles->sortByDesc('updated_at');
+        $articles_ids = ArticleCategory::where('category_id', $id)->get();
+        $articles_ids = $articles_ids->sortByDesc('updated_at');
+
+        $articles = array();
+        foreach ($articles_ids as $item) {
+            $article = Article::where('id', $item->article_id)->get();
+            foreach ($article as $value)
+                array_push($articles,
+                    new \workspace\classes\Article($value->id, $value->name, $value->text, $value->language_id,
+                        $value->image_name, $value->image, $value->parent_id));
+        }
 
         if(isset($_SESSION['username']) && isset($_SESSION['role'])) {
             $username = $_SESSION['username'];
