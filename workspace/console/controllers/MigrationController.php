@@ -73,8 +73,6 @@ class MigrationController extends ConsoleController
         catch (\Exception $e){
             $this->out->r('Message: ' .$e->getMessage(), 'red');
         }
-
-
     }
 
     public function actionRollback()
@@ -92,6 +90,5 @@ class MigrationController extends ConsoleController
         catch (\Exception $e){
             $this->out->r('Message: ' .$e->getMessage(), 'red');
         }
-
     }
 }

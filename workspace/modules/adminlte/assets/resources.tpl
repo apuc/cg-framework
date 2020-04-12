@@ -19,7 +19,11 @@
     <link rel="stylesheet" href="/workspace/modules/adminlte/resources/plugins/summernote/summernote-bs4.css">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+    <!-- custom -->
     <link rel="stylesheet" href="/resources/css/main.css">
 {/capture}
 
@@ -32,17 +36,16 @@
     <!-- jQuery UI 1.11.4 -->
     <script src="/workspace/modules/adminlte/resources/plugins/jquery-ui/jquery-ui.min.js"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-    <script>
-        $.widget.bridge('uibutton', $.ui.button)
-    </script>
+    <script>$.widget.bridge('uibutton', $.ui.button)</script>
     <!-- Bootstrap 4 -->
-    <script src="/workspace/modules/adminlte/resources/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+{*    <script src="/workspace/modules/adminlte/resources/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>*}
     <!-- ChartJS -->
     <script src="/workspace/modules/adminlte/resources/plugins/chart.js/Chart.min.js"></script>
     <!-- Sparkline -->
     <script src="/workspace/modules/adminlte/resources/plugins/sparklines/sparkline.js"></script>
     <!-- JQVMap -->
     <script src="/workspace/modules/adminlte/resources/plugins/jqvmap/jquery.vmap.min.js"></script>
+
     <script src="/workspace/modules/adminlte/resources/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
     <!-- jQuery Knob Chart -->
     <script src="/workspace/modules/adminlte/resources/plugins/jquery-knob/jquery.knob.min.js"></script>
@@ -57,10 +60,13 @@
     <script src="/workspace/modules/adminlte/resources/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
     <!-- AdminLTE App -->
     <script src="/workspace/modules/adminlte/resources/dist/js/adminlte.js"></script>
-    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-    <script src="/workspace/modules/adminlte/resources/dist/js/pages/dashboard.js"></script>
-    <!-- AdminLTE for demo purposes -->
-    <script src="/workspace/modules/adminlte/resources/dist/js/demo.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
     <!-- GridView -->
     <script src="/resources/js/gridView.js"></script>
     <script src="/resources/js/main.js"></script>

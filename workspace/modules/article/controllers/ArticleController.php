@@ -4,6 +4,7 @@ namespace workspace\modules\article\controllers;
 use core\App;
 use core\Controller;
 use core\Debug;
+use Illuminate\Database\Schema\Blueprint;
 use workspace\models\Article;
 use workspace\models\ArticleCategory;
 use workspace\models\Category;
@@ -37,7 +38,11 @@ class ArticleController extends Controller
                         $language = Language::where('id', $model->language_id)->first();
                         return $language->name;
                     }
-                ]
+                ],
+                'title' => 'Title',
+                'description' => 'Description',
+                'keywords' => 'Keywords',
+                'url' => 'URL'
             ],
             'baseUri' => 'article',
             'pagination' => [
@@ -47,7 +52,17 @@ class ArticleController extends Controller
             ],
         ];
 
-        return $this->render('article/article.tpl', ['h1' => 'Статьи', 'model' => $model, 'options' => $options]);
+        $categories = Category::all();
+        $select_options = [
+            'id' => 'category_ids',
+            'class' => '',
+            'label' => 'Категории:',
+            'value' => 'category',
+            'value_id' => 'id'
+        ];
+
+        return $this->render('article/article.tpl', ['h1' => 'Статьи', 'model' => $model, 'options' => $options,
+            'select_options' => $select_options, 'categories' => $categories]);
     }
 
     public function actionView($id)
@@ -62,17 +77,29 @@ class ArticleController extends Controller
                     'label' => 'Язык',
                     'value' => function($model) {
                         $loc_model = Language::where('id', $model->language_id)->first();
+
                         return $loc_model->name;
                     }
                 ],
                 'category' => [
                     'label' => 'Категория',
                     'value' => function($model) {
-                        $loc_model = Category::where('id', $model->category_id)->first();
-                        return $loc_model->category;
+                        $ac = ArticleCategory::where('article_id', $model->id)->get();
+                        $category = '';
+                        foreach ($ac as $item) {
+                            $c = Category::where('id', $item->category_id)->first();
+                            $category .= $c->category . ', ';
+                        }
+                        $category = substr($category, 0, -2);
+
+                        return $category;
                     }
                 ],
-                'image' => 'Картинка'
+                'image' => 'Картинка',
+                'title' => 'Title',
+                'description' => 'Description',
+                'keywords' => 'Keywords',
+                'url' => 'URL'
             ],
         ];
 
@@ -84,7 +111,8 @@ class ArticleController extends Controller
         if(isset($_POST['name']) && isset($_POST['text'])) {
             $article = new Article();
             $data = new \workspace\classes\Article($article->id, $_POST['name'], $_POST['text'], $_POST['language_id'],
-                '', $_POST['image'], 0, $_POST['category_id']);
+                '', $_POST['image'], 0, $_POST['category_id'], $_POST['title'], $_POST['description'],
+                $_POST['keywords'], $_POST['url']);
 
             Article::saveLocalArticle($article, $data);
             $this->redirect('article');
@@ -108,7 +136,8 @@ class ArticleController extends Controller
 
         if(isset($_POST['name']) && isset($_POST['text'])) {
             $data = new \workspace\classes\Article($model->id, $_POST['name'], $_POST['text'], $_POST['language_id'],
-                '', $_POST['image'], 0, $_POST['category_id']);
+                '', $_POST['image'], 0, $_POST['category_id'], $_POST['title'], $_POST['description'],
+                $_POST['keywords'], $_POST['url']);
             Article::editLocalArticle($model, $data);
 
             $this->redirect('article');
@@ -116,9 +145,19 @@ class ArticleController extends Controller
             $languages = $this->getArray(Language::all(), 'name');
             $categories = $this->getArray(Category::all(), 'category');
 
+            $categories_obj = Category::all();
+
+            $select_options = [
+                'id' => 'category_ids',
+                'class' => '',
+                'label' => 'Категории:',
+                'value' => 'category',
+                'value_id' => 'id'
+            ];
+
             return $this->render('article/edit.tpl',
                 ['h1' => 'Редактировать: ', 'model' => $model, 'languages' => $languages, 'categories' => $categories,
-                    'category_id' => $category_id]);
+                    'category_id' => $category_id, 'select_options' => $select_options, 'categories_obj' => $categories_obj]);
         }
     }
 

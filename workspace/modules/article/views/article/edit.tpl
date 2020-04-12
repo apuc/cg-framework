@@ -26,6 +26,7 @@
                 {/foreach}
             </select>
         </div>
+        {core\Select2::widget()->setParams($categories_obj, $select_options)->run()}
         <div class="form-group">
             <label for="category_id">Категория:</label>
             <select class="form-control" name="category_id" id="category_id">
@@ -41,6 +42,23 @@
         <div class="form-group">
             <label for="image">Имя картинки:</label>
             <input type="text" name="image" id="image" class="form-control" required="required" value="{$model->image_name}" />
+        </div>
+
+        <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" name="title" id="title" class="form-control" required="required" value="{$model->title}" />
+        </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <input type="text" name="description" id="description" class="form-control" required="required" value="{$model->description}" />
+        </div>
+        <div class="form-group">
+            <label for="keywords">Keywords:</label>
+            <input type="text" name="keywords" id="keywords" class="form-control" required="required" value="{$model->keywords}" />
+        </div>
+        <div class="form-group">
+            <label for="url">Url:</label>
+            <input type="text" name="url" id="url" class="form-control" required="required" value="{$model->url}" />
         </div>
         <div class="form-group">
             <input type="submit" name="submit" id="submit_button" class="btn btn-default" value="Submit">

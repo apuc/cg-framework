@@ -11,7 +11,7 @@ class Article extends Model
 {
     protected $table = "article";
 
-    public $fillable = ['id', 'name', 'text' , 'language_id', 'image_name', 'image', 'parent_id'];
+    public $fillable = ['id', 'name', 'text' , 'language_id', 'image_name', 'image', 'parent_id', 'title', 'description', 'keywords', 'url'];
 
     public static function saveLocalArticle($model, $data)
     {
@@ -79,6 +79,10 @@ class Article extends Model
         $model->image = '<img src="/workspace/modules/themes/themes/the-news-reporter/assets/images/'. $data->image .'" />';
         $model->parent_id = $data->parent_id;
         $model->language_id = $data->language_id;
+        $model->title = $data->title;
+        $model->description = $data->description;
+        $model->keywords = $data->keywords;
+        $model->url = $data->url;
         $model->save();
 
         return $model;
