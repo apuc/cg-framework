@@ -1,11 +1,11 @@
 <?php
 
-
 use core\App;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class title_to_article extends Migration
+class AddFieldsToArticle extends Migration
 {
     /**
      * Run the migrations.
@@ -20,5 +20,15 @@ class title_to_article extends Migration
             $table->string('keywords')->nullable();
             $table->string('url')->nullable();;
         });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+
     }
 }
