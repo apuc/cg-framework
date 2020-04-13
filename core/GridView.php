@@ -83,19 +83,20 @@ class GridView extends Widget
 
             (isset($this->options['serial'])) ? $table .= '<td>' . ($i + 1) . '</td>' :  $table .= '';
 
-
             if (!empty($this->actionsBtn)) {
                 $table .= '<td>';
                 foreach ((array)$this->actionsBtn as $item)
                     $table .= $this->createBtn($item, $this->options['baseUri'], $this->model[$i]->id);
                 $table .= '</td>';
-
             }
 
             foreach ($this->options['fields'] as $key => $option)
-                $table .= '<td>' . ((isset($this->model[$i]->$key))
-                        ? $this->model[$i]->$key
-                        : call_user_func($this->options['fields'][$key]['value'], $this->model[$i])) . '</td>';
+                if(isset($this->model[$i]->$key))
+                    $table .= '<td>' . $this->model[$i]->$key . '</td>';
+                elseif(isset($this->options['fields'][$key]['label']))
+                    $table .= '<td>' . call_user_func($this->options['fields'][$key]['value'], $this->model[$i]) . '</td>';
+                else
+                    $table .= '<td></td>';
 
             $table .= '</tr>';
         }

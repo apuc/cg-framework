@@ -19,20 +19,32 @@
                 {/foreach}
             </select>
         </div>
-        <div class="form-group">
-            <label for="category_id">Категория:</label>
-            <select class="form-control" name="category_id" id="category_id">
-                {foreach from=$categories key=key item=item}
-                    <option value="{$key}">{$item}</option>
-                {/foreach}
-            </select>
-        </div>
+
+        {core\Select2::widget()->setParams($categories_obj, $select_options, [])->run()}
+
         <div class="form-group">
             <label for="image">Имя картинки:</label>
             <input type="text" name="image" id="image" class="form-control" required="required" />
         </div>
+
         <div class="form-group">
-            <input type="submit" name="submit" id="submit_button" class="btn btn-default" value="Submit">
+            <label for="title">Title:</label>
+            <input type="text" name="title" id="title" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <input type="text" name="description" id="description" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="keywords">Keywords:</label>
+            <input type="text" name="keywords" id="keywords" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="url">Url:</label>
+            <input type="text" name="url" id="url" class="form-control" />
+        </div>
+        <div class="form-group">
+            <input type="submit" name="submit" id="submit_button" class="btn btn-default" value="Сохранить">
         </div>
     </form>
 </div>

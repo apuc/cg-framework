@@ -1,3 +1,9 @@
+$('#select').selectpicker();
+
+$( "#category_ids" ).change(function(e) {
+    //console.log($('#category_ids').val());
+});
+
 jQuery(document).ready(function ($) {
     $( ".download" ).click(function(e) {
         e.preventDefault();

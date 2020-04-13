@@ -152,7 +152,7 @@ class CmService
      */
     public function download(string $slug): bool
     {
-        App::$header->add('Access-Control-Allow-Origin', '*');
+        //App::$header->add('Access-Control-Allow-Origin', '*');
         $type = file_get_contents('https://rep.craft-group.xyz/type.php?slug=' . $slug);
 
         $filename = $slug . '.zip';

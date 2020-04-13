@@ -26,24 +26,32 @@
                 {/foreach}
             </select>
         </div>
-        <div class="form-group">
-            <label for="category_id">Категория:</label>
-            <select class="form-control" name="category_id" id="category_id">
-                {foreach from=$categories key=key item=item}
-                    {if $key == $model->category_id}
-                        <option selected value="{$key}">{$item}</option>
-                    {else}
-                        <option value="{$key}">{$item}</option>
-                    {/if}
-                {/foreach}
-            </select>
-        </div>
+
+        {core\Select2::widget()->setParams($categories_obj, $select_options, $selected_categories)->run()}
+
         <div class="form-group">
             <label for="image">Имя картинки:</label>
             <input type="text" name="image" id="image" class="form-control" required="required" value="{$model->image_name}" />
         </div>
+
         <div class="form-group">
-            <input type="submit" name="submit" id="submit_button" class="btn btn-default" value="Submit">
+            <label for="title">Title:</label>
+            <input type="text" name="title" id="title" class="form-control" value="{$model->title}" />
+        </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <input type="text" name="description" id="description" class="form-control" value="{$model->description}" />
+        </div>
+        <div class="form-group">
+            <label for="keywords">Keywords:</label>
+            <input type="text" name="keywords" id="keywords" class="form-control" value="{$model->keywords}" />
+        </div>
+        <div class="form-group">
+            <label for="url">Url:</label>
+            <input type="text" name="url" id="url" class="form-control" value="{$model->url}" />
+        </div>
+        <div class="form-group">
+            <input type="submit" name="submit" id="submit_button" class="btn btn-default" value="Сохранить">
         </div>
     </form>
 </div>
