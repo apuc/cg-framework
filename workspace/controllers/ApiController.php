@@ -4,9 +4,13 @@
 namespace workspace\controllers;
 
 use core\App;
+use core\component_manager\lib\CM;
+use core\component_manager\lib\Mod;
 use core\Controller;
 use workspace\models\Article;
 use workspace\models\Settings;
+use workspace\modules\themes\controllers\ThemesController;
+use workspace\modules\themes\Themes;
 use ZipArchive;
 
 
@@ -14,7 +18,7 @@ class ApiController extends Controller
 {
     public function getDataFromJson()
     {
-        App::$header->add('Access-Control-Allow-Origin', '*');
+        //App::$header->add('Access-Control-Allow-Origin', '*');
 
         $json = file_get_contents('php://input');
 
@@ -121,7 +125,7 @@ class ApiController extends Controller
         unlink($path . $file);
     }
 
-    public function actionSetTheme()
+    public function actionChangeTheme()
     {
         $model = Settings::where('key', 'theme')->first();
 
@@ -131,5 +135,65 @@ class ApiController extends Controller
 
             $this->redirect('themes');
         }
+    }
+
+    public function actionSetTheme()
+    {
+        $data = file_get_contents('php://input');
+
+        $mod = new Mod();
+
+        if($mod->getModInfo($data)['status'] == 'active')
+            return 1;
+        elseif($mod->getModInfo($data)['status'] == 'inactive') {
+            try {
+                $cm = new CM();
+                $theme = Settings::where('key', 'theme')->first();
+                $cm->modChangeStatusToInactive($theme->value);
+                $cm->modChangeStatusToActive($data);
+                $theme->value = $data;
+                $theme->save();
+
+                return 1;
+            } catch (\Exception $e) {
+                return $e;
+            }
+        } else {
+            try {
+                $cm = new CM();
+                $cm->download($data);
+
+                $theme = Settings::where('key', 'theme')->first();
+                $cm->modChangeStatusToInactive($theme->value);
+                $cm->modChangeStatusToActive($data);
+                $theme->value = $data;
+                $theme->save();
+
+                return 1;
+            } catch (\Exception $e) {
+                return $e;
+            }
+        }
+    }
+
+    public function actionSetTitle()
+    {
+        $model = Settings::where('key', 'title')->first();
+        $model->value = file_get_contents('php://input');
+        $model->save();
+    }
+
+    public function actionSetKeywords()
+    {
+        $model = Settings::where('key', 'keywords')->first();
+        $model->value = file_get_contents('php://input');
+        $model->save();
+    }
+
+    public function actionSetDescription()
+    {
+        $model = Settings::where('key', 'description')->first();
+        $model->value = file_get_contents('php://input');
+        $model->save();
     }
 }

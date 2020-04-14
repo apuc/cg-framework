@@ -13,7 +13,7 @@ App::$collector->post('/update-article', ['workspace\controllers\ApiController',
 App::$collector->post('/set-options', ['workspace\controllers\ApiController', 'actionSetOptions']);
 App::$collector->get('/get-options', ['workspace\controllers\ApiController', 'actionGetOptions']);
 App::$collector->post('/download', ['workspace\controllers\ApiController', 'actionDownload']);
-App::$collector->post('/set-theme', ['workspace\controllers\ApiController', 'actionSetTheme']);
+App::$collector->post('/change-theme', ['workspace\controllers\ApiController', 'actionChangeTheme']);
 
 App::$collector->any('sign-up', ['workspace\controllers\MainController', 'actionSignUp']);
 App::$collector->any('sign-in', ['workspace\controllers\MainController', 'actionSignIn']);
@@ -23,3 +23,8 @@ App::$collector->any('module-download', ['workspace\controllers\MainController',
 App::$collector->any('module-set-active', ['workspace\controllers\MainController', 'actionSetActive']);
 App::$collector->any('module-set-inactive', ['workspace\controllers\MainController', 'actionSetInactive']);
 App::$collector->any('module-delete', ['workspace\controllers\MainController', 'actionModuleDelete']);
+
+App::$collector->post('/set-theme', ['workspace\controllers\ApiController', 'actionSetTheme']);
+App::$collector->post('/set-title', ['workspace\controllers\ApiController', 'actionSetTitle']);
+App::$collector->post('/set-keywords', ['workspace\controllers\ApiController', 'actionSetKeywords']);
+App::$collector->post('/set-description', ['workspace\controllers\ApiController', 'actionSetDescription']);

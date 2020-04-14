@@ -30,7 +30,7 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
         let theme = $(this).attr('data-theme');
         $.ajax({
-            url: 'set-theme',
+            url: 'change-theme',
             type: 'POST',
             data: {
                 theme: theme
