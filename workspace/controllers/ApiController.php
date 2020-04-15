@@ -4,33 +4,70 @@
 namespace workspace\controllers;
 
 use core\App;
+use core\component_manager\lib\CM;
+use core\component_manager\lib\Mod;
 use core\Controller;
 use workspace\models\Article;
 use workspace\models\Settings;
+use workspace\modules\themes\controllers\ThemesController;
+use workspace\modules\themes\Themes;
+use ZipArchive;
 
 
 class ApiController extends Controller
 {
-    public function actionGetArticle()
+    public function getDataFromJson()
     {
-        $json = file_get_contents('php://input');
-        $data = json_decode($json);
+        //App::$header->add('Access-Control-Allow-Origin', '*');
 
-        if($data) {
-            $a = new Article();
-            $a->name = $data->title;
-            $a->text = $data->article;
-            $a->language_id = $data->language_id;
-            $a->save();
+        $json = file_get_contents('php://input');
+
+        return json_decode($json);
+    }
+
+    public function actionTemplates()
+    {
+        return $this->getDataFromJson();
+    }
+
+    public function actionStoreArticle()
+    {
+        $data = $this->getDataFromJson();
+
+        $existing = Article::where('parent_id', $data->parent_id)->first();
+
+        if(!$existing) {
+            $model = new Article();
+            Article::saveData($model, $data);
+
+            return 'The article successfully added!';
+        } else {
+            Article::saveData($existing, $data);
+
+            return 'The article already exist and was successfully updated!';
+        }
+    }
+
+    public function actionUpdateArticle()
+    {
+        $data = $this->getDataFromJson();
+
+        $existing = Article::where('parent_id', $data->parent_id)->first();
+        if($existing) {
+            Article::saveData($existing, $data);
+
+            return 'The article successfully updated!';
+        } else {
+            $model = new Article();
+            Article::saveData($model, $data);
+
+            return 'The article didn\'t exist and was successfully added!';
         }
     }
 
     public function actionSetOptions()
     {
-        App::$header->add('Access-Control-Allow-Origin', '*');
-
-        $json = file_get_contents('php://input');
-        $data = json_decode($json);
+        $data = $this->getDataFromJson();
 
         if($data)
             foreach ($data as $value)
@@ -64,5 +101,99 @@ class ApiController extends Controller
     public function actionDelete()
     {
         return 'Data: '.$_POST['url'];
+    }
+
+    public function actionDownload()
+    {
+        $file = $_POST['theme'] . '.zip';
+        $path = WORKSPACE_DIR . '/modules/themes/themes/';
+
+        $ch = curl_init('https://news-parser.craft-group.xyz/themes/' . $file);
+        $fp = fopen( $path . $file, 'wb');
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+
+        $zip = new ZipArchive;
+        $res = $zip->open($path . $file);
+        if ($res === TRUE) {
+            $zip->extractTo($path);
+            $zip->close();
+        }
+        unlink($path . $file);
+    }
+
+    public function actionChangeTheme()
+    {
+        $model = Settings::where('key', 'theme')->first();
+
+        if(isset($_POST['theme'])) {
+            $model->value = $_POST['theme'];
+            $model->save();
+
+            $this->redirect('themes');
+        }
+    }
+
+    public function actionSetTheme()
+    {
+        $data = file_get_contents('php://input');
+
+        $mod = new Mod();
+
+        if($mod->getModInfo($data)['status'] == 'active')
+            return 1;
+        elseif($mod->getModInfo($data)['status'] == 'inactive') {
+            try {
+                $cm = new CM();
+                $theme = Settings::where('key', 'theme')->first();
+                $cm->modChangeStatusToInactive($theme->value);
+                $cm->modChangeStatusToActive($data);
+                $theme->value = $data;
+                $theme->save();
+
+                return 1;
+            } catch (\Exception $e) {
+                return $e;
+            }
+        } else {
+            try {
+                $cm = new CM();
+                $cm->download($data);
+
+                $theme = Settings::where('key', 'theme')->first();
+                $cm->modChangeStatusToInactive($theme->value);
+                $cm->modChangeStatusToActive($data);
+                $theme->value = $data;
+                $theme->save();
+
+                return 1;
+            } catch (\Exception $e) {
+                return $e;
+            }
+        }
+    }
+
+    public function actionSetTitle()
+    {
+        $model = Settings::where('key', 'title')->first();
+        $model->value = file_get_contents('php://input');
+        $model->save();
+    }
+
+    public function actionSetKeywords()
+    {
+        $model = Settings::where('key', 'keywords')->first();
+        $model->value = file_get_contents('php://input');
+        $model->save();
+    }
+
+    public function actionSetDescription()
+    {
+        $model = Settings::where('key', 'description')->first();
+        $model->value = file_get_contents('php://input');
+        $model->save();
     }
 }

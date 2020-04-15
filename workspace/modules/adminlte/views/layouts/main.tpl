@@ -95,10 +95,11 @@
             <!-- Sidebar user panel (optional) -->
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
-                    <img src="/workspace/modules/adminlte/resources/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                    <img src="/workspace/modules/adminlte/resources/dist/img/user1-128x128.jpg" class="img-circle elevation-2" alt="User Image">
                 </div>
                 <div class="info">
-                    <a href="#" class="d-block">Alexander Pierce</a>
+                    <a href="#" class="d-block">Admin</a>
+                    <div class="logout-line"><a href="/logout">Logout</a></div>
                 </div>
             </div>
 
@@ -113,7 +114,7 @@
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
-                {core\BreadCrumbs::widget()->setParams($bc_options)->run()}
+                {core\BreadCrumbs::widget()->run()}
                 {$content}
             </div><!-- /.container-fluid -->
         </section>

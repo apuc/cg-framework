@@ -11,7 +11,7 @@ class Settings
     {
         $config['adminLeftMenu'] = [
             [
-                'title' => 'Настройки',
+                'title' => 'Settings',
                 'url' => '/settings',
                 'icon' => '<i class="nav-icon fas fa-copy"></i>',
             ],

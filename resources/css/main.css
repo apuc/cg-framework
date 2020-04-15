@@ -1,0 +1,51 @@
+.blue-text {
+    color: #2e6da4;
+}
+
+.breadcrumbs {
+    text-align: right;
+}
+
+.custom-container {
+    width: 30%;
+}
+
+.custom-link {
+    color: black;
+    text-decoration: none;
+}
+
+.fixed-width {
+    width: 15px;
+}
+
+.img {
+    height: 100px;
+    width: 200px;
+}
+
+.info {
+    font-size: 13px;
+}
+
+.logout-line {
+    border-top-style: solid;
+    border-top-color: lightgrey;
+    border-top-width: 1px;
+    margin-top: 10px;
+    padding-top: 5px;
+}
+
+.module-action {
+    width: 80%;
+    margin: auto;
+}
+
+.title-center {
+    margin-top: 3%;
+    text-align: center;
+}
+
+.transparent {
+    opacity: 0;
+}
