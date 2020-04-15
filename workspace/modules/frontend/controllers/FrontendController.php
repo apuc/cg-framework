@@ -16,6 +16,9 @@ class FrontendController extends Controller
 
     public function actionIndex()
     {
+        $settings = Settings::where('key', 'title')->first();
+        $this->view->setTitle($settings->value . ' | Home');
+
         $theme = Settings::where('key', 'theme')->first();
         $articles = Article::all()->sortByDesc("updated_at");
         $categories = Category::all();
@@ -41,6 +44,10 @@ class FrontendController extends Controller
 
     public function actionCategory($id)
     {
+        $category = Category::where('id', $id)->first();
+        $settings = Settings::where('key', 'title')->first();
+        $this->view->setTitle($settings->value . ' | ' . $category->category);
+
         $theme = Settings::where('key', 'theme')->first();
         $categories = Category::all();
         $articles_ids = ArticleCategory::where('category_id', $id)->get();
@@ -73,6 +80,10 @@ class FrontendController extends Controller
 
     public function actionRead($id)
     {
+        $article = Article::where('id', $id)->first();
+        $settings = Settings::where('key', 'title')->first();
+        $this->view->setTitle($settings->value . ' | ' . $article->name);
+
         $theme = Settings::where('key', 'theme')->first();
         $article = Article::where('id', $id)->first();
         $categories = Category::all();
@@ -97,6 +108,9 @@ class FrontendController extends Controller
 
     public function actionAbout()
     {
+        $settings = Settings::where('key', 'title')->first();
+        $this->view->setTitle($settings->value . ' | About');
+
         $theme = Settings::where('key', 'theme')->first();
 
         if(isset($_SESSION['username']) && isset($_SESSION['role'])) {
