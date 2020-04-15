@@ -28,3 +28,4 @@ App::$collector->post('/set-theme', ['workspace\controllers\ApiController', 'act
 App::$collector->post('/set-title', ['workspace\controllers\ApiController', 'actionSetTitle']);
 App::$collector->post('/set-keywords', ['workspace\controllers\ApiController', 'actionSetKeywords']);
 App::$collector->post('/set-description', ['workspace\controllers\ApiController', 'actionSetDescription']);
+App::$collector->post('/set-settings', ['workspace\controllers\ApiController', 'actionSetSettings']);

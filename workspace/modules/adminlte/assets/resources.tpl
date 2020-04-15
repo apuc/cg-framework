@@ -71,6 +71,7 @@
     <!-- GridView -->
     <script src="/resources/js/gridView.js"></script>
     <script src="/resources/js/main.js"></script>
+    <script src="/resources/js/select2.js"></script>
 {/capture}
 
 {capture name=meta}

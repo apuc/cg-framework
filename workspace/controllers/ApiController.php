@@ -140,7 +140,44 @@ class ApiController extends Controller
     public function actionSetTheme()
     {
         $data = file_get_contents('php://input');
+        $this->saveTheme($data);
+    }
 
+    public function actionSetTitle()
+    {
+       $this->saveData('title', file_get_contents('php://input'));
+    }
+
+    public function actionSetKeywords()
+    {
+        $this->saveData('keywords', file_get_contents('php://input'));
+    }
+
+    public function actionSetDescription()
+    {
+        $this->saveData('description', file_get_contents('php://input'));
+    }
+
+    public function actionSetSettings()
+    {
+        $data = file_get_contents('php://input');
+        $data = json_decode($data);
+
+        $this->saveData('title', $data->title);
+        $this->saveData('keywords', $data->keywords);
+        $this->saveData('description', $data->description);
+        $this->saveTheme($data->theme);
+    }
+
+    public function saveData($key, $data)
+    {
+        $model = Settings::where('key', $key)->first();
+        $model->value = $data;
+        $model->save();
+    }
+
+    public function saveTheme($data)
+    {
         $mod = new Mod();
 
         if($mod->getModInfo($data)['status'] == 'active')
@@ -174,26 +211,5 @@ class ApiController extends Controller
                 return $e;
             }
         }
-    }
-
-    public function actionSetTitle()
-    {
-        $model = Settings::where('key', 'title')->first();
-        $model->value = file_get_contents('php://input');
-        $model->save();
-    }
-
-    public function actionSetKeywords()
-    {
-        $model = Settings::where('key', 'keywords')->first();
-        $model->value = file_get_contents('php://input');
-        $model->save();
-    }
-
-    public function actionSetDescription()
-    {
-        $model = Settings::where('key', 'description')->first();
-        $model->value = file_get_contents('php://input');
-        $model->save();
     }
 }
