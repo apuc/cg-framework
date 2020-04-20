@@ -28,4 +28,9 @@ App::$collector->post('/set-theme', ['workspace\controllers\ApiController', 'act
 App::$collector->post('/set-title', ['workspace\controllers\ApiController', 'actionSetTitle']);
 App::$collector->post('/set-keywords', ['workspace\controllers\ApiController', 'actionSetKeywords']);
 App::$collector->post('/set-description', ['workspace\controllers\ApiController', 'actionSetDescription']);
-App::$collector->get('/', [workspace\controllers\MainController::class, 'actionIndex']);
+
+App::$collector->group(['after' => 'main_group', 'params' => ['AFTER']], function($router) {
+    App::$collector->group(['before' => 'next'], function($router) {
+        App::$collector->get('/', [workspace\controllers\MainController::class, 'actionIndex'], ['before' => 'some', 'params' => ['param to some, BEFORE']]);
+    });
+});
