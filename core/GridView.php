@@ -11,9 +11,12 @@ namespace core;
 class GridView extends Widget
 {
     public $actionsBtn = [
-        'view' => ['class' => 'custom-link', 'id' => '', 'icon' => '<i class="nav-icon fas fa-eye"></i>', 'url' => '/{id}'],
-        'edit' => ['class' => 'custom-link', 'id' => '', 'icon' => '<i class="nav-icon fas fa-edit"></i>', 'url' => '/update/{id}'],
-        'delete' => ['class' => 'custom-link __delete', 'id' => 'delete', 'icon' => '<i class="nav-icon fas fa-trash"></i>', 'url' => '/delete/{id}'],
+        'view' => ['class' => 'custom-link', 'id' => '', 'icon' => '<i class="nav-icon fas fa-eye"></i>',
+            'url' => '/{id}'],
+        'edit' => ['class' => 'custom-link', 'id' => '', 'icon' => '<i class="nav-icon fas fa-edit"></i>',
+            'url' => '/update/{id}'],
+        'delete' => ['class' => 'custom-link __delete', 'id' => 'delete',
+            'icon' => '<i class="nav-icon fas fa-trash"></i>', 'url' => '/delete/{id}'],
     ];
 
     protected $model;
@@ -23,16 +26,6 @@ class GridView extends Widget
      * @var $pagination Pagination
      */
     protected $pagination;
-
-    /**
-        available params for $options:
-            'serial' => '#',
-            'actions' => 'view, edit, delete',
-            'table_class' => 'class_1 class_2 ... class_m',
-            'thead_class' => 'class_1 class_2 ... class_m',
-            'baseUri' => 'url',
-            'fields' => ['attr_1', ..., 'attr_m']
-     */
 
     public function run()
     {
@@ -70,7 +63,8 @@ class GridView extends Widget
         $table .= '</tr>';
         $table .= '</thead>';
 
-        $this->pagination->setParams($this->options['baseUri'], count($this->model), isset($this->options['pagination']) ? $this->options['pagination'] : []);
+        $this->pagination->setParams($this->options['baseUri'], count($this->model),
+            isset($this->options['pagination']) ? $this->options['pagination'] : []);
 
         $end = $this->pagination->getPage() * $this->pagination->getPerPage();
         $start = ($end - ($this->pagination->getPerPage() - 1)) - 1;
@@ -94,7 +88,8 @@ class GridView extends Widget
                 if(isset($this->model[$i]->$key))
                     $table .= '<td>' . $this->model[$i]->$key . '</td>';
                 elseif(isset($this->options['fields'][$key]['label']))
-                    $table .= '<td>' . call_user_func($this->options['fields'][$key]['value'], $this->model[$i]) . '</td>';
+                    $table .= '<td>' . call_user_func($this->options['fields'][$key]['value'], $this->model[$i])
+                        . '</td>';
                 else
                     $table .= '<td></td>';
 
@@ -124,12 +119,14 @@ class GridView extends Widget
         $uri = $url . str_replace('{id}', $id, $btn['url']);
         $data_url = $url . str_replace('{id}', '', $btn['url']);
 
-        return '<a class="'. $btn['class'] .'" id="'. $btn['id'] .'" href="'. $uri .'" data-id="'.$id.'" data-url="'.$data_url.'">' . $btn['icon'] . '</a> ';
+        return '<a class="' . $btn['class'] . '" id="' . $btn['id'] . '" href="' . $uri . '" data-id="' . $id
+            . '" data-url="' . $data_url . '">' . $btn['icon'] . '</a> ';
     }
 
     public function setTableSettings($table, $tag, $class, $default_class)
     {
-        $table .= '<'.$tag.' class="'. ((isset($this->options[$class])) ? $this->options[$class] : $default_class) . '">';
+        $table .= '<' . $tag . ' class="' . ((isset($this->options[$class])) ? $this->options[$class] : $default_class)
+            . '">';
 
         return $table;
     }

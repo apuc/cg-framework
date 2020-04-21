@@ -15,7 +15,7 @@ class ThemesController extends Controller
 {
     protected function init()
     {
-        App::$header->add('Access-Control-Allow-Origin', '*');
+        //App::$header->add('Access-Control-Allow-Origin', '*');
         if(!isset($_SESSION['role']) || $_SESSION['role'] != 1) $this->redirect('');
         $this->viewPath = '/modules/themes/views/';
         $this->layoutPath = App::$config['adminLayoutPath'];
