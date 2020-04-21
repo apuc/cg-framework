@@ -1,23 +1,15 @@
-{foreach from=$categories item=category}
-    <div class="single_left_coloum_wrapper">
-        <h2 class="title"> {$category->category} </h2>
-        <a class="more" href="/category/{$category->id}">more</a>
-        {$i = 0}
-        {foreach from=$articles item=item}
-            {foreach from=$article_category item=ac}
-                {if $ac->article_id == $item->id && $ac->category_id == $category->id}
-                    {if $i++ < $amount}
-                        <div class="single_left_coloum floatleft">
-                            {$item->image}
-                            <h3> {$item->name} </h3>
-                            <div class="article_text_small"><p> {$item->text} </p></div>
-                            <a class="readmore" href="/read/{$item->id}">read more</a>
-                        </div>
-                    {else}
-                        {break}
-                    {/if}
-                {/if}
-            {/foreach}
-        {/foreach}
-    </div>
-{/foreach}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+{include file="{$workspace_dir}/modules/themes/themes/the-news-reporter/assets/resources.tpl"}
+<head>
+    {$smarty.capture.meta}
+    <title>The News Reporter</title>
+    {$smarty.capture.css}
+    {$smarty.capture.js_head}
+</head>
+<body>
+{$content}
+{$smarty.capture.js_body}
+</body>
+</html>

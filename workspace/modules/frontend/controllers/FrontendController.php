@@ -2,9 +2,8 @@
 
 namespace workspace\modules\frontend\controllers;
 
-
+use core\component_manager\lib\Mod;
 use core\Controller;
-use core\Debug;
 use workspace\models\ArticleCategory;
 use workspace\models\Category;
 use workspace\models\Settings;
@@ -13,6 +12,18 @@ use workspace\models\Article;
 class FrontendController extends Controller
 {
     public $viewPath = '/modules/themes/themes/';
+
+    protected function init()
+    {
+        $mod = new Mod();
+        $active = $mod->getByStatus('active');
+        $theme = 'default';
+        foreach ($active as $key => $item)
+            if($item['type'] == 'theme')
+                $theme = $key;
+
+        $this->layoutPath = '/modules/themes/themes/' . $theme . '/layouts/';
+    }
 
     public function actionIndex()
     {

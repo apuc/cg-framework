@@ -70,7 +70,7 @@ class MainController extends Controller
 
     public function actionModules()
     {
-        App::$header->add('Access-Control-Allow-Origin', '*');
+        //App::$header->add('Access-Control-Allow-Origin', '*');
         $content = file_get_contents('https://rep.craft-group.xyz/handler.php');
         $data = json_decode($content);
 
