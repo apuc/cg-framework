@@ -23,6 +23,7 @@ App::$collector->any('module-download', ['workspace\controllers\MainController',
 App::$collector->any('module-set-active', ['workspace\controllers\MainController', 'actionSetActive']);
 App::$collector->any('module-set-inactive', ['workspace\controllers\MainController', 'actionSetInactive']);
 App::$collector->any('module-delete', ['workspace\controllers\MainController', 'actionModuleDelete']);
+App::$collector->any('language', ['workspace\controllers\MainController', 'actionLanguage']);
 
 App::$collector->post('/set-theme', ['workspace\controllers\ApiController', 'actionSetTheme']);
 App::$collector->post('/set-title', ['workspace\controllers\ApiController', 'actionSetTitle']);

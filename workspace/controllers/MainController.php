@@ -10,6 +10,7 @@ use core\Controller;
 use workspace\classes\Button;
 use workspace\classes\Modules;
 use workspace\models\User;
+use workspace\widgets\Language;
 
 class MainController extends Controller
 {
@@ -21,6 +22,11 @@ class MainController extends Controller
         $this->view->registerJs('/resources/js/bodyScript.js', [], true);
 
         return $this->render('main/index.tpl', ['h1' => 'Проект ' . App::$config['app_name']]);
+    }
+
+    public function actionLanguage()
+    {
+        Language::widget()->run();
     }
 
     public function actionSignUp()

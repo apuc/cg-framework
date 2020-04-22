@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Language extends Migration
+class Promocode extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,12 @@ class Language extends Migration
      */
     public function up()
     {
-        App::$db->schema->create('language', function (Blueprint $table) {
+        App::$db->schema->create('promocode', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 255);
-            $table->string('slug', 255);
+            $table->date('active_from');
+            $table->date('active_to');
+            $table->integer('discount');
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ class Language extends Migration
      */
     public function down()
     {
-        App::$db->schema->dropIfExists('language');
+        //
     }
 }

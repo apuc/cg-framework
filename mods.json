@@ -14,5 +14,9 @@
   "article": {
     "version": "0.1",
     "status": "active"
+  },
+  "promocode": {
+    "version": "0.1",
+    "status": "active"
   }
 }
