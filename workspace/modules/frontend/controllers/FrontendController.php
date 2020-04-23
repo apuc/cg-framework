@@ -19,8 +19,10 @@ class FrontendController extends Controller
         $active = $mod->getByStatus('active');
         $theme = 'default';
         foreach ($active as $key => $item)
-            if($item['type'] == 'theme')
+            if($item['type'] == 'theme') {
                 $theme = $key;
+                break;
+            }
 
         $this->layoutPath = '/modules/themes/themes/' . $theme . '/layouts/';
     }
@@ -83,7 +85,8 @@ class FrontendController extends Controller
         }
 
         try {
-            return $this->render($theme->value . '/category.tpl', ['categories' => $categories, 'articles' => $articles, 'username' => $username, 'role' => $role]);
+            return $this->render($theme->value . '/category.tpl', ['categories' => $categories,
+                'articles' => $articles, 'username' => $username, 'role' => $role]);
         } catch (\Exception $e) {
             return $this->render('default/index.tpl', ['h1' => 'Site with']);
         }
@@ -111,7 +114,8 @@ class FrontendController extends Controller
 
         try {
             return $this->render($theme->value . '/article.tpl',
-                ['article' => $article, 'categories' => $categories, 'articles' => $articles, 'popular' => 10, 'username' => $username, 'role' => $role]);
+                ['article' => $article, 'categories' => $categories, 'articles' => $articles, 'popular' => 10,
+                    'username' => $username, 'role' => $role]);
         } catch (\Exception $e) {
             return $this->render('default/index.tpl', ['article' => $article]);
         }
