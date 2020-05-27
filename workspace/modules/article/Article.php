@@ -11,9 +11,9 @@ class Article
     {
         $config['adminLeftMenu'] = [
             [
-                'title' => 'Articles',
+                'title' => 'Статьи',
                 'url' => '/article',
-                'icon' => '<i class="nav-icon fas fa-copy"></i>',
+                'icon' => '<i class="fas fa-newspaper"></i>',
             ],
         ];
 

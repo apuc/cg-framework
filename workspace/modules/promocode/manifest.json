@@ -5,5 +5,5 @@
   "description": "promocode module",
   "configFile": "config/promocode.php",
   "routFile": "routing/rout.php",
-  "migrationPath": "console/migrations"
+  "migrationPath": "migrations"
 }

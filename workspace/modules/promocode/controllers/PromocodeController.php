@@ -12,7 +12,7 @@ class PromocodeController extends Controller
 
     protected function init()
     {
-        if(!isset($_SESSION['role']) || $_SESSION['role'] != 1) $this->redirect('');
+        //if(!isset($_SESSION['role']) || $_SESSION['role'] != 1) $this->redirect('');
 
         $this->viewPath = '/modules/promocode/views/';
         $this->layoutPath = App::$config['adminLayoutPath'];
@@ -43,7 +43,7 @@ class PromocodeController extends Controller
             'baseUri' => 'promocode'
         ];
 
-        return $this->render('promocode/promocode.tpl', ['h1' => 'Настройки', 'model' => $model, 'options' => $options]);
+        return $this->render('promocode/promocode.tpl', ['h1' => 'Промокоды', 'model' => $model, 'options' => $options]);
     }
 
     public function actionView($id)

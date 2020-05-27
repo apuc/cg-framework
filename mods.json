@@ -18,5 +18,13 @@
   "promocode": {
     "version": "0.1",
     "status": "active"
+  },
+  "product": {
+    "version": "0.1",
+    "status": "active"
+  },
+  "order": {
+    "version": "0.1",
+    "status": "active"
   }
 }

@@ -11,9 +11,9 @@ class Promocode
     {
         $config['adminLeftMenu'] = [
             [
-                'title' => 'Promocodes',
+                'title' => 'Промокоды',
                 'url' => '/promocode',
-                'icon' => '<i class="nav-icon fas fa-copy"></i>',
+                'icon' => '<i class="fas fa-window-maximize"></i>',
             ],
         ];
 

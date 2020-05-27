@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Promocode extends Migration
+class CreateProductTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,12 +14,12 @@ class Promocode extends Migration
      */
     public function up()
     {
-        App::$db->schema->create('promocode', function (Blueprint $table) {
+        App::$db->schema->create('product', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 255);
-            $table->date('active_from');
-            $table->date('active_to');
-            $table->integer('discount');
+            $table->string('title',255);
+            $table->string('description',255);
+            $table->tinyInteger('status');
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ class Promocode extends Migration
      */
     public function down()
     {
-        //
+        App::$db->schema->dropIfExists('product');
     }
 }

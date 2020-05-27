@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<order date="2019-11-01 17:22">
+    <id>14</id>
+    <city>Нижневартовск</city>
+    <email></email>
+    <fio>КАРЫМОВА ФИРУЗА ДИНИСЛАМОВНА</fio>
+    <phone>89871027995</phone>
+    <pay>1</pay>
+    <delivery>1</delivery>
+    <shop_id>520</shop_id>
+    <delivery_date>27.04.2020</delivery_date>
+    <delivery_time>с 10-19 часов</delivery_time>
+    <address>хмао-югра г.мегион пгт.высокий ул.высокий 1/2</address>
+    <comment>магазин "орхидея" посёлок высокий ленина 1\2</comment>
+    <products>
+    </products>
+</order>

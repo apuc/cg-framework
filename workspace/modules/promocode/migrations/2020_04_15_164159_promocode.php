@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Category extends Migration
+class Promocode extends Migration
 {
     /**
      * Run the migrations.
@@ -14,9 +14,12 @@ class Category extends Migration
      */
     public function up()
     {
-        App::$db->schema->create('category', function (Blueprint $table) {
+        App::$db->schema->create('promocode', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('category', 255);
+            $table->string('name', 255);
+            $table->date('active_from');
+            $table->date('active_to');
+            $table->integer('discount');
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ class Category extends Migration
      */
     public function down()
     {
-        App::$db->schema->dropIfExists('category');
+        App::$db->schema->dropIfExists('promocode');
     }
 }
