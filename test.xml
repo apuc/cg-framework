@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<order date="2020-05-27 11:05">
-    <id>4</id>
+<order date="2020-05-29 04:05">
+    <id>2</id>
     <city>Москва</city>
-    <email>fzfzfz</email>
+    <email>ddd@ddd.dd</email>
     <fio>csadvgfbnthmyj</fio>
     <phone>+7</phone>
     <pay>1</pay>
@@ -11,7 +11,7 @@
     <delivery_date>2020-05-30</delivery_date>
     <delivery_time>scdvbgnhtm</delivery_time>
     <address>xcwtrby</address>
-    <comment>sdfgh</comment>
+    <comment>qdwfeetnrm</comment>
     <products>
-    <product id="1"><amount>12345</amount><quantity>2</quantity></product></products>
+    <product id="1234"><amount>2491.2</amount><quantity>2</quantity></product></products>
 </order>
