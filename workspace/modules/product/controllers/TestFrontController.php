@@ -21,7 +21,7 @@ class TestFrontController extends Controller
         //if(!isset($_SESSION['role']) || $_SESSION['role'] != 1) $this->redirect('');
 
         $this->viewPath = '/modules/product/views/front';
-        $this->layoutPath = App::$config['adminLayoutPath'];
+        //$this->layoutPath = App::$config['adminLayoutPath'];
         App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);
         App::$breadcrumbs->addItem(['text' => 'Список товаров', 'url' => 'testfront']);
     }

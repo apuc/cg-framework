@@ -13,12 +13,6 @@ class ProductXML
    public function executeXML($path = 'product.xml'){
        $this->xml = simplexml_load_file($path);
        foreach ($this->xml->product as $prod){
-           foreach ($prod->images->image as $img){
-               $photo = new ProductPhoto();
-               $photo->product_id = (int)$prod->attributes()->id;
-               $photo->photo =(string)$img->attributes()->src;
-               $photo->save();
-           }
            if(Product::where('id',(int)$prod->attributes()->id)->first()) continue;
            $product = new Product();
            $product->id = (int)$prod->attributes()->id;
@@ -28,9 +22,15 @@ class ProductXML
            $virtual_product = new VirtualProduct();
            $virtual_product->product_id = (int)$prod->attributes()->id;
            $virtual_product->price = (float)$prod->price;
-           $photo->save();
            $product->save();
            $virtual_product->save();
+
+           foreach ($prod->images->image as $img){
+               $photo = new ProductPhoto();
+               $photo->product_id = (int)$prod->attributes()->id;
+               $photo->photo =(string)$img->attributes()->src;
+               $photo->save();
+           }
        }
    }
 

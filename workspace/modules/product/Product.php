@@ -12,7 +12,7 @@ class Product
         $config['adminLeftMenu'] = [
             [
                 'title' => 'Товары',
-                'url' => '/product',
+                'url' => '/admin/product',
                 'icon' => '<i class="nav-icon fas fa-copy"></i>',
             ],
         ];

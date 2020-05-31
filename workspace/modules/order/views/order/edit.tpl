@@ -4,7 +4,7 @@
 <div class="h1">{$h1} {$model->fio}</div>
 
 <div class="container">
-    <form class="form-horizontal" name="edit_form" id="edit_form" method="post" action="/order/update/{$model->id}">
+    <form class="form-horizontal" name="edit_form" id="edit_form" method="post" action="/admin/order/update/{$model->id}">
         <div class="form-group">
             <label for="city">Город:</label>
             <input type="text" name="city" id="city" class="form-control" required="required" value="{$model->city}" />
@@ -56,6 +56,10 @@
         <div class="form-group">
             <label for="product_id">Номер товара:</label>
             <input type="number" name="product_id" id="product_id" class="form-control" required="required" value="{$prodmodel->product_id}"/>
+        </div>
+        <div class="form-group">
+            <label for="quantity">кол-во:</label>
+            <input type="number" name="quantity" id="quantity" class="form-control" required="required" value="{$prodmodel->quantity}"/>
         </div>
         <div class="form-group">
             <input type="submit" name="submit" id="submit_button" class="btn btn-default" value="Submit">

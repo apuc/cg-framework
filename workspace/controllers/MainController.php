@@ -7,6 +7,7 @@ use core\component_manager\lib\CM;
 use core\component_manager\lib\Config;
 use core\component_manager\lib\Mod;
 use core\Controller;
+use core\Debug;
 use workspace\classes\Button;
 use workspace\classes\Modules;
 use workspace\models\User;
@@ -59,7 +60,7 @@ class MainController extends Controller
                 $_SESSION['role'] = $model->role;
                 $_SESSION['username'] = $model->username;
 
-                $this->redirect('adminlte');
+                $this->redirect('');
             } else {
                 $this->redirect('sign-in');
             }

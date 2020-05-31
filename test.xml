@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<order date="2020-05-29 04:05">
+<order date="2020-05-31 11:05">
     <id>2</id>
-    <city>Москва</city>
-    <email>ddd@ddd.dd</email>
-    <fio>csadvgfbnthmyj</fio>
-    <phone>+7</phone>
+    <city>Донецк</city>
+    <email>ad@mail.ru</email>
+    <fio>Dghdfgd</fio>
+    <phone>666171111</phone>
     <pay>1</pay>
     <delivery>2</delivery>
-    <shop_id>520</shop_id>
-    <delivery_date>2020-05-30</delivery_date>
-    <delivery_time>scdvbgnhtm</delivery_time>
-    <address>xcwtrby</address>
-    <comment>qdwfeetnrm</comment>
+    <shop_id>222</shop_id>
+    <delivery_date>2020-05-31</delivery_date>
+    <delivery_time>скоро</delivery_time>
+    <address>ул. Артема</address>
+    <comment>sdsd</comment>
     <products>
-    <product id="1234"><amount>2491.2</amount><quantity>2</quantity></product></products>
+    <product id="1"><amount>333</amount><quantity>2</quantity></product></products>
 </order>
