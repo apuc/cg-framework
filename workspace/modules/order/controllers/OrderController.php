@@ -110,23 +110,12 @@ class OrderController extends Controller
             //Debug::dd(OrderXml::run()->createXml($model,$prodmodel)->get());
             $xml =  OrderXml::run()->createXml($model,$prodmodel);
             $xml->save();
-//            $data = [
-//                'host' => '31.28.9.200',
-//                'port' => '21',
-//                'login' => 'web-ftp',
-//                'pass' => '123edsaqw'
-//            ];
-            $data = [
-                'host' => '95.181.135.186',
-                'port' => '1525',
-                'login' => 'adminloved',
-                'pass' => 'vOU847PwYnG0'
-            ];
-            Ftp::run($data)->putFile(ROOT_DIR.DIRECTORY_SEPARATOR.'test.xml', 'orders'.DIRECTORY_SEPARATOR.'order_'.$model->id.'.xml');
+
+            Ftp::run(App::$config['FTP'])->putFile(ROOT_DIR.DIRECTORY_SEPARATOR.'test.xml', 'orders'.DIRECTORY_SEPARATOR.'order_'.$model->id.'.xml');
             //ProductXML::run()->executeXML();
             //FtpExchange::run()->sendFile();
 
-            $this->redirect('order');
+            $this->redirect('admin/order');
         } else
             return $this->render('order/store.tpl', ['h1' => 'Добавить заказ']);
     }
@@ -165,13 +154,8 @@ class OrderController extends Controller
         $prodmodel = OrderProduct::where('order_id', $id)->first();
         $xml =  OrderXml::run()->createXml($model,$prodmodel);
         $xml->save();
-        $data = [
-            'host' => '95.181.135.186',
-            'port' => '1525',
-            'login' => 'adminloved',
-            'pass' => 'vOU847PwYnG0'
-        ];
-        Ftp::run($data)->putFile(ROOT_DIR.DIRECTORY_SEPARATOR.'test.xml', 'orders'.DIRECTORY_SEPARATOR.'order_'.$model->id.'.xml');
-        $this->redirect('order');
+
+        Ftp::run(App::$config['FTP'])->putFile(ROOT_DIR.DIRECTORY_SEPARATOR.'test.xml', 'orders'.DIRECTORY_SEPARATOR.'order_'.$model->id.'.xml');
+        $this->redirect('admin/order');
     }
 }

@@ -3,6 +3,7 @@ namespace workspace\modules\product\services;
 
 use core\Debug;
 use workspace\modules\product\models\Product;
+use workspace\modules\product\models\ProductPhoto;
 use workspace\modules\product\models\VirtualProduct;
 
 class ProductXML
@@ -23,6 +24,13 @@ class ProductXML
            $virtual_product->price = (float)$prod->price;
            $product->save();
            $virtual_product->save();
+
+           foreach ($prod->images->image as $img){
+               $photo = new ProductPhoto();
+               $photo->product_id = (int)$prod->attributes()->id;
+               $photo->photo =(string)$img->attributes()->src;
+               $photo->save();
+           }
        }
    }
 

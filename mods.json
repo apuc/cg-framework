@@ -26,5 +26,9 @@
   "order": {
     "version": "0.1",
     "status": "active"
+  },
+  "frontend": {
+    "version": "0.1",
+    "status": "inactive"
   }
 }

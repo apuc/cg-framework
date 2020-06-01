@@ -12,7 +12,7 @@ class Order
         $config['adminLeftMenu'] = [
             [
                 'title' => 'Заказы',
-                'url' => '/order',
+                'url' => '/admin/order',
                 'icon' => '<i class="fas fa-border-none"></i>',
             ],
         ];

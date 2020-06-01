@@ -2,4 +2,6 @@
 
 use core\App;
 
-App::$collector->gridView('settings', ['workspace\modules\settings\controllers\SettingsController']);
+App::$collector->group(['prefix' => 'admin'], function ($router) {
+    App::$collector->gridView('settings', ['workspace\modules\settings\controllers\SettingsController']);
+});

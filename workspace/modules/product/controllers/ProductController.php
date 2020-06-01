@@ -78,7 +78,7 @@ class ProductController extends Controller
             $virtual_product->product_id = $model->id;
             $virtual_product->price = $_POST['price'];
             $virtual_product->save();
-            $this->redirect('product');
+            $this->redirect('/admin/product');
         } else
             return $this->render('store.tpl', ['h1' => 'Добавить товар']);
     }
@@ -111,6 +111,6 @@ class ProductController extends Controller
     public function actionDownload()
     {
         ProductXML::run()->executeXML();
-        $this->redirect('product');
+        $this->redirect('admin/product');
     }
 }
