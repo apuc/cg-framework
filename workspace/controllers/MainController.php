@@ -37,7 +37,6 @@ class MainController extends Controller
     {
         $this->view->setTitle('Sign Up');
         $request = new RegistrationRequest();
-        Debug::dd($request);
         if($request->isPost() && $request->validate()){
             $model = new User();
             $model->username = $request->username;

@@ -159,7 +159,7 @@ class Request
     }
 
     /**
-     * Загружаем свойсва 
+     * Загружаем свойсва
      */
     public function load()
     {
