@@ -10,6 +10,7 @@ use workspace\modules\order\models\Order;
 use workspace\modules\order\services\Ftp;
 use workspace\modules\order\services\OrderXml;
 use workspace\modules\product\models\Product;
+use workspace\modules\product\models\ProductPhoto;
 use workspace\modules\product\models\VirtualProduct;
 
 class TestFrontController extends Controller
@@ -33,6 +34,10 @@ class TestFrontController extends Controller
             $options = [
                 'serial' => '#',
                 'fields' => [
+                    'photo' => ['label' => 'Фото', 'value' => function ($model) {
+                        $photo = ProductPhoto::where('product_id', $model->id)->first();
+                        return !empty($photo->photo) ? "<img src='$photo->photo' style='max-width: 100px'/>" : null;
+                    }],
                     'name' => [
                         'label' => 'Название'
                     ],
@@ -89,24 +94,9 @@ class TestFrontController extends Controller
             $prodmodel->product_id = $product->id;
             $prodmodel->quantity = $_POST['quantity'];
             $prodmodel->save();
-            //Debug::dd(OrderXml::run()->createXml($model,$prodmodel)->get());
             $xml =  OrderXml::run()->createXml($model,$prodmodel);
             $xml->save();
-//            $data = [
-//                'host' => '31.28.9.200',
-//                'port' => '21',
-//                'login' => 'web-ftp',
-//                'pass' => '123edsaqw'
-//            ];
-            $data = [
-                'host' => '95.181.135.186',
-                'port' => '1525',
-                'login' => 'adminloved',
-                'pass' => 'vOU847PwYnG0'
-            ];
-            Ftp::run($data)->putFile(ROOT_DIR.DIRECTORY_SEPARATOR.'test.xml', 'orders'.DIRECTORY_SEPARATOR.'order_'.$model->id.'.xml');
-            //ProductXML::run()->executeXML();
-            //FtpExchange::run()->sendFile();
+            Ftp::run(App::$config['FTP'])->putFile(ROOT_DIR.DIRECTORY_SEPARATOR.'test.xml', 'orders'.DIRECTORY_SEPARATOR.'order_'.$model->id.'.xml');
 
             $options = [
                 'serial' => '#',

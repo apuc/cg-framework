@@ -5,6 +5,7 @@ namespace workspace\modules\product\controllers;
 use core\App;
 use core\Controller;
 use workspace\modules\product\models\Product;
+use workspace\modules\product\models\ProductPhoto;
 use workspace\modules\product\models\VirtualProduct;
 use workspace\modules\product\services\ProductXML;
 
@@ -104,6 +105,7 @@ class ProductController extends Controller
 
     public function actionDelete()
     {
+        ProductPhoto::where('product_id', $_POST['id'])->delete();
         VirtualProduct::where('product_id', $_POST['id'])->delete();
         Product::where('id', $_POST['id'])->delete();
     }
