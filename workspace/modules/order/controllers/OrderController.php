@@ -23,7 +23,7 @@ class OrderController extends Controller
         $this->viewPath = '/modules/order/views/';
         $this->layoutPath = App::$config['adminLayoutPath'];
         App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);
-        App::$breadcrumbs->addItem(['text' => 'Заказы', 'url' => 'order']);
+        App::$breadcrumbs->addItem(['text' => 'Заказы']);
     }
 
     public function actionIndex()
@@ -139,7 +139,7 @@ class OrderController extends Controller
             $model->comment = $_POST['comment'];
             $model->total_price = $_POST['total_price'];
             $model->save();
-            $this->redirect('order');
+            $this->redirect('admin/order');
         } else
             return $this->render('order/edit.tpl', ['h1' => 'Редактировать: ', 'model' => $model, 'prodmodel' => $prodmodel]);
     }
