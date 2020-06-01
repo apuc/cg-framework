@@ -1,0 +1,118 @@
+<?php
+
+namespace core;
+
+class Request
+{
+    /** @var string $host Абсолютный адрес сервера */
+    public $host;
+
+    /** @var array $headers Заголовки запроса */
+    public $headers;
+
+
+    public function __construct()
+    {
+        $this->headers = getallheaders();
+    }
+
+
+    /**
+     * Возвращает абсолютный адрес сервера.
+     * @return string
+     */
+    public function getHost() : string
+    {
+        if ($this->host !== null) {
+            return $this->host;
+        }
+
+        $http = $this->getIsSecure() ? 'https' : 'http';
+
+        if ($this->headerExist('host')) {
+            $this->host = $http . '://' . $this->getHeader('Host');
+        } elseif (isset($_SERVER['SERVER_NAME'])) {
+            $this->host = $http . '://' . $_SERVER['SERVER_NAME'];
+        }
+
+        return $this->host;
+    }
+
+
+    /**
+     * Возвращает true если шифрование https, иначе false.
+     * @return bool
+     */
+    public function getIsSecure() : bool
+    {
+        if (isset($_SERVER['HTTPS']) && (strcasecmp($_SERVER['HTTPS'], 'on') === 0 || $_SERVER['HTTPS'] == 1)) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Проверяет был ли передан заголовок запроса.
+     * @return bool
+     */
+    public function headerExist($header) : bool
+    {
+        return isset($this->headers[$header]);
+    }
+
+
+    /**
+     * Возвращает заголовок запроса
+     * @param string $header Заголовок.
+     * @param mixed $defaultValue Значение если, параметр не передан.
+     */
+    public function getHeader($header, $defaultValue = null)
+    {
+        return $this->header[$header] ?? $defaultValue;
+    }
+
+
+    /**
+     * Возвращает GET - параметр.
+     * @param string $param Параметр.
+     * @param mixed $defaultValue Значение если, параметр не передан.
+     * @return mixed
+     */
+    public function get($param, $defaultValue = null)
+    {
+        return $_GET[$param] ?? $defaultValue;
+    }
+
+
+    /**
+     * Возвращает POST - параметр.
+     * @param string $param Параметр.
+     * @param mixed $defaultValue Значение если, параметр не передан.
+     * @return mixed
+     */
+    public function post($param, $defaultValue = null)
+    {
+        return $_POST[$param] ?? $defaultValue;
+    }
+
+
+    /**
+     * Был ли POST - запрос.
+     * @return bool
+     */
+    public function isPost() : bool
+    {
+        return ($_SERVER['REQUEST_METHOD'] === 'POST');
+    }
+
+    /**
+     * Был ли GET - запрос.
+     * @return bool
+     */
+    public function isGet() : bool
+    {
+        return ($_SERVER['REQUEST_METHOD'] === 'GET');
+    }
+}
