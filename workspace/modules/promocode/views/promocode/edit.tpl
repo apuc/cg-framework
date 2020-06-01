@@ -1,10 +1,10 @@
-{assign var="url" value="{'promocode/'}{$model->id}"}
+{assign var="url" value="{'/admin/promocode/'}{$model->id}"}
 {core\App::$breadcrumbs->addItem(['text' => $model->name, 'url' => {$url}])}
 {core\App::$breadcrumbs->addItem(['text' => 'Edit'])}
 <div class="h1">{$h1} {$model->name}</div>
 
 <div class="container">
-    <form class="form-horizontal" name="edit_form" id="edit_form" method="post" action="/promocode/update/{$model->id}">
+    <form class="form-horizontal" name="edit_form" id="edit_form" method="post" action="/admin/promocode/update/{$model->id}">
         <div class="form-group">
             <label for="firstname">Name:</label>
             <input type="text" name="name" id="name" class="form-control" required="required" value="{$model->name}" />

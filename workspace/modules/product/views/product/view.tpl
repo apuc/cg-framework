@@ -1,4 +1,4 @@
-{assign var="url" value="{'product/'}{$model->id}"}
+{assign var="url" value="{'/admin/product/'}{$model->id}"}
 {core\App::$breadcrumbs->addItem(['text' => $model->name, 'url' => $url])}
 <div class="h1">{$model->name}</div>
 

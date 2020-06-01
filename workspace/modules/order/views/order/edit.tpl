@@ -1,4 +1,4 @@
-{assign var="url" value="{'order/'}{$model->id}"}
+{assign var="url" value="{'admin/order/'}{$model->id}"}
 {core\App::$breadcrumbs->addItem(['text' => $model->fio, 'url' => {$url}])}
 {core\App::$breadcrumbs->addItem(['text' => 'Edit'])}
 <div class="h1">{$h1} {$model->fio}</div>

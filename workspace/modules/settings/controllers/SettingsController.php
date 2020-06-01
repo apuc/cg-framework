@@ -19,7 +19,7 @@ class SettingsController extends Controller
         $this->viewPath = '/modules/settings/views/';
         $this->layoutPath = App::$config['adminLayoutPath'];
         App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);
-        App::$breadcrumbs->addItem(['text' => 'Settings', 'url' => 'settings']);
+        App::$breadcrumbs->addItem(['text' => 'Settings', 'url' => 'admin/settings']);
     }
 
     public function actionIndex()
@@ -70,7 +70,7 @@ class SettingsController extends Controller
             $settings->value = $_POST['value'];
             $settings->save();
 
-            $this->redirect('settings');
+            $this->redirect('admin/settings');
         } else
             return $this->render('settings/store.tpl', ['h1' => 'Добавить настройку']);
     }
@@ -84,7 +84,7 @@ class SettingsController extends Controller
             $model->value = $_POST['value'];
             $model->save();
 
-            $this->redirect('settings');
+            $this->redirect('admin/settings');
         } else
             return $this->render('settings/edit.tpl', ['h1' => 'Редактировать: ', 'model' => $model]);
     }

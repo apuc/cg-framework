@@ -17,7 +17,7 @@ class PromocodeController extends Controller
         $this->viewPath = '/modules/promocode/views/';
         $this->layoutPath = App::$config['adminLayoutPath'];
         App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);
-        App::$breadcrumbs->addItem(['text' => 'Promocode', 'url' => 'promocode']);
+        App::$breadcrumbs->addItem(['text' => 'Promocode', 'url' => '/admin/promocode']);
     }
 
     public function actionIndex()
@@ -73,7 +73,7 @@ class PromocodeController extends Controller
             $model->active_to = $_POST['active_to'];
             $model->save();
 
-            $this->redirect('promocode');
+            $this->redirect('admin/promocode');
         } else
             return $this->render('promocode/store.tpl', ['h1' => 'Добавить промокод']);
     }
@@ -89,7 +89,7 @@ class PromocodeController extends Controller
             $model->active_to = $_POST['active_to'];
             $model->save();
 
-            $this->redirect('promocode');
+            $this->redirect('admin/promocode');
         } else
             return $this->render('promocode/edit.tpl', ['h1' => 'Редактировать: ', 'model' => $model]);
     }
