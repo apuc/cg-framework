@@ -2,18 +2,35 @@
 
 namespace core;
 
+use Rakit\Validation\Validator;
+
 class Request
 {
-    /** @var string $host Абсолютный адрес сервера */
+    /**
+     * @var string $host Абсолютный адрес сервера
+     */
     public $host;
 
-    /** @var array $headers Заголовки запроса */
+    /**
+     * @var array $headers Заголовки запроса
+     */
     public $headers;
+
+    /**
+     * @var array
+     */
+    public $data = [];
+
+    /**
+     * @var array
+     */
+    public $errors = [];
 
 
     public function __construct()
     {
         $this->headers = $this->getRequestHeaders();
+        $this->load();
     }
 
 
@@ -21,6 +38,14 @@ class Request
      * @return array
      */
     public function rules()
+    {
+        return [];
+    }
+
+    /**
+     * @return array
+     */
+    public function messages()
     {
         return [];
     }
@@ -75,6 +100,7 @@ class Request
      * Возвращает заголовок запроса
      * @param string $header Заголовок.
      * @param mixed $defaultValue Значение если, параметр не передан.
+     * @return mixed|null
      */
     public function getHeader($header, $defaultValue = null)
     {
@@ -93,6 +119,7 @@ class Request
         if (is_null($param)) {
             return $_GET;
         }
+
         return $_GET[$param] ?? $defaultValue;
     }
 
@@ -108,6 +135,7 @@ class Request
         if (is_null($param)) {
             return $_POST;
         }
+
         return $_POST[$param] ?? $defaultValue;
     }
 
@@ -130,6 +158,56 @@ class Request
         return ($_SERVER['REQUEST_METHOD'] === 'GET');
     }
 
+    /**
+     * Загружаем свойсва 
+     */
+    public function load()
+    {
+        if (!empty($_REQUEST)) {
+            foreach ($_REQUEST as $key => $item) {
+                $this->{$key} = $item;
+                $this->data[$key] = $item;
+            }
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function validate()
+    {
+        if (!empty($this->data)) {
+            $valid = new Validator();
+            $validation = $valid->make($this->data, $this->rules());
+            $validation->setMessages($this->messages());
+            $validation->validate();
+            if ($validation->fails()) {
+                $this->errors = $validation->errors();
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMessagesArray()
+    {
+        $msgs = [];
+        if($this->errors){
+            foreach ($this->errors->toArray() as $item){
+                $msgs[] = array_values($item)[0];
+            }
+        }
+
+        return $msgs;
+    }
+
+    /**
+     * @return array
+     */
     protected function getRequestHeaders()
     {
         $headers = array();
@@ -140,6 +218,7 @@ class Request
             $header = str_replace(' ', '-', ucwords(str_replace('_', ' ', strtolower(substr($key, 5)))));
             $headers[$header] = $value;
         }
+
         return $headers;
     }
 }
