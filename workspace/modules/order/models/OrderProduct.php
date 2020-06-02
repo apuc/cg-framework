@@ -1,7 +1,7 @@
 <?php
 
 
-namespace workspace\models;
+namespace workspace\modules\order\models;
 
 
 use Illuminate\Database\Eloquent\Model;

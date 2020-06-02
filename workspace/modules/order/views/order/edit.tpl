@@ -4,6 +4,15 @@
 <div class="h1">{$h1} {$model->fio}</div>
 
 <div class="container">
+
+    {if !empty($errors)}
+        {foreach from=$errors item=error}
+            <div class="alert alert-danger" role="alert">
+                {$error}
+            </div>
+        {/foreach}
+    {/if}
+
     <form class="form-horizontal" name="edit_form" id="edit_form" method="post" action="/admin/order/update/{$model->id}">
         <div class="form-group">
             <label for="city">Город:</label>

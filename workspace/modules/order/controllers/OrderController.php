@@ -5,8 +5,9 @@ namespace workspace\modules\order\controllers;
 use core\App;
 use core\Controller;
 use core\Debug;
-use workspace\models\OrderProduct;
+use workspace\modules\order\models\OrderProduct;
 use workspace\modules\order\models\Order;
+use workspace\modules\order\requests\OrderRequest;
 use workspace\modules\order\services\Ftp;
 use workspace\modules\order\services\FtpExchange;
 use workspace\modules\order\services\OrderXml;
@@ -87,27 +88,27 @@ class OrderController extends Controller
 
     public function actionStore()
     {
-        if(isset($_POST['city']) && isset($_POST['email']) && isset($_POST['fio']) && isset($_POST['phone']) && isset($_POST['pay']) && isset($_POST['delivery']) && isset($_POST['shop_id']) && isset($_POST['delivery_date']) && isset($_POST['delivery_time']) && isset($_POST['address']) && isset($_POST['comment']) && isset($_POST['total_price']) && isset($_POST['product_id']) && isset($_POST['quantity'])) {
+        $request = new OrderRequest();
+        if($request->isPost() && $request->validate()) {
             $model = new Order();
-            $model->city = $_POST['city'];
-            $model->email = $_POST['email'];
-            $model->fio = $_POST['fio'];
-            $model->phone = $_POST['phone'];
-            $model->pay = $_POST['pay'];
-            $model->delivery = $_POST['delivery'];
-            $model->shop_id = $_POST['shop_id'];
-            $model->delivery_date = $_POST['delivery_date'];
-            $model->delivery_time = $_POST['delivery_time'];
-            $model->address = $_POST['address'];
-            $model->comment = $_POST['comment'];
-            $model->total_price = $_POST['total_price'];
+            $model->city = $request->city;
+            $model->email = $request->email;
+            $model->fio = $request->fio;
+            $model->phone = $request->phone;
+            $model->pay = $request->pay;
+            $model->delivery = $request->delivery;
+            $model->shop_id = $request->shop_id;
+            $model->delivery_date = $request->delivery_date;
+            $model->delivery_time = $request->delivery_time;
+            $model->address = $request->address;
+            $model->comment = $request->comment;
+            $model->total_price = $request->total_price;
             $model->save();
             $prodmodel = new OrderProduct();
             $prodmodel->order_id = $model->id;
-            $prodmodel->product_id = $_POST['product_id'];
-            $prodmodel->quantity = $_POST['quantity'];
+            $prodmodel->product_id = $request->product_id;
+            $prodmodel->quantity = $request->quantity;
             $prodmodel->save();
-            //Debug::dd(OrderXml::run()->createXml($model,$prodmodel)->get());
             $xml =  OrderXml::run()->createXml($model,$prodmodel);
             $xml->save();
 
@@ -117,31 +118,31 @@ class OrderController extends Controller
 
             $this->redirect('admin/order');
         } else
-            return $this->render('order/store.tpl', ['h1' => 'Добавить заказ']);
+            return $this->render('order/store.tpl', ['h1' => 'Добавить заказ','errors' => $request->getMessagesArray()]);
     }
 
     public function actionEdit($id)
     {
         $model = Order::where('id', $id)->first();
         $prodmodel = OrderProduct::where('order_id', $id)->first();
-
-        if(isset($_POST['city']) && isset($_POST['email']) && isset($_POST['fio']) && isset($_POST['phone']) && isset($_POST['pay']) && isset($_POST['delivery']) && isset($_POST['shop_id']) && isset($_POST['delivery_date']) && isset($_POST['delivery_time']) && isset($_POST['address']) && isset($_POST['comment']) && isset($_POST['total_price'])) {
-            $model->city = $_POST['city'];
-            $model->email = $_POST['email'];
-            $model->fio = $_POST['fio'];
-            $model->phone = $_POST['phone'];
-            $model->pay = $_POST['pay'];
-            $model->delivery = $_POST['delivery'];
-            $model->shop_id = $_POST['shop_id'];
-            $model->delivery_date = $_POST['delivery_date'];
-            $model->delivery_time = $_POST['delivery_time'];
-            $model->address = $_POST['address'];
-            $model->comment = $_POST['comment'];
-            $model->total_price = $_POST['total_price'];
+        $request = new OrderRequest();
+        if($request->isPost() && $request->validate()) {
+            $model->city = $request->city;
+            $model->email = $request->email;
+            $model->fio = $request->fio;
+            $model->phone = $request->phone;
+            $model->pay = $request->pay;
+            $model->delivery = $request->delivery;
+            $model->shop_id = $request->shop_id;
+            $model->delivery_date = $request->delivery_date;
+            $model->delivery_time = $request->delivery_time;
+            $model->address = $request->address;
+            $model->comment = $request->comment;
+            $model->total_price = $request->total_price;
             $model->save();
             $this->redirect('admin/order');
         } else
-            return $this->render('order/edit.tpl', ['h1' => 'Редактировать: ', 'model' => $model, 'prodmodel' => $prodmodel]);
+            return $this->render('order/edit.tpl', ['h1' => 'Редактировать: ', 'model' => $model, 'prodmodel' => $prodmodel, 'errors' => $request->getMessagesArray()]);
     }
 
     public function actionDelete()

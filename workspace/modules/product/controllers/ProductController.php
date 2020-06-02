@@ -7,6 +7,7 @@ use core\Controller;
 use workspace\modules\product\models\Product;
 use workspace\modules\product\models\ProductPhoto;
 use workspace\modules\product\models\VirtualProduct;
+use workspace\modules\product\requests\ProductRequest;
 use workspace\modules\product\services\ProductXML;
 
 class ProductController extends Controller
@@ -51,7 +52,7 @@ class ProductController extends Controller
 
         $options = [
             'fields' => [
-                'id'=>'Номер товара',
+                'id' => 'Номер товара',
                 'name' => 'Название',
                 'description' => 'Описание',
                 'price' => ['label' => 'Цена', 'value' => function ($model) {
@@ -68,20 +69,24 @@ class ProductController extends Controller
 
     public function actionStore()
     {
-        if (isset($_POST['name']) && isset($_POST['description']) && isset($_POST['status']) && isset($_POST['price'])) {
+        $request = new ProductRequest();
+        if ($request->isPost() && $request->validate()) {
             $model = new Product();
-            $model->name = $_POST['name'];
-            $model->title = $_POST['name'];
-            $model->description = $_POST['description'];
-            $model->status = $_POST['status'];
+            $model->name = $request->name;
+            $model->title = $request->name;
+            $model->description = $request->description;
+            $model->status = $request->status;
             $model->save();
             $virtual_product = new VirtualProduct();
             $virtual_product->product_id = $model->id;
-            $virtual_product->price = $_POST['price'];
+            $virtual_product->price = $request->price;
             $virtual_product->save();
             $this->redirect('admin/product');
         } else
-            return $this->render('store.tpl', ['h1' => 'Добавить товар']);
+            return $this->render('store.tpl', [
+                'h1' => 'Добавить товар',
+                'errors' => $request->getMessagesArray()
+            ]);
     }
 
     public function actionEdit($id)
@@ -89,18 +94,24 @@ class ProductController extends Controller
         $model = Product::where('id', $id)->first();
         $virtual_product = VirtualProduct::where('product_id', $id)->first();
 
-        if (isset($_POST['name']) && isset($_POST['description']) && isset($_POST['status']) && isset($_POST['price'])) {
-            $model->name = $_POST['name'];
-            $model->title = $_POST['name'];
-            $model->description = $_POST['description'];
-            $model->status = $_POST['status'];
+        $request = new ProductRequest();
+        if ($request->isPost() && $request->validate()) {
+            $model->name = $request->name;
+            $model->title = $request->name;
+            $model->description = $request->description;
+            $model->status = $request->status;
             $model->save();
             $virtual_product->product_id = $model->id;
-            $virtual_product->price = $_POST['price'];
+            $virtual_product->price = $request->price;
             $virtual_product->save();
             $this->redirect('admin/product');
         } else
-            return $this->render('edit.tpl', ['h1' => 'Редактировать: ', 'model' => $model, 'virtual_product' => $virtual_product]);
+            return $this->render('edit.tpl', [
+                'h1' => 'Редактировать: ',
+                'model' => $model,
+                'virtual_product' => $virtual_product,
+                'errors' => $request->getMessagesArray()
+            ]);
     }
 
     public function actionDelete()

@@ -2,6 +2,15 @@
 <div class="h1">{$h1}</div>
 
 <div class="container">
+
+    {if !empty($errors)}
+        {foreach from=$errors item=error}
+            <div class="alert alert-danger" role="alert">
+                {$error}
+            </div>
+        {/foreach}
+    {/if}
+
     <form class="form-horizontal" name="create_form" id="create_form" method="post" action="/admin/order/create">
         <div class="form-group">
             <label for="city">Город:</label>
@@ -9,7 +18,7 @@
         </div>
         <div class="form-group">
             <label for="email">Эл. почта:</label>
-            <input type="email" name="email" id="email" class="form-control" required="required"/>
+            <input type="text" name="email" id="email" class="form-control" required="required"/>
         </div>
         <div class="form-group">
             <label for="fio">ФИО:</label>
