@@ -12,3 +12,4 @@ App::$collector->group(['before' => 'auth'], function ($router) {
 
 App::$collector->get('catalog', ['workspace\modules\product\controllers\TestFrontController', 'actionCatalog']);
 App::$collector->any('testfront/order/{id}', ['workspace\modules\product\controllers\TestFrontController', 'actionOrder']);
+App::$collector->any('testfront/oneproduct/{id}', ['workspace\modules\product\controllers\TestFrontController', 'actionOneProduct']);

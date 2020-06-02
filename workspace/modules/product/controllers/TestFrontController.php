@@ -48,6 +48,10 @@ class TestFrontController extends Controller
                     'buy'=>[
                         'label' => 'КУПИТЬ',
                         'value' => function($model){ return "<a href='/testfront/order/$model->id' class='btn btn-dark'>Купить</a>";}
+                    ],
+                    'show'=>[
+                        'label' => 'Просмотреть',
+                        'value' => function($model){ return "<a href='/testfront/oneproduct/$model->id' class='btn btn-dark'>Просмотреть</a>";}
                     ]
                 ],
                 'baseUri' => 'product'
@@ -115,6 +119,35 @@ class TestFrontController extends Controller
             $this->redirect('catalog');
         } else
             return $this->render('order.tpl', ['h1' => 'Отправить заказ','options'=>$options,'product'=>$product]);
+    }
+
+    public function actionOneProduct($id)
+    {
+        $model = Product::where('id', $id)->first();
+        $photo = ProductPhoto::where('product_id', $model->id)->first();
+        $options = [
+            'fields' => [
+                'id'=>'Номер товара',
+                'photo' => ['label' => 'Фото', 'value' => function ($model) {
+                    $photo = ProductPhoto::where('product_id', $model->id)->first();
+                    return !empty($photo->photo) ? "<img src='/$photo->photo' style='max-width: 100px'/>" : null;
+                }],
+                'name' => 'Название',
+                'description' => 'Описание',
+                'price' => ['label' => 'Цена', 'value' => function ($model) {
+                    $vp = VirtualProduct::where('product_id', $model->id)->first();
+
+                    return !empty($vp->price) ? $vp->price : null;
+                }],
+                'status' => 'Статус',
+                'buy'=>[
+                    'label' => 'КУПИТЬ',
+                    'value' => function($model){ return "<a href='/testfront/order/$model->id' class='btn btn-dark'>Купить</a>";}
+                ]
+            ],
+        ];
+
+        return $this->render('product.tpl', ['model' => $model, 'options' => $options, 'photo'=>$photo]);
     }
 
 }
