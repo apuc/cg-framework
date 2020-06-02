@@ -7,7 +7,7 @@
  */
 
 return [
-    'app_name' => 'CG',
+    'app_name' => 'LovedShop',
     'adminLeftMenu' => [
 //       [
 //            'title' => 'Страница 1',

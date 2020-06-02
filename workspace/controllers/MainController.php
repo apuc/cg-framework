@@ -23,7 +23,7 @@ class MainController extends Controller
     {
         $this->view->setTitle('Main Page');
         $this->view->addMeta('keywords', 'главная', ['some' => 'text']);
-        $this->view->registerJs('/resources/js/bodyScript.js', [], true);
+//        $this->view->registerJs('/resources/js/bodyScript.js', [], true);
 
         return $this->render('main/index.tpl', ['h1' => 'Проект ' . App::$config['app_name']]);
     }

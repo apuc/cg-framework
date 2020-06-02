@@ -39,7 +39,7 @@ class GridView extends Widget
 
     public function run()
     {
-        $this->view->registerJs(RESOURCES_DIR . '/js/gridView.js');
+        //$this->view->registerJs(RESOURCES_DIR . '/js/gridView.js');
 
         return self::getTable() . $this->pagination->run();
     }
