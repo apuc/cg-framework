@@ -16,9 +16,11 @@
   },
   "autoload": {
     "classmap": [
-      "core/",
-      "workspace/"
+      "core/"
     ],
+    "psr-4": {
+      "workspace\\": "workspace/"
+    },
     "files": [
       "init.php"
     ]
