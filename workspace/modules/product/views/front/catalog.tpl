@@ -2,6 +2,7 @@
 
 {core\GridView::widget()
 ->deleteActionBtn('edit')
+->deleteActionBtn('view')
 ->deleteActionBtn('delete')
 ->setParams($model, $options)
 ->run()}
