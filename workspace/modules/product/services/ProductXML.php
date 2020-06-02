@@ -32,10 +32,10 @@ class ProductXML
                $file_name = md5(time(). rand(0, 999999));
                $dir = "resources".DIRECTORY_SEPARATOR."img".DIRECTORY_SEPARATOR."product".DIRECTORY_SEPARATOR."product_".$product->id.DIRECTORY_SEPARATOR;
                if (!file_exists($dir))
-                   mkdir($dir);
+                   mkdir($dir, 0775);
                $info =  new SplFileInfo((string)$img->attributes()->src);
 
-               Ftp::run(App::$config['FTP'])->getFile(ROOT_DIR.DIRECTORY_SEPARATOR.$dir.$file_name.".".$info->getExtension(), (string)$img->attributes()->src);
+               Ftp::run(App::$config['FTP'])->getFile(ROOT_DIR.DIRECTORY_SEPARATOR.$dir.$file_name.".".$info->getExtension(), (string)$img->attributes()->src, FTP_BINARY);
                $photo = new ProductPhoto();
                $photo->product_id = (int)$prod->attributes()->id;
                $photo->photo = $dir.$file_name.".".$info->getExtension();
