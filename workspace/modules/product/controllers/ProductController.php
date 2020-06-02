@@ -40,7 +40,7 @@ class ProductController extends Controller
                     return !empty($vp->price) ? $vp->price : null;
                 }],
             ],
-            'baseUri' => 'product'
+            'baseUri' => 'product',
         ];
 
         return $this->render('product.tpl', ['h1' => 'Товар', 'model' => $model, 'options' => $options]);

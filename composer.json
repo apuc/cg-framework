@@ -15,10 +15,8 @@
     "rakit/validation": "^1.2"
   },
   "autoload": {
-    "classmap": [
-      "core/"
-    ],
     "psr-4": {
+      "core\\": "core/",
       "workspace\\": "workspace/"
     },
     "files": [
