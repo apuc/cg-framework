@@ -4,3 +4,4 @@ vendor
 config/local
 workspace/views_c
 destination.db
+resources/img
