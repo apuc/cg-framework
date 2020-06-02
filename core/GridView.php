@@ -18,6 +18,9 @@ class GridView extends Widget
 
     protected $model;
     protected $options;
+    protected $defaultOptions = [
+        'filters' => true,
+    ];
 
     /**
      * @var $pagination Pagination
@@ -25,13 +28,13 @@ class GridView extends Widget
     protected $pagination;
 
     /**
-        available params for $options:
-            'serial' => '#',
-            'actions' => 'view, edit, delete',
-            'table_class' => 'class_1 class_2 ... class_m',
-            'thead_class' => 'class_1 class_2 ... class_m',
-            'baseUri' => 'url',
-            'fields' => ['attr_1', ..., 'attr_m']
+     * available params for $options:
+     * 'serial' => '#',
+     * 'actions' => 'view, edit, delete',
+     * 'table_class' => 'class_1 class_2 ... class_m',
+     * 'thead_class' => 'class_1 class_2 ... class_m',
+     * 'baseUri' => 'url',
+     * 'fields' => ['attr_1', ..., 'attr_m']
      */
 
     public function run()
@@ -44,7 +47,7 @@ class GridView extends Widget
     public function setParams($data = [], $options = [])
     {
         $this->model = $data;
-        $this->options = $options;
+        $this->options = array_merge($this->defaultOptions, $options);
 
         $this->pagination = Pagination::widget();
 
@@ -58,7 +61,7 @@ class GridView extends Widget
         $table .= self::setTableSettings($table, 'thead', 'thead_class', 'thead-dark');
 
         $table .= '<tr>';
-        (isset($this->options['serial'])) ? $table .= '<th scope="col">'.$this->options['serial'].'</th>' : $table .= '';
+        (isset($this->options['serial'])) ? $table .= '<th scope="col">' . $this->options['serial'] . '</th>' : $table .= '';
         (!empty($this->actionsBtn)) ? $table .= '<th scope="col"></th>' : $table .= '';
 
         foreach ($this->options['fields'] as $key => $field)
@@ -75,13 +78,17 @@ class GridView extends Widget
         $end = $this->pagination->getPage() * $this->pagination->getPerPage();
         $start = ($end - ($this->pagination->getPerPage() - 1)) - 1;
 
-        if($end > $this->pagination->getAmountOfData())
+        if ($end > $this->pagination->getAmountOfData())
             $end = $this->pagination->getAmountOfData();
 
-        for($i = $start; $i < $end; $i++ ) {
+        if ($this->options['filters']) {
+            $table .= $this->createFilters($this->options);
+        }
+
+        for ($i = $start; $i < $end; $i++) {
             $table .= '<tr>';
 
-            (isset($this->options['serial'])) ? $table .= '<td>' . ($i + 1) . '</td>' :  $table .= '';
+            (isset($this->options['serial'])) ? $table .= '<td>' . ($i + 1) . '</td>' : $table .= '';
 
             if (!empty($this->actionsBtn)) {
                 $table .= '<td>';
@@ -91,9 +98,9 @@ class GridView extends Widget
             }
 
             foreach ($this->options['fields'] as $key => $option)
-                if(isset($this->model[$i]->$key))
+                if (isset($this->model[$i]->$key))
                     $table .= '<td>' . $this->model[$i]->$key . '</td>';
-                elseif(isset($this->options['fields'][$key]['label']))
+                elseif (isset($this->options['fields'][$key]['label']))
                     $table .= '<td>' . call_user_func($this->options['fields'][$key]['value'], $this->model[$i]) . '</td>';
                 else
                     $table .= '<td></td>';
@@ -119,18 +126,45 @@ class GridView extends Widget
         return $this;
     }
 
+    public function createFilters($options)
+    {
+        $html = '<tr>';
+        $html .= isset($options['serial']) ? '<td></td>' : '';
+        $html .= !empty($this->actionsBtn) ? '<td></td>' : '';
+        foreach ($options['fields'] as $key => $field) {
+            if (isset($field['showFilter']) && !$field['showFilter']) {
+                $html .= '<td></td>';
+            } else {
+                $html .= '<td><input class="form-control __filter" type="text" name="' . $key . 'Search"></td>';
+            }
+        }
+        $html .= '</tr>';
+
+        return $html;
+    }
+
     protected function createBtn($btn, $url, $id)
     {
         $uri = $url . str_replace('{id}', $id, $btn['url']);
         $data_url = $url . str_replace('{id}', '', $btn['url']);
 
-        return '<a class="'. $btn['class'] .'" id="'. $btn['id'] .'" href="'. $uri .'" data-id="'.$id.'" data-url="'.$data_url.'">' . $btn['icon'] . '</a> ';
+        return '<a class="' . $btn['class'] . '" id="' . $btn['id'] . '" href="' . $uri . '" data-id="' . $id . '" data-url="' . $data_url . '">' . $btn['icon'] . '</a> ';
     }
 
     public function setTableSettings($table, $tag, $class, $default_class)
     {
-        $table .= '<'.$tag.' class="'. ((isset($this->options[$class])) ? $this->options[$class] : $default_class) . '">';
+        $table .= '<' . $tag . ' class="' . ((isset($this->options[$class])) ? $this->options[$class] : $default_class) . '">';
 
         return $table;
+    }
+
+    private function generateAdditionalParams($data)
+    {
+        $params = '';
+        foreach ((array)$data as $key => $datum) {
+            $params .= $key . '="' . $datum . '" ';
+        }
+
+        return $params;
     }
 }

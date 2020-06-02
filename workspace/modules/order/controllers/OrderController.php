@@ -37,7 +37,8 @@ class OrderController extends Controller
                     'label' => 'Номер заказа'
                 ],
                 'city' => [
-                    'label' => 'Город'
+                    'label' => 'Город',
+                    'showFilter' => false,
                 ],
                 'email' => [
                     'label' => 'email'
@@ -52,10 +53,12 @@ class OrderController extends Controller
                     'label' => 'Тип доставки'
                 ],
                 'delivery_date' => [
-                    'label' => 'Дата доставки'
+                    'label' => 'Дата доставки',
+                    'showFilter' => false,
                 ],
             ],
-            'baseUri' => 'order'
+            'baseUri' => 'order',
+            //'filters' => false
         ];
 
         return $this->render('order/order.tpl', ['h1' => 'Заказы', 'model' => $model, 'options' => $options]);
