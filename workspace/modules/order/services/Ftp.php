@@ -20,7 +20,6 @@ class Ftp
         $this->pass = $data['pass'];
 
         $this->connection = ftp_connect($this->host, $this->port);
-        Debug::dd($this);
         if (!ftp_login($this->connection, $this->login, $this->pass))
             exit("Не могу соединиться");
         ftp_pasv($this->connection, true);
