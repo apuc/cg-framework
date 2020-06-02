@@ -4,10 +4,12 @@ namespace workspace\modules\product\controllers;
 
 use core\App;
 use core\Controller;
+use core\Debug;
 use workspace\modules\product\models\Product;
 use workspace\modules\product\models\ProductPhoto;
 use workspace\modules\product\models\VirtualProduct;
 use workspace\modules\product\requests\ProductRequest;
+use workspace\modules\product\requests\ProductSearchRequest;
 use workspace\modules\product\services\ProductXML;
 
 class ProductController extends Controller
@@ -26,7 +28,8 @@ class ProductController extends Controller
 
     public function actionIndex()
     {
-        $model = Product::all();
+        $request = new ProductSearchRequest();
+        $model = Product::search($request);
 
         $options = [
             'serial' => '#',
@@ -35,9 +38,7 @@ class ProductController extends Controller
                     'label' => 'Название'
                 ],
                 'price' => ['label' => 'Цена', 'value' => function ($model) {
-                    $vp = VirtualProduct::where('product_id', $model->id)->first();
-
-                    return !empty($vp->price) ? $vp->price : null;
+                    return isset($model->vp->first()->price) ? $model->vp->first()->price : null;
                 }],
             ],
             'baseUri' => 'product',

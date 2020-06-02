@@ -69,7 +69,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
 
     <!-- GridView -->
-    <script src="/resources/js/gridView.js"></script>
+    {*<script src="/resources/js/gridView.js"></script>*}
     <script src="/resources/js/main.js"></script>
 {/capture}
 

@@ -39,7 +39,7 @@ class GridView extends Widget
 
     public function run()
     {
-        //$this->view->registerJs(RESOURCES_DIR . '/js/gridView.js');
+        $this->view->registerJs('/resources/js/gridView.js', [], true);
 
         return self::getTable() . $this->pagination->run();
     }
@@ -128,17 +128,18 @@ class GridView extends Widget
 
     public function createFilters($options)
     {
-        $html = '<tr>';
+        $html = '<tr><form class="__filterForm">';
         $html .= isset($options['serial']) ? '<td></td>' : '';
         $html .= !empty($this->actionsBtn) ? '<td></td>' : '';
         foreach ($options['fields'] as $key => $field) {
             if (isset($field['showFilter']) && !$field['showFilter']) {
                 $html .= '<td></td>';
             } else {
-                $html .= '<td><input class="form-control __filter" type="text" name="' . $key . 'Search"></td>';
+                $val = isset($_GET[$key . 'Search']) ? $_GET[$key . 'Search'] : '';
+                $html .= '<td><input class="form-control __filter" type="text" name="' . $key . 'Search" value="'. $val .'"></td>';
             }
         }
-        $html .= '</tr>';
+        $html .= '</form></tr>';
 
         return $html;
     }

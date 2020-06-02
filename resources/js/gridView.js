@@ -18,4 +18,8 @@ jQuery(document).ready(function ($) {
             }
         });
     });
+
+    $(".__filter").on("focusout", function (e) {
+        $(".__filterForm").submit();
+    });
 });
