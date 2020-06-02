@@ -1,25 +1,26 @@
 {
-    "require": {
-        "craft-group/phroute": "^2.1.1",
-        "illuminate/events": "^6.0",
-        "illuminate/database": "^6.0",
-        "swiftmailer/swiftmailer": "^6.2",
-        "illuminate/filesystem": "^6.16",
-        "samejack/php-argv": "dev-master",
-        "ext-json": "*",
-        "phpquery/phpquery": "^0.0.2",
-        "symfony/filesystem": "^5.0",
-      "ext-simplexml": "*",
-      "ext-dom": "*",
-      "ext-ftp": "*"
-    },
-    "autoload": {
-        "classmap": [
-            "core/",
-            "workspace/"
-        ],
-        "files": [
-            "init.php"
-        ]
-    }
+  "require": {
+    "craft-group/phroute": "^2.1.1",
+    "illuminate/events": "^6.0",
+    "illuminate/database": "^6.0",
+    "swiftmailer/swiftmailer": "^6.2",
+    "illuminate/filesystem": "^6.16",
+    "samejack/php-argv": "dev-master",
+    "ext-json": "*",
+    "phpquery/phpquery": "^0.0.2",
+    "symfony/filesystem": "^5.0",
+    "ext-simplexml": "*",
+    "ext-dom": "*",
+    "ext-ftp": "*",
+    "rakit/validation": "^1.2"
+  },
+  "autoload": {
+    "classmap": [
+      "core/",
+      "workspace/"
+    ],
+    "files": [
+      "init.php"
+    ]
+  }
 }
