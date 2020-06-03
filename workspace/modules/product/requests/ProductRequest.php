@@ -6,7 +6,7 @@ namespace workspace\modules\product\requests;
 use core\Request;
 
 /**
- * Class RegistrationRequest
+ * Class ProductRequest
  * @package workspace\modules\product\requests
  * @property string $name
  * @property string $description

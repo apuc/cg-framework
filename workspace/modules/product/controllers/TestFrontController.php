@@ -5,13 +5,14 @@ namespace workspace\modules\product\controllers;
 
 use core\App;
 use core\Controller;
-use workspace\models\OrderProduct;
+use workspace\modules\order\models\OrderProduct;
 use workspace\modules\order\models\Order;
 use workspace\modules\order\services\Ftp;
 use workspace\modules\order\services\OrderXml;
 use workspace\modules\product\models\Product;
 use workspace\modules\product\models\ProductPhoto;
 use workspace\modules\product\models\VirtualProduct;
+use workspace\modules\product\requests\FrontRequest;
 
 class TestFrontController extends Controller
 {
@@ -76,27 +77,28 @@ class TestFrontController extends Controller
             'baseUri' => 'product'
         ];
         $product = Product::where('id',$id)->take(1)->get();
-        if(isset($_POST['city']) && isset($_POST['email']) && isset($_POST['fio']) && isset($_POST['phone']) && isset($_POST['pay']) && isset($_POST['delivery']) && isset($_POST['shop_id']) && isset($_POST['delivery_date']) && isset($_POST['delivery_time']) && isset($_POST['address']) && isset($_POST['comment']) && isset($_POST['quantity'])) {
+        $request = new FrontRequest();
+        if($request->isPost() && $request->validate()) {
             $model = new Order();
             $product = Product::where('id',$id)->first();
             $vproduct = VirtualProduct::where('product_id',$id)->first();
-            $model->city = $_POST['city'];
-            $model->email = $_POST['email'];
-            $model->fio = $_POST['fio'];
-            $model->phone = $_POST['phone'];
-            $model->pay = $_POST['pay'];
-            $model->delivery = $_POST['delivery'];
-            $model->shop_id = $_POST['shop_id'];
-            $model->delivery_date = $_POST['delivery_date'];
-            $model->delivery_time = $_POST['delivery_time'];
-            $model->address = $_POST['address'];
-            $model->comment = $_POST['comment'];
-            $model->total_price = $vproduct->price*$_POST['quantity'];
+            $model->city = $request->city;
+            $model->email = $request->email;
+            $model->fio = $request->fio;
+            $model->phone = $request->phone;
+            $model->pay = $request->pay;
+            $model->delivery = $request->delivery;
+            $model->shop_id = $request->shop_id;
+            $model->delivery_date = $request->delivery_date;
+            $model->delivery_time = $request->delivery_time;
+            $model->address = $request->address;
+            $model->comment = $request->comment;
+            $model->total_price = $vproduct->price*$request->quantity;
             $model->save();
             $prodmodel = new OrderProduct();
             $prodmodel->order_id = $model->id;
             $prodmodel->product_id = $product->id;
-            $prodmodel->quantity = $_POST['quantity'];
+            $prodmodel->quantity = $request->quantity;
             $prodmodel->save();
             $xml =  OrderXml::run()->createXml($model,$prodmodel);
             $xml->save();
@@ -118,7 +120,12 @@ class TestFrontController extends Controller
 
             $this->redirect('catalog');
         } else
-            return $this->render('order.tpl', ['h1' => 'Отправить заказ','options'=>$options,'product'=>$product]);
+            return $this->render('order.tpl', [
+                'h1' => 'Отправить заказ',
+                'options'=>$options,
+                'product'=>$product,
+                'errors' => $request->getMessagesArray(),
+                ]);
     }
 
     public function actionOneProduct($id)
