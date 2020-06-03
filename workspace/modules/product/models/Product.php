@@ -12,6 +12,9 @@ class Product extends Model
     protected $table = "product";
     public $fillable = ['name', 'title', 'description', 'status'];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function vp()
     {
         return $this->hasMany('workspace\modules\product\models\VirtualProduct');

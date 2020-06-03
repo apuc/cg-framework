@@ -22,4 +22,10 @@ jQuery(document).ready(function ($) {
     $(".__filter").on("focusout", function (e) {
         $(".__filterForm").submit();
     });
+
+    $(".__filter").on('keypress',function(e) {
+        if(e.which == 13) {
+            $(".__filterForm").submit();
+        }
+    });
 });
