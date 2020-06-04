@@ -8,6 +8,7 @@ use core\Debug;
 use workspace\modules\order\models\OrderProduct;
 use workspace\modules\order\models\Order;
 use workspace\modules\order\requests\OrderRequest;
+use workspace\modules\order\requests\OrderSearchRequest;
 use workspace\modules\order\services\Ftp;
 use workspace\modules\order\services\FtpExchange;
 use workspace\modules\order\services\OrderXml;
@@ -29,7 +30,8 @@ class OrderController extends Controller
 
     public function actionIndex()
     {
-        $model = Order::all();
+        $request = new OrderSearchRequest();
+        $model = Order::search($request);
 
         $options = [
             'serial' => '#',
@@ -51,7 +53,8 @@ class OrderController extends Controller
                     'label' => 'Телефон'
                 ],
                 'delivery' => [
-                    'label' => 'Тип доставки'
+                    'label' => 'Тип доставки',
+                    'showFilter' => false,
                 ],
                 'delivery_date' => [
                     'label' => 'Дата доставки',
@@ -150,6 +153,7 @@ class OrderController extends Controller
 
     public function actionDelete()
     {
+        OrderProduct::where('order_id', $_POST['id'])->delete();
         Order::where('id', $_POST['id'])->delete();
     }
 

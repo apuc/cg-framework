@@ -4,7 +4,9 @@ namespace workspace\modules\promocode\controllers;
 
 use core\App;
 use core\Controller;
-use workspace\models\Promocode;
+use workspace\modules\promocode\models\Promocode;
+use workspace\modules\promocode\requests\PromocodeRequest;
+use workspace\modules\promocode\requests\PromocodeSearchRequest;
 
 class PromocodeController extends Controller
 {
@@ -22,7 +24,8 @@ class PromocodeController extends Controller
 
     public function actionIndex()
     {
-        $model = Promocode::all();
+        $request = new PromocodeSearchRequest();
+        $model = Promocode::search($request);
 
         $options = [
             'serial' => '#',
@@ -43,7 +46,11 @@ class PromocodeController extends Controller
             'baseUri' => 'promocode'
         ];
 
-        return $this->render('promocode/promocode.tpl', ['h1' => 'Промокоды', 'model' => $model, 'options' => $options]);
+        return $this->render('promocode/promocode.tpl', [
+            'h1' => 'Промокоды',
+            'model' => $model,
+            'options' => $options
+        ]);
     }
 
     public function actionView($id)
@@ -65,33 +72,42 @@ class PromocodeController extends Controller
 
     public function actionStore()
     {
-        if(isset($_POST['name']) && isset($_POST['discount']) && isset($_POST['active_from']) && isset($_POST['active_to'])) {
+        $request = new PromocodeRequest();
+        if($request->isPost() && $request->validate()) {
             $model = new Promocode();
-            $model->name = $_POST['name'];
-            $model->discount = $_POST['discount'];
-            $model->active_from = $_POST['active_from'];
-            $model->active_to = $_POST['active_to'];
+            $model->name = $request->name;
+            $model->discount = $request->discount;
+            $model->active_from = $request->active_from;
+            $model->active_to = $request->active_to;
             $model->save();
 
             $this->redirect('admin/promocode');
         } else
-            return $this->render('promocode/store.tpl', ['h1' => 'Добавить промокод']);
+            return $this->render('promocode/store.tpl', [
+                'h1' => 'Добавить промокод',
+                'errors' => $request->getMessagesArray(),
+                ]);
     }
 
     public function actionEdit($id)
     {
+        $request = new PromocodeRequest();
         $model = Promocode::where('id', $id)->first();
 
-        if(isset($_POST['name']) && isset($_POST['discount']) && isset($_POST['active_from']) && isset($_POST['active_to'])) {
-            $model->name = $_POST['name'];
-            $model->discount = $_POST['discount'];
-            $model->active_from = $_POST['active_from'];
-            $model->active_to = $_POST['active_to'];
+        if($request->isPost() && $request->validate()) {
+            $model->name = $request->name;
+            $model->discount = $request->discount;
+            $model->active_from = $request->active_from;
+            $model->active_to = $request->active_to;
             $model->save();
 
             $this->redirect('admin/promocode');
         } else
-            return $this->render('promocode/edit.tpl', ['h1' => 'Редактировать: ', 'model' => $model]);
+            return $this->render('promocode/edit.tpl', [
+                'h1' => 'Редактировать: ',
+                'model' => $model,
+                'errors' => $request->getMessagesArray(),
+                ]);
     }
 
     public function actionDelete()
