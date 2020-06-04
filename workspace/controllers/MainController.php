@@ -8,6 +8,7 @@ use core\component_manager\lib\Config;
 use core\component_manager\lib\Mod;
 use core\Controller;
 use core\Debug;
+use core\helpers\Form;
 use core\Request;
 use workspace\classes\Button;
 use workspace\classes\Modules;
@@ -21,6 +22,17 @@ class MainController extends Controller
 
     public function actionIndex()
     {
+        echo Form::select('test', [
+            'one' => 'Один',
+            'two' => 'Два',
+            'three' => 'Три'
+        ], [
+            'selected' => 'two',
+            'disabled' => 'one',
+            'attr' => [
+                'class' => 'form-control',
+            ]
+        ]);
         $this->view->setTitle('Main Page');
         $this->view->addMeta('keywords', 'главная', ['some' => 'text']);
 //        $this->view->registerJs('/resources/js/bodyScript.js', [], true);
@@ -37,7 +49,7 @@ class MainController extends Controller
     {
         $this->view->setTitle('Sign Up');
         $request = new RegistrationRequest();
-        if($request->isPost() && $request->validate()){
+        if ($request->isPost() && $request->validate()) {
             $model = new User();
             $model->username = $request->username;
             $model->email = $request->email;
@@ -58,7 +70,7 @@ class MainController extends Controller
     {
         $this->view->setTitle('Sign In');
         $request = new LoginRequest();
-        if($request->isPost() && $request->validate()){
+        if ($request->isPost() && $request->validate()) {
             $model = User::where('username', $request->username)->first();
 
             if (password_verify($request->password, $model->password_hash)) {
