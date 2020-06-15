@@ -2,3 +2,6 @@
 .git/
 workspace/views_c
 destination.db
+frontend/web/proxy.txt
+frontend/web/time.txt
+frontend/web/test.txt
