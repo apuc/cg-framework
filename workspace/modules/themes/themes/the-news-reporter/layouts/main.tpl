@@ -4,9 +4,11 @@
 {include file="{$workspace_dir}/modules/themes/themes/the-news-reporter/assets/resources.tpl"}
 <head>
     {$smarty.capture.meta}
-    <title>The News Reporter</title>
+    <title>{$title}</title>
+    {$meta}
     {$smarty.capture.css}
     {$smarty.capture.js_head}
+    {$jsHead}
 </head>
 <body>
 {$content}

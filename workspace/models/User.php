@@ -12,4 +12,8 @@ class User extends Model
 
     public $fillable = ['username', 'email', 'role', 'password_hash'];
 
+    public static function getCurrentUserName()
+    {
+        return $_SESSION['username'] ?? null;
+    }
 }

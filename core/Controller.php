@@ -31,7 +31,6 @@ class Controller
         $this->view->tpl->assign('view', $this->view);
 
         $view = $this->view->getTpl($tpl, $data);
-
         $this->view->tpl->assign('title', $this->view->title);
         $this->view->tpl->assign('meta', $this->view->getMetaHtml());
         $this->view->tpl->assign('css', $this->view->getCssHtml());

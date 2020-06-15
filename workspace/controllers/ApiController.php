@@ -3,11 +3,15 @@
 
 namespace workspace\controllers;
 
+use core\App;
 use core\component_manager\lib\CM;
 use core\component_manager\lib\Mod;
 use core\Controller;
 use workspace\models\Article;
 use workspace\models\Settings;
+
+use workspace\modules\themes\controllers\ThemesController;
+use workspace\modules\themes\Themes;
 use ZipArchive;
 
 

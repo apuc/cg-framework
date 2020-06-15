@@ -7,15 +7,24 @@ use core\component_manager\lib\CM;
 use core\component_manager\lib\Config;
 use core\component_manager\lib\Mod;
 use core\Controller;
+
 use workspace\classes\Button;
 use workspace\classes\Modules;
 use workspace\models\User;
+use core\Debug;
+use core\helpers\Form;
+use core\Request;
+use workspace\requests\LoginRequest;
+use workspace\requests\RegistrationRequest;
+use workspace\widgets\Language;
+
 
 class MainController extends Controller
 {
 
     public function actionIndex()
     {
+
         $this->view->setTitle('Main Page');
         $this->view->addMeta('keywords', 'главная', ['some' => 'text']);
         $this->view->registerJs('/resources/js/bodyScript.js', [], true);
@@ -23,43 +32,50 @@ class MainController extends Controller
         return $this->render('main/index.tpl', ['h1' => 'Проект ' . App::$config['app_name']]);
     }
 
+
+    public function actionLanguage()
+    {
+        Language::widget()->run();
+    }
+
     public function actionSignUp()
     {
         $this->view->setTitle('Sign Up');
-        if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])) {
+        $request = new RegistrationRequest();
+        if ($request->isPost() && $request->validate()) {
             $model = new User();
-            $model->username = $_POST['username'];
-            $model->email = $_POST['email'];
+            $model->username = $request->username;
+            $model->email = $request->email;
             $model->role = 2;
-            $model->password_hash = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            $model->password_hash = password_hash($request->password, PASSWORD_DEFAULT);
             $model->save();
 
             $_SESSION['role'] = $model->role;
             $_SESSION['username'] = $model->username;
 
             $this->redirect('');
-        } else {
-            return $this->render('main/sign-up.tpl');
         }
+
+        return $this->render('main/sign-up.tpl', ['errors' => $request->getMessagesArray()]);
     }
 
     public function actionSignIn()
     {
         $this->view->setTitle('Sign In');
-        if (isset($_POST['username']) && isset($_POST['password'])) {
-            $model = User::where('username', $_POST['username'])->first();
 
-            if (password_verify($_POST['password'], $model->password_hash)) {
+        $request = new LoginRequest();
+        if ($request->isPost() && $request->validate()) {
+            $model = User::where('username', $request->username)->first();
+
+            if (password_verify($request->password, $model->password_hash)) {
                 $_SESSION['role'] = $model->role;
                 $_SESSION['username'] = $model->username;
 
-                $this->redirect('adminlte');
-            } else {
-                $this->redirect('sign-in');
+                $this->redirect('');
             }
-        } else {
-            return $this->render('main/sign-in.tpl');
         }
+
+        return $this->render('main/sign-in.tpl', ['errors' => $request->getMessagesArray()]);
     }
 
     public function actionLogout()
@@ -70,7 +86,7 @@ class MainController extends Controller
 
     public function actionModules()
     {
-        //App::$header->add('Access-Control-Allow-Origin', '*');
+        App::$header->add('Access-Control-Allow-Origin', '*');
         $content = file_get_contents('https://rep.craft-group.xyz/handler.php');
         $data = json_decode($content);
 

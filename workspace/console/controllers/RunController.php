@@ -11,7 +11,7 @@ class RunController extends ConsoleController
 
     public function actionRun()
     {
-        $this->out->r('run/parse', 'red');
+        $this->out->r('run/parse', 'green');
     }
 
 }

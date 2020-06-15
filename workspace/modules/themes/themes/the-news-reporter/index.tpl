@@ -10,6 +10,7 @@
                     {include file="{$workspace_dir}/modules/themes/themes/the-news-reporter/parts/main.tpl"}
 
                     {include file="{$workspace_dir}/modules/themes/themes/the-news-reporter/parts/gallery.tpl"}
+
                 </div>
             </div>
             <div class="sidebar floatright">
@@ -28,6 +29,7 @@
                 </div>
             </div>
         </div>
+
         {include file="{$workspace_dir}/modules/themes/themes/the-news-reporter/parts/footer.tpl"}
     </div>
 </div>

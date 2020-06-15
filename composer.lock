@@ -4,37 +4,85 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3e91c84e783516bcb964c60bade38123",
+    "content-hash": "a74349f1583903eea171159b7ada68dc",
     "packages": [
         {
-            "name": "doctrine/inflector",
-            "version": "1.3.1",
+            "name": "craft-group/phroute",
+            "version": "v2.1.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/doctrine/inflector.git",
-                "reference": "ec3a55242203ffa6a4b27c58176da97ff0a7aec1"
+                "url": "https://github.com/apuc/phroute.git",
+                "reference": "2993ad94f8f8a92b45ef70aff936fe2ca0d7f05c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/inflector/zipball/ec3a55242203ffa6a4b27c58176da97ff0a7aec1",
-                "reference": "ec3a55242203ffa6a4b27c58176da97ff0a7aec1",
+                "url": "https://api.github.com/repos/apuc/phroute/zipball/2993ad94f8f8a92b45ef70aff936fe2ca0d7f05c",
+                "reference": "2993ad94f8f8a92b45ef70aff936fe2ca0d7f05c",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1"
+                "php": ">=5.4.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^6.2"
+                "phpunit/phpunit": "^5.0",
+                "satooshi/php-coveralls": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Phroute\\Phroute\\": "src/Phroute"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kavalar",
+                    "email": "apuc06@mail.ru"
+                }
+            ],
+            "description": "Fast, fully featured restful request router for PHP",
+            "keywords": [
+                "router",
+                "routing"
+            ],
+            "time": "2020-04-20T18:38:39+00:00"
+        },
+        {
+            "name": "doctrine/inflector",
+            "version": "2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/inflector.git",
+                "reference": "9cf661f4eb38f7c881cac67c75ea9b00bf97b210"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/inflector/zipball/9cf661f4eb38f7c881cac67c75ea9b00bf97b210",
+                "reference": "9cf661f4eb38f7c881cac67c75ea9b00bf97b210",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2 || ^8.0"
+            },
+            "require-dev": {
+                "doctrine/coding-standard": "^7.0",
+                "phpstan/phpstan": "^0.11",
+                "phpstan/phpstan-phpunit": "^0.11",
+                "phpstan/phpstan-strict-rules": "^0.11",
+                "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.3.x-dev"
+                    "dev-master": "2.0.x-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Doctrine\\Common\\Inflector\\": "lib/Doctrine/Common/Inflector"
+                    "Doctrine\\Inflector\\": "lib/Doctrine/Inflector"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -63,32 +111,38 @@
                     "email": "schmittjoh@gmail.com"
                 }
             ],
-            "description": "Common String Manipulations with regard to casing and singular/plural rules.",
-            "homepage": "http://www.doctrine-project.org",
+            "description": "PHP Doctrine Inflector is a small library that can perform string manipulations with regard to upper/lowercase and singular/plural forms of words.",
+            "homepage": "https://www.doctrine-project.org/projects/inflector.html",
             "keywords": [
                 "inflection",
-                "pluralize",
-                "singularize",
-                "string"
+                "inflector",
+                "lowercase",
+                "manipulation",
+                "php",
+                "plural",
+                "singular",
+                "strings",
+                "uppercase",
+                "words"
             ],
-            "time": "2019-10-30T19:59:35+00:00"
+            "time": "2020-05-29T15:13:26+00:00"
         },
         {
             "name": "doctrine/lexer",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/lexer.git",
-                "reference": "5242d66dbeb21a30dd8a3e66bf7a73b66e05e1f6"
+                "reference": "e864bbf5904cb8f5bb334f99209b48018522f042"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/lexer/zipball/5242d66dbeb21a30dd8a3e66bf7a73b66e05e1f6",
-                "reference": "5242d66dbeb21a30dd8a3e66bf7a73b66e05e1f6",
+                "url": "https://api.github.com/repos/doctrine/lexer/zipball/e864bbf5904cb8f5bb334f99209b48018522f042",
+                "reference": "e864bbf5904cb8f5bb334f99209b48018522f042",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2"
+                "php": "^7.2 || ^8.0"
             },
             "require-dev": {
                 "doctrine/coding-standard": "^6.0",
@@ -133,7 +187,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2019-10-30T14:39:59+00:00"
+            "time": "2020-05-25T17:44:05+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -195,16 +249,16 @@
         },
         {
             "name": "illuminate/container",
-            "version": "v6.18.6",
+            "version": "v6.18.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/container.git",
-                "reference": "4078808892a7a40cbbfa5dec57c2efa1f170097d"
+                "reference": "3147dc925108b7463be7701ddd50ae947ee6c0fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/container/zipball/4078808892a7a40cbbfa5dec57c2efa1f170097d",
-                "reference": "4078808892a7a40cbbfa5dec57c2efa1f170097d",
+                "url": "https://api.github.com/repos/illuminate/container/zipball/3147dc925108b7463be7701ddd50ae947ee6c0fd",
+                "reference": "3147dc925108b7463be7701ddd50ae947ee6c0fd",
                 "shasum": ""
             },
             "require": {
@@ -235,20 +289,20 @@
             ],
             "description": "The Illuminate Container package.",
             "homepage": "https://laravel.com",
-            "time": "2020-02-27T19:49:00+00:00"
+            "time": "2020-06-01T14:59:29+00:00"
         },
         {
             "name": "illuminate/contracts",
-            "version": "v6.18.6",
+            "version": "v6.18.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
-                "reference": "e08ea83602d96cdfd7106a15f07878935c1a7675"
+                "reference": "147855644b77121fdc58643230d9c042ff182ff0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/e08ea83602d96cdfd7106a15f07878935c1a7675",
-                "reference": "e08ea83602d96cdfd7106a15f07878935c1a7675",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/147855644b77121fdc58643230d9c042ff182ff0",
+                "reference": "147855644b77121fdc58643230d9c042ff182ff0",
                 "shasum": ""
             },
             "require": {
@@ -279,20 +333,20 @@
             ],
             "description": "The Illuminate Contracts package.",
             "homepage": "https://laravel.com",
-            "time": "2020-02-27T19:49:00+00:00"
+            "time": "2020-05-13T20:53:59+00:00"
         },
         {
             "name": "illuminate/database",
-            "version": "v6.18.6",
+            "version": "v6.18.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/database.git",
-                "reference": "ed6552ff6b9a57ec6f2ed76e69c8a8cae500ad50"
+                "reference": "e9dc2afc768e9eb3f8772b05526eda34a41aee18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/database/zipball/ed6552ff6b9a57ec6f2ed76e69c8a8cae500ad50",
-                "reference": "ed6552ff6b9a57ec6f2ed76e69c8a8cae500ad50",
+                "url": "https://api.github.com/repos/illuminate/database/zipball/e9dc2afc768e9eb3f8772b05526eda34a41aee18",
+                "reference": "e9dc2afc768e9eb3f8772b05526eda34a41aee18",
                 "shasum": ""
             },
             "require": {
@@ -340,20 +394,20 @@
                 "orm",
                 "sql"
             ],
-            "time": "2020-03-23T14:15:03+00:00"
+            "time": "2020-06-09T13:55:15+00:00"
         },
         {
             "name": "illuminate/events",
-            "version": "v6.18.6",
+            "version": "v6.18.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/events.git",
-                "reference": "fbcc805c869521b3fa90eee9175bb5b15ec8ffd4"
+                "reference": "baaafafe6572e75ac8c0387261c4b38e85d5c41f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/events/zipball/fbcc805c869521b3fa90eee9175bb5b15ec8ffd4",
-                "reference": "fbcc805c869521b3fa90eee9175bb5b15ec8ffd4",
+                "url": "https://api.github.com/repos/illuminate/events/zipball/baaafafe6572e75ac8c0387261c4b38e85d5c41f",
+                "reference": "baaafafe6572e75ac8c0387261c4b38e85d5c41f",
                 "shasum": ""
             },
             "require": {
@@ -385,20 +439,20 @@
             ],
             "description": "The Illuminate Events package.",
             "homepage": "https://laravel.com",
-            "time": "2020-02-11T22:40:40+00:00"
+            "time": "2020-06-08T19:10:21+00:00"
         },
         {
             "name": "illuminate/filesystem",
-            "version": "v6.18.6",
+            "version": "v6.18.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/filesystem.git",
-                "reference": "799a3af9435458d56e9f3647e09e11ffc9ace896"
+                "reference": "5f2cb50514bfac44db2421580bee22cdde7b789a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/filesystem/zipball/799a3af9435458d56e9f3647e09e11ffc9ace896",
-                "reference": "799a3af9435458d56e9f3647e09e11ffc9ace896",
+                "url": "https://api.github.com/repos/illuminate/filesystem/zipball/5f2cb50514bfac44db2421580bee22cdde7b789a",
+                "reference": "5f2cb50514bfac44db2421580bee22cdde7b789a",
                 "shasum": ""
             },
             "require": {
@@ -408,11 +462,11 @@
                 "symfony/finder": "^4.3.4"
             },
             "suggest": {
-                "league/flysystem": "Required to use the Flysystem local and FTP drivers (^1.0).",
+                "league/flysystem": "Required to use the Flysystem local and FTP drivers (^1.0.34).",
                 "league/flysystem-aws-s3-v3": "Required to use the Flysystem S3 driver (^1.0).",
                 "league/flysystem-cached-adapter": "Required to use the Flysystem cache (^1.0).",
                 "league/flysystem-sftp": "Required to use the Flysystem SFTP driver (^1.0).",
-                "psr/http-message": "Required to allow Storage::put to accept a StreamInterface (^1.0)"
+                "psr/http-message": "Required to allow Storage::put to accept a StreamInterface (^1.0)."
             },
             "type": "library",
             "extra": {
@@ -437,24 +491,24 @@
             ],
             "description": "The Illuminate Filesystem package.",
             "homepage": "https://laravel.com",
-            "time": "2020-02-25T14:02:04+00:00"
+            "time": "2020-06-02T15:24:59+00:00"
         },
         {
             "name": "illuminate/support",
-            "version": "v6.18.6",
+            "version": "v6.18.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "6955d0c254ae55ede96be71309b5fb09693441cd"
+                "reference": "aafc887fd5d4a51a7c81833938bce28d9c607a6d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/6955d0c254ae55ede96be71309b5fb09693441cd",
-                "reference": "6955d0c254ae55ede96be71309b5fb09693441cd",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/aafc887fd5d4a51a7c81833938bce28d9c607a6d",
+                "reference": "aafc887fd5d4a51a7c81833938bce28d9c607a6d",
                 "shasum": ""
             },
             "require": {
-                "doctrine/inflector": "^1.1",
+                "doctrine/inflector": "^1.4|^2.0",
                 "ext-json": "*",
                 "ext-mbstring": "*",
                 "illuminate/contracts": "^6.0",
@@ -498,25 +552,26 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "https://laravel.com",
-            "time": "2020-03-24T20:01:29+00:00"
+            "time": "2020-06-01T14:38:14+00:00"
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.32.2",
+            "version": "2.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "f10e22cf546704fab1db4ad4b9dedbc5c797a0dc"
+                "reference": "4b9bd835261ef23d36397a46a76b496a458305e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/f10e22cf546704fab1db4ad4b9dedbc5c797a0dc",
-                "reference": "f10e22cf546704fab1db4ad4b9dedbc5c797a0dc",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/4b9bd835261ef23d36397a46a76b496a458305e5",
+                "reference": "4b9bd835261ef23d36397a46a76b496a458305e5",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "php": "^7.1.8 || ^8.0",
+                "symfony/polyfill-mbstring": "^1.0",
                 "symfony/translation": "^3.4 || ^4.0 || ^5.0"
             },
             "require-dev": {
@@ -534,7 +589,8 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.x-dev"
+                    "dev-master": "2.x-dev",
+                    "dev-3.x": "3.x-dev"
                 },
                 "laravel": {
                     "providers": [
@@ -569,7 +625,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2020-03-31T13:43:19+00:00"
+            "time": "2020-05-24T18:27:52+00:00"
         },
         {
             "name": "phpquery/phpquery",
@@ -603,50 +659,6 @@
             ],
             "description": "jquery for php",
             "time": "2019-08-08T19:13:26+00:00"
-        },
-        {
-            "name": "phroute/phroute",
-            "version": "v2.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mrjgreen/phroute.git",
-                "reference": "dbe2b986f9ee1dd33dc956fcc35d1fa22e8e196c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mrjgreen/phroute/zipball/dbe2b986f9ee1dd33dc956fcc35d1fa22e8e196c",
-                "reference": "dbe2b986f9ee1dd33dc956fcc35d1fa22e8e196c",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "*",
-                "satooshi/php-coveralls": "dev-master"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Phroute\\Phroute\\": "src/Phroute"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Joe Green",
-                    "email": "joe.green.0991@gmail.com"
-                }
-            ],
-            "description": "Fast, fully featured restful request router for PHP",
-            "keywords": [
-                "router",
-                "routing"
-            ],
-            "time": "2015-07-22T20:46:43+00:00"
         },
         {
             "name": "psr/container",
@@ -746,6 +758,47 @@
             "time": "2017-10-23T01:57:42+00:00"
         },
         {
+            "name": "rakit/validation",
+            "version": "v1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rakit/validation.git",
+                "reference": "d7710a2c8133d89b5640b79e832f370ad2d58767"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rakit/validation/zipball/d7710a2c8133d89b5640b79e832f370ad2d58767",
+                "reference": "d7710a2c8133d89b5640b79e832f370ad2d58767",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.5",
+                "squizlabs/php_codesniffer": "^3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Rakit\\Validation\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Muhammad Syifa",
+                    "email": "emsifa@gmail.com"
+                }
+            ],
+            "description": "PHP Laravel like standalone validation library",
+            "time": "2019-07-10T03:20:16+00:00"
+        },
+        {
             "name": "samejack/php-argv",
             "version": "dev-master",
             "source": {
@@ -795,16 +848,16 @@
         },
         {
             "name": "snapappointments/bootstrap-select",
-            "version": "v1.13.12",
+            "version": "v1.13.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/snapappointments/bootstrap-select.git",
-                "reference": "38e031a6bc42cdb18b1bff62e8094ae75bb1c22c"
+                "reference": "5cc3bf9d92cba0aeaf03d635a8a6f7bfc2a2dc7f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/snapappointments/bootstrap-select/zipball/38e031a6bc42cdb18b1bff62e8094ae75bb1c22c",
-                "reference": "38e031a6bc42cdb18b1bff62e8094ae75bb1c22c",
+                "url": "https://api.github.com/repos/snapappointments/bootstrap-select/zipball/5cc3bf9d92cba0aeaf03d635a8a6f7bfc2a2dc7f",
+                "reference": "5cc3bf9d92cba0aeaf03d635a8a6f7bfc2a2dc7f",
                 "shasum": ""
             },
             "suggest": {
@@ -841,7 +894,7 @@
                 "replacement",
                 "select"
             ],
-            "time": "2019-10-11T00:02:17+00:00"
+            "time": "2020-05-07T22:16:49+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -907,26 +960,26 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v5.0.7",
+            "version": "v5.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "ca3b87dd09fff9b771731637f5379965fbfab420"
+                "reference": "6e4320f06d5f2cce0d96530162491f4465179157"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/ca3b87dd09fff9b771731637f5379965fbfab420",
-                "reference": "ca3b87dd09fff9b771731637f5379965fbfab420",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/6e4320f06d5f2cce0d96530162491f4465179157",
+                "reference": "6e4320f06d5f2cce0d96530162491f4465179157",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2.5",
+                "php": ">=7.2.5",
                 "symfony/polyfill-ctype": "~1.8"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.0-dev"
+                    "dev-master": "5.1-dev"
                 }
             },
             "autoload": {
@@ -953,11 +1006,11 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2020-03-27T16:56:45+00:00"
+            "time": "2020-05-30T20:35:19+00:00"
         },
         {
             "name": "symfony/finder",
-            "version": "v4.4.7",
+            "version": "v4.4.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
@@ -1006,16 +1059,16 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.15.0",
+            "version": "v1.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "4719fa9c18b0464d399f1a63bf624b42b6fa8d14"
+                "reference": "e94c8b1bbe2bc77507a1056cdb06451c75b427f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/4719fa9c18b0464d399f1a63bf624b42b6fa8d14",
-                "reference": "4719fa9c18b0464d399f1a63bf624b42b6fa8d14",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/e94c8b1bbe2bc77507a1056cdb06451c75b427f9",
+                "reference": "e94c8b1bbe2bc77507a1056cdb06451c75b427f9",
                 "shasum": ""
             },
             "require": {
@@ -1027,7 +1080,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.15-dev"
+                    "dev-master": "1.17-dev"
                 }
             },
             "autoload": {
@@ -1060,20 +1113,20 @@
                 "polyfill",
                 "portable"
             ],
-            "time": "2020-02-27T09:26:54+00:00"
+            "time": "2020-05-12T16:14:59+00:00"
         },
         {
             "name": "symfony/polyfill-iconv",
-            "version": "v1.15.0",
+            "version": "v1.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-iconv.git",
-                "reference": "ad6d62792bfbcfc385dd34b424d4fcf9712a32c8"
+                "reference": "c4de7601eefbf25f9d47190abe07f79fe0a27424"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-iconv/zipball/ad6d62792bfbcfc385dd34b424d4fcf9712a32c8",
-                "reference": "ad6d62792bfbcfc385dd34b424d4fcf9712a32c8",
+                "url": "https://api.github.com/repos/symfony/polyfill-iconv/zipball/c4de7601eefbf25f9d47190abe07f79fe0a27424",
+                "reference": "c4de7601eefbf25f9d47190abe07f79fe0a27424",
                 "shasum": ""
             },
             "require": {
@@ -1085,7 +1138,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.15-dev"
+                    "dev-master": "1.17-dev"
                 }
             },
             "autoload": {
@@ -1119,20 +1172,20 @@
                 "portable",
                 "shim"
             ],
-            "time": "2020-03-09T19:04:49+00:00"
+            "time": "2020-05-12T16:47:27+00:00"
         },
         {
             "name": "symfony/polyfill-intl-idn",
-            "version": "v1.15.0",
+            "version": "v1.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-idn.git",
-                "reference": "47bd6aa45beb1cd7c6a16b7d1810133b728bdfcf"
+                "reference": "3bff59ea7047e925be6b7f2059d60af31bb46d6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-intl-idn/zipball/47bd6aa45beb1cd7c6a16b7d1810133b728bdfcf",
-                "reference": "47bd6aa45beb1cd7c6a16b7d1810133b728bdfcf",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-idn/zipball/3bff59ea7047e925be6b7f2059d60af31bb46d6a",
+                "reference": "3bff59ea7047e925be6b7f2059d60af31bb46d6a",
                 "shasum": ""
             },
             "require": {
@@ -1146,7 +1199,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.15-dev"
+                    "dev-master": "1.17-dev"
                 }
             },
             "autoload": {
@@ -1181,20 +1234,20 @@
                 "portable",
                 "shim"
             ],
-            "time": "2020-03-09T19:04:49+00:00"
+            "time": "2020-05-12T16:47:27+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.15.0",
+            "version": "v1.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "81ffd3a9c6d707be22e3012b827de1c9775fc5ac"
+                "reference": "fa79b11539418b02fc5e1897267673ba2c19419c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/81ffd3a9c6d707be22e3012b827de1c9775fc5ac",
-                "reference": "81ffd3a9c6d707be22e3012b827de1c9775fc5ac",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/fa79b11539418b02fc5e1897267673ba2c19419c",
+                "reference": "fa79b11539418b02fc5e1897267673ba2c19419c",
                 "shasum": ""
             },
             "require": {
@@ -1206,7 +1259,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.15-dev"
+                    "dev-master": "1.17-dev"
                 }
             },
             "autoload": {
@@ -1240,20 +1293,20 @@
                 "portable",
                 "shim"
             ],
-            "time": "2020-03-09T19:04:49+00:00"
+            "time": "2020-05-12T16:47:27+00:00"
         },
         {
             "name": "symfony/polyfill-php72",
-            "version": "v1.15.0",
+            "version": "v1.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php72.git",
-                "reference": "37b0976c78b94856543260ce09b460a7bc852747"
+                "reference": "f048e612a3905f34931127360bdd2def19a5e582"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php72/zipball/37b0976c78b94856543260ce09b460a7bc852747",
-                "reference": "37b0976c78b94856543260ce09b460a7bc852747",
+                "url": "https://api.github.com/repos/symfony/polyfill-php72/zipball/f048e612a3905f34931127360bdd2def19a5e582",
+                "reference": "f048e612a3905f34931127360bdd2def19a5e582",
                 "shasum": ""
             },
             "require": {
@@ -1262,7 +1315,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.15-dev"
+                    "dev-master": "1.17-dev"
                 }
             },
             "autoload": {
@@ -1295,25 +1348,88 @@
                 "portable",
                 "shim"
             ],
-            "time": "2020-02-27T09:26:54+00:00"
+            "time": "2020-05-12T16:47:27+00:00"
         },
         {
-            "name": "symfony/translation",
-            "version": "v5.0.7",
+            "name": "symfony/polyfill-php80",
+            "version": "v1.17.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/translation.git",
-                "reference": "99b831770e10807dca0979518e2c89edffef5978"
+                "url": "https://github.com/symfony/polyfill-php80.git",
+                "reference": "5e30b2799bc1ad68f7feb62b60a73743589438dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/99b831770e10807dca0979518e2c89edffef5978",
-                "reference": "99b831770e10807dca0979518e2c89edffef5978",
+                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/5e30b2799bc1ad68f7feb62b60a73743589438dd",
+                "reference": "5e30b2799bc1ad68f7feb62b60a73743589438dd",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2.5",
+                "php": ">=7.0.8"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.17-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Polyfill\\Php80\\": ""
+                },
+                "files": [
+                    "bootstrap.php"
+                ],
+                "classmap": [
+                    "Resources/stubs"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ion Bazan",
+                    "email": "ion.bazan@gmail.com"
+                },
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill backporting some PHP 8.0+ features to lower PHP versions",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "time": "2020-05-12T16:47:27+00:00"
+        },
+        {
+            "name": "symfony/translation",
+            "version": "v5.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/translation.git",
+                "reference": "d387f07d4c15f9c09439cf3f13ddbe0b2c5e8be2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/d387f07d4c15f9c09439cf3f13ddbe0b2c5e8be2",
+                "reference": "d387f07d4c15f9c09439cf3f13ddbe0b2c5e8be2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.5",
                 "symfony/polyfill-mbstring": "~1.0",
+                "symfony/polyfill-php80": "^1.15",
                 "symfony/translation-contracts": "^2"
             },
             "conflict": {
@@ -1345,7 +1461,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.0-dev"
+                    "dev-master": "5.1-dev"
                 }
             },
             "autoload": {
@@ -1372,24 +1488,24 @@
             ],
             "description": "Symfony Translation Component",
             "homepage": "https://symfony.com",
-            "time": "2020-03-27T16:56:45+00:00"
+            "time": "2020-05-30T20:35:19+00:00"
         },
         {
             "name": "symfony/translation-contracts",
-            "version": "v2.0.1",
+            "version": "v2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation-contracts.git",
-                "reference": "8cc682ac458d75557203b2f2f14b0b92e1c744ed"
+                "reference": "e5ca07c8f817f865f618aa072c2fe8e0e637340e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation-contracts/zipball/8cc682ac458d75557203b2f2f14b0b92e1c744ed",
-                "reference": "8cc682ac458d75557203b2f2f14b0b92e1c744ed",
+                "url": "https://api.github.com/repos/symfony/translation-contracts/zipball/e5ca07c8f817f865f618aa072c2fe8e0e637340e",
+                "reference": "e5ca07c8f817f865f618aa072c2fe8e0e637340e",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2.5"
+                "php": ">=7.2.5"
             },
             "suggest": {
                 "symfony/translation-implementation": ""
@@ -1397,7 +1513,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0-dev"
+                    "dev-master": "2.1-dev"
                 }
             },
             "autoload": {
@@ -1429,7 +1545,7 @@
                 "interoperability",
                 "standards"
             ],
-            "time": "2019-11-18T17:27:11+00:00"
+            "time": "2020-05-20T17:43:50+00:00"
         }
     ],
     "packages-dev": [],
@@ -1441,10 +1557,13 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "ext-json": "*",
         "ext-curl": "*",
         "ext-zip": "*",
-        "ext-fileinfo": "*"
+        "ext-fileinfo": "*",
+        "ext-json": "*",
+        "ext-simplexml": "*",
+        "ext-dom": "*",
+        "ext-ftp": "*"
     },
     "platform-dev": []
 }

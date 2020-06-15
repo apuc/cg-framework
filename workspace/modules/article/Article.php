@@ -13,7 +13,7 @@ class Article
             [
                 'title' => 'Articles',
                 'url' => '/article',
-                'icon' => '<i class="nav-icon fas fa-copy"></i>',
+                'icon' => '<i class="fas fa-newspaper"></i>',
             ],
         ];
 

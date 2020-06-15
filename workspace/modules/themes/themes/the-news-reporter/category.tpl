@@ -2,6 +2,7 @@
     <div class="center">
         {include file="{$workspace_dir}/modules/themes/themes/the-news-reporter/parts/header.tpl"}
         {include file="{$workspace_dir}/modules/themes/themes/the-news-reporter/parts/menu.tpl"}
+
         <div class="content_area">
             {foreach from=$articles item=item}
                 <div class="single_left_coloum floatleft">

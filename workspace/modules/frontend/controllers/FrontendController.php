@@ -4,6 +4,7 @@ namespace workspace\modules\frontend\controllers;
 
 use core\component_manager\lib\Mod;
 use core\Controller;
+use core\Debug;
 use workspace\models\ArticleCategory;
 use workspace\models\Category;
 use workspace\models\Settings;
@@ -30,7 +31,7 @@ class FrontendController extends Controller
     public function actionIndex()
     {
         $settings = Settings::where('key', 'title')->first();
-        $this->view->setTitle($settings->value . ' | Home');
+        $this->view->setTitle('Home');
 
         $theme = Settings::where('key', 'theme')->first();
         $articles = Article::all()->sortByDesc("updated_at");
@@ -40,7 +41,9 @@ class FrontendController extends Controller
         if(isset($_SESSION['username']) && isset($_SESSION['role'])) {
             $username = $_SESSION['username'];
             $role = $_SESSION['role'];
-        } else {
+
+        }
+        else {
             $username = '';
             $role = '';
         }
@@ -58,7 +61,7 @@ class FrontendController extends Controller
     {
         $category = Category::where('id', $id)->first();
         $settings = Settings::where('key', 'title')->first();
-        $this->view->setTitle($settings->value . ' | ' . $category->category);
+        $this->view->setTitle($category->category);
 
         $theme = Settings::where('key', 'theme')->first();
         $categories = Category::all();
@@ -77,7 +80,8 @@ class FrontendController extends Controller
         if(isset($_SESSION['username']) && isset($_SESSION['role'])) {
             $username = $_SESSION['username'];
             $role = $_SESSION['role'];
-        } else {
+        }
+        else {
             $username = '';
             $role = '';
         }
@@ -94,7 +98,7 @@ class FrontendController extends Controller
     {
         $article = Article::where('id', $id)->first();
         $settings = Settings::where('key', 'title')->first();
-        $this->view->setTitle($settings->value . ' | ' . $article->name);
+        $this->view->setTitle($article->name);
 
         $theme = Settings::where('key', 'theme')->first();
         $article = Article::where('id', $id)->first();
@@ -104,7 +108,8 @@ class FrontendController extends Controller
         if(isset($_SESSION['username']) && isset($_SESSION['role'])) {
             $username = $_SESSION['username'];
             $role = $_SESSION['role'];
-        } else {
+        }
+        else {
             $username = '';
             $role = '';
         }
@@ -121,14 +126,15 @@ class FrontendController extends Controller
     public function actionAbout()
     {
         $settings = Settings::where('key', 'title')->first();
-        $this->view->setTitle($settings->value . ' | About');
+        $this->view->setTitle('About');
 
         $theme = Settings::where('key', 'theme')->first();
 
         if(isset($_SESSION['username']) && isset($_SESSION['role'])) {
             $username = $_SESSION['username'];
             $role = $_SESSION['role'];
-        } else {
+        }
+        else {
             $username = '';
             $role = '';
         }

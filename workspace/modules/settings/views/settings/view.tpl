@@ -1,4 +1,4 @@
-{assign var="url" value="{'settings/'}{$model->id}"}
+{assign var="url" value="{'/admin/settings/'}{$model->id}"}
 {core\App::$breadcrumbs->addItem(['text' => $model->key, 'url' => $url])}
 <div class="h1">{$model->key}</div>
 

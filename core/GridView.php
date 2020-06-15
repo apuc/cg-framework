@@ -21,15 +21,25 @@ class GridView extends Widget
 
     protected $model;
     protected $options;
+    protected $defaultOptions = [
+        'filters' => true,
+    ];
 
     /**
      * @var $pagination Pagination
+     * available params for $options:
+     * 'serial' => '#',
+     * 'actions' => 'view, edit, delete',
+     * 'table_class' => 'class_1 class_2 ... class_m',
+     * 'thead_class' => 'class_1 class_2 ... class_m',
+     * 'baseUri' => 'url',
+     * 'fields' => ['attr_1', ..., 'attr_m']
      */
     protected $pagination;
 
     public function run()
     {
-        $this->view->registerJs(RESOURCES_DIR . '/js/gridView.js');
+        $this->view->registerJs('/resources/js/gridView.js', [], true);
 
         return self::getTable() . $this->pagination->run();
     }
@@ -37,12 +47,20 @@ class GridView extends Widget
     public function setParams($data = [], $options = [])
     {
         $this->model = $data;
-        $this->options = $options;
+        $this->options = array_merge($this->defaultOptions, $options);
 
-        $this->pagination = Pagination::widget();
-
-        return $this;
+        return self::getTable() . $this->pagination->run();
     }
+
+//    public function setParams($data = [], $options = [])
+//    {
+//        $this->model = $data;
+//        $this->options = $options;
+//
+//        $this->pagination = Pagination::widget();
+//
+//        return $this;
+//    }
 
     public function getTable()
     {
@@ -51,7 +69,9 @@ class GridView extends Widget
         $table .= self::setTableSettings($table, 'thead', 'thead_class', 'thead-dark');
 
         $table .= '<tr>';
-        (isset($this->options['serial'])) ? $table .= '<th scope="col">'.$this->options['serial'].'</th>' : $table .= '';
+
+        (isset($this->options['serial'])) ? $table .= '<th scope="col">' . $this->options['serial'] . '</th>' : $table .= '';
+
         (!empty($this->actionsBtn)) ? $table .= '<th scope="col"></th>' : $table .= '';
 
         foreach ($this->options['fields'] as $key => $field)
@@ -69,13 +89,17 @@ class GridView extends Widget
         $end = $this->pagination->getPage() * $this->pagination->getPerPage();
         $start = ($end - ($this->pagination->getPerPage() - 1)) - 1;
 
-        if($end > $this->pagination->getAmountOfData())
+        if ($end > $this->pagination->getAmountOfData())
             $end = $this->pagination->getAmountOfData();
 
-        for($i = $start; $i < $end; $i++ ) {
+        if ($this->options['filters']) {
+            $table .= $this->createFilters($this->options);
+        }
+
+        for ($i = $start; $i < $end; $i++) {
             $table .= '<tr>';
 
-            (isset($this->options['serial'])) ? $table .= '<td>' . ($i + 1) . '</td>' :  $table .= '';
+            (isset($this->options['serial'])) ? $table .= '<td>' . ($i + 1) . '</td>' : $table .= '';
 
             if (!empty($this->actionsBtn)) {
                 $table .= '<td>';
@@ -114,6 +138,24 @@ class GridView extends Widget
         return $this;
     }
 
+    public function createFilters($options)
+    {
+        $html = '<tr><form class="__filterForm">';
+        $html .= isset($options['serial']) ? '<td></td>' : '';
+        $html .= !empty($this->actionsBtn) ? '<td></td>' : '';
+        foreach ($options['fields'] as $key => $field) {
+            if (isset($field['showFilter']) && !$field['showFilter']) {
+                $html .= '<td></td>';
+            } else {
+                $val = isset($_GET[$key . 'Search']) ? $_GET[$key . 'Search'] : '';
+                $html .= '<td><input class="form-control __filter" type="text" name="' . $key . 'Search" value="'. $val .'"></td>';
+            }
+        }
+        $html .= '</form></tr>';
+
+        return $html;
+    }
+
     protected function createBtn($btn, $url, $id)
     {
         $uri = $url . str_replace('{id}', $id, $btn['url']);
@@ -125,9 +167,18 @@ class GridView extends Widget
 
     public function setTableSettings($table, $tag, $class, $default_class)
     {
-        $table .= '<' . $tag . ' class="' . ((isset($this->options[$class])) ? $this->options[$class] : $default_class)
-            . '">';
+        $table .= '<' . $tag . ' class="' . ((isset($this->options[$class])) ? $this->options[$class] : $default_class) . '">';
 
         return $table;
+    }
+
+    private function generateAdditionalParams($data)
+    {
+        $params = '';
+        foreach ((array)$data as $key => $datum) {
+            $params .= $key . '="' . $datum . '" ';
+        }
+
+        return $params;
     }
 }

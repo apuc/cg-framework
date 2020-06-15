@@ -1,6 +1,6 @@
 <div class="single_sidebar">
     <div class="popular">
-        <h2 class="title">Popular</h2>
+        <h2 class="title">Newest</h2>
         <ul>
             {$i = 0}
             {foreach from=$articles item=item}
