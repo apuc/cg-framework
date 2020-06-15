@@ -3,7 +3,6 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
         let id = $(this).attr('data-id');
         let url = $(this).attr('data-url');
-        console.log(url);
 
         $.ajax({
             url: url,
@@ -14,8 +13,19 @@ jQuery(document).ready(function ($) {
             success: function () {
                 window.location.reload();
             },
-            error: function () {
+            error: function (res) {
+                console.log(res)
             }
         });
+    });
+
+    $(".__filter").on("focusout", function (e) {
+        $(".__filterForm").submit();
+    });
+
+    $(".__filter").on('keypress',function(e) {
+        if(e.which == 13) {
+            $(".__filterForm").submit();
+        }
     });
 });

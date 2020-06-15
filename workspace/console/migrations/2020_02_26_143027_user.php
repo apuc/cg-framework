@@ -17,6 +17,7 @@ class User extends Migration
         App::$db->schema->create('user', function (Blueprint $table) {
             $table->increments('id');
             $table->string('username', 255);
+            $table->string('email', 255);
             $table->string('password_hash', 255);
             $table->integer('role');
             $table->timestamps();

@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Category extends Migration
+class AddFieldsToArticle extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,11 @@ class Category extends Migration
      */
     public function up()
     {
-        App::$db->schema->create('category', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('category', 255);
-            $table->timestamps();
+        App::$db->schema->table('article', function (Blueprint $table) {
+            $table->string('title')->nullable();;
+            $table->string('description')->nullable();;
+            $table->string('keywords')->nullable();
+            $table->string('url')->nullable();;
         });
     }
 
@@ -28,6 +29,6 @@ class Category extends Migration
      */
     public function down()
     {
-        App::$db->schema->dropIfExists('category');
+
     }
 }

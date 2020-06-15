@@ -14,5 +14,21 @@
   "article": {
     "version": "0.1",
     "status": "active"
+  },
+  "promocode": {
+    "version": "0.1",
+    "status": "active"
+  },
+  "product": {
+    "version": "0.1",
+    "status": "active"
+  },
+  "order": {
+    "version": "0.1",
+    "status": "active"
+  },
+  "frontend": {
+    "version": "0.1",
+    "status": "inactive"
   }
 }

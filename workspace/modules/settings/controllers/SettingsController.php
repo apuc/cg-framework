@@ -14,8 +14,12 @@ class SettingsController extends Controller
 
     protected function init()
     {
+        //if(!isset($_SESSION['role']) || $_SESSION['role'] != 1) $this->redirect('');
+
         $this->viewPath = '/modules/settings/views/';
         $this->layoutPath = App::$config['adminLayoutPath'];
+        App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);
+        App::$breadcrumbs->addItem(['text' => 'Settings', 'url' => 'admin/settings']);
     }
 
     public function actionIndex()
@@ -25,34 +29,18 @@ class SettingsController extends Controller
         $options = [
             'serial' => '#',
             'fields' => [
-                [
-                    'key' => 'Ключ',
-                    'category' => [
-                        'label' => 'Значение',
-                        'value' => function($model) {
-                            return $model->value;
-                        }
-                    ]
+                'key' => 'Ключ',
+                'category' => [
+                    'label' => 'Значение',
+                    'value' => function($model) {
+                        return $model->value;
+                    }
                 ]
             ],
-            'baseUri' => 'settings',
+            'baseUri' => 'settings'
         ];
 
-        $bc_options = [
-            'class' => 'bc',
-            'separator' => ' > ',
-            'items' => [
-                [
-                    'text' => 'AdminPanel',
-                    'url' => 'adminlte'
-                ],
-                [
-                    'text' => 'Settings',
-                ],
-            ],
-        ];
-
-        return $this->render('settings/settings.tpl', ['h1' => 'Settings', 'model' => $model, 'options' => $options, 'bc_options' => $bc_options]);
+        return $this->render('settings/settings.tpl', ['h1' => 'Настройки', 'model' => $model, 'options' => $options]);
     }
 
     public function actionView($id)
@@ -71,92 +59,34 @@ class SettingsController extends Controller
             ],
         ];
 
-        $bc_options = [
-            'class' => '',
-            'separator' => ' > ',
-            'items' => [
-                [
-                    'text' => 'AdminPanel',
-                    'url' => 'adminlte'
-                ],
-                [
-                    'text' => 'Settings',
-                    'url' => 'settings'
-                ],
-                [
-                    'text' => $model->key,
-                ],
-            ],
-        ];
-
-        return $this->render('settings/view.tpl', ['h1' => $model->key, 'model' => $model, 'options' => $options, 'bc_options' => $bc_options]);
+        return $this->render('settings/view.tpl', ['model' => $model, 'options' => $options]);
     }
 
     public function actionStore()
     {
-        $bc_options = [
-            'class' => '',
-            'separator' => ' > ',
-            'items' => [
-                [
-                    'text' => 'AdminPanel',
-                    'url' => 'adminlte'
-                ],
-                [
-                    'text' => 'Settings',
-                    'url' => 'settings'
-                ],
-                [
-                    'text' => 'Create',
-                ],
-            ],
-        ];
-
         if(isset($_POST['key']) && isset($_POST['value'])) {
             $settings = new Settings();
             $settings->key = $_POST['key'];
             $settings->value = $_POST['value'];
             $settings->save();
 
-            $this->redirect('settings');
+            $this->redirect('admin/settings');
         } else
-            return $this->render('settings/store.tpl', ['h1' => 'Create', 'bc_options' => $bc_options]);
+            return $this->render('settings/store.tpl', ['h1' => 'Добавить настройку']);
     }
 
     public function actionEdit($id)
     {
-        $settings = Settings::where('id', $id)->first();
-
-        $bc_options = [
-            'class' => '',
-            'separator' => ' > ',
-            'items' => [
-                [
-                    'text' => 'AdminPanel',
-                    'url' => 'adminlte'
-                ],
-                [
-                    'text' => 'Settings',
-                    'url' => 'settings'
-                ],
-                [
-                    'text' => $settings->key,
-                    'url' => 'settings/'.$id
-                ],
-                [
-                    'text' => 'Edit',
-                ],
-            ],
-        ];
+        $model = Settings::where('id', $id)->first();
 
         if(isset($_POST['key']) && isset($_POST['value'])) {
-            $settings->key = $_POST['key'];
-            $settings->value = $_POST['value'];
-            $settings->save();
+            $model->key = $_POST['key'];
+            $model->value = $_POST['value'];
+            $model->save();
 
-            $this->redirect('settings');
+            $this->redirect('admin/settings');
         } else
-            return $this->render('settings/edit.tpl', ['h1' => 'Edit', 'settings' => $settings, 'bc_options' => $bc_options]);
+            return $this->render('settings/edit.tpl', ['h1' => 'Редактировать: ', 'model' => $model]);
     }
 
     public function actionDelete()

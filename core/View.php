@@ -93,7 +93,8 @@ class View
                 $jsHtml .= "<script src='" . $j['src'] . "' " . $params . " ></script>" . "\n";
             }
         }
-        echo $jsHtml;
+
+        return $jsHtml;
     }
 
     public function setViewPath($dir)

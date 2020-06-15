@@ -1,0 +1,9 @@
+{
+  "name": "promocode",
+  "version": "0.1",
+  "class": "workspace\\modules\\promocode\\Promocode",
+  "description": "promocode module",
+  "configFile": "config/promocode.php",
+  "routFile": "routing/rout.php",
+  "migrationPath": "migrations"
+}

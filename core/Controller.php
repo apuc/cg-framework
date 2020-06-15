@@ -19,9 +19,9 @@ class Controller
 
     public function __construct()
     {
-        $this->init();
-
         $this->view = View::get();
+
+        $this->init();
 
         $this->view->setViewPath(WORKSPACE_DIR . $this->viewPath);
     }
@@ -54,12 +54,13 @@ class Controller
 
     public function redirect($url)
     {
-        $baseUrl = sprintf(
+        $uri = sprintf(
             "%s://%s",
             isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
             $_SERVER['SERVER_NAME']
         );
-        header('Location: '.$baseUrl.':8000/'.$url);
+
+        header('Location: ' . $uri . '/' . $url);
         die();
     }
 

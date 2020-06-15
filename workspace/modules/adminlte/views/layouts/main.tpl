@@ -87,7 +87,7 @@
         <a href="index3.html" class="brand-link">
             <img src="/workspace/modules/adminlte/resources/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
                  style="opacity: .8">
-            <span class="brand-text font-weight-light">AdminLTE 3</span>
+            <span class="brand-text font-weight-light">{core\App::$config['app_name']}</span>
         </a>
 
         <!-- Sidebar -->
@@ -95,10 +95,11 @@
             <!-- Sidebar user panel (optional) -->
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
-                    <img src="/workspace/modules/adminlte/resources/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                    <img src="/workspace/modules/adminlte/resources/dist/img/user1-128x128.jpg" class="img-circle elevation-2" alt="User Image">
                 </div>
                 <div class="info">
-                    <a href="#" class="d-block">Alexander Pierce</a>
+                    <a href="#" class="d-block">{workspace\models\User::getCurrentUserName()}</a>
+                    <div class="logout-line"><a href="/logout">Logout</a></div>
                 </div>
             </div>
 
@@ -113,7 +114,7 @@
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
-                {core\BreadCrumbs::widget()->setParams($bc_options)->run()}
+                {core\BreadCrumbs::widget()->run()}
                 {$content}
             </div><!-- /.container-fluid -->
         </section>

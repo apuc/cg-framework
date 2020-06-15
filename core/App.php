@@ -9,6 +9,8 @@ use Illuminate\Support\Arr;
 use Phroute\Phroute\Dispatcher;
 use Phroute\Phroute\RouteCollector;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use routing\Filter;
+use workspace\models\User;
 
 /**
  * Class App
@@ -59,6 +61,11 @@ class App
      */
     static $db;
 
+    /**
+     * @var $breadcrumbs BCContainer
+     */
+    static $breadcrumbs;
+
     public function setConfig($configListFile = 'list.php')
     {
         $this->activeMod();
@@ -68,11 +75,14 @@ class App
         }
         App::$header = new Header();
         App::$collector = new CgRouteCollector();
+        App::$breadcrumbs = new BCContainer();
+
         return $this;
     }
 
     public function setRouting($routListFile = 'list.php')
     {
+        $this->routList = (include(CORE_DIR . '/routing/rout.php'));
         $this->routList = (include(ROUTING_DIR . '/' . $routListFile));
         foreach ($this->routList as $item) {
             include(ROUTING_DIR . '/' . $item);
@@ -157,5 +167,4 @@ class App
     {
         return new self();
     }
-
 }
