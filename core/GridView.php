@@ -44,23 +44,24 @@ class GridView extends Widget
         return self::getTable() . $this->pagination->run();
     }
 
+//    public function setParams($data = [], $options = [])
+//    {
+//        $this->model = $data;
+//        $this->options = array_merge($this->defaultOptions, $options);
+//        $this->pagination = Pagination::widget();
+//
+//        return self::getTable() . $this->pagination->run();
+//    }
+
     public function setParams($data = [], $options = [])
     {
         $this->model = $data;
         $this->options = array_merge($this->defaultOptions, $options);
 
-        return self::getTable() . $this->pagination->run();
-    }
+        $this->pagination = Pagination::widget();
 
-//    public function setParams($data = [], $options = [])
-//    {
-//        $this->model = $data;
-//        $this->options = $options;
-//
-//        $this->pagination = Pagination::widget();
-//
-//        return $this;
-//    }
+        return $this;
+    }
 
     public function getTable()
     {

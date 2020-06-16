@@ -25,7 +25,6 @@ class ThemesController extends Controller
 
     public function actionIndex()
     {
-
         $content = file_get_contents('https://rep.craft-group.xyz/handler.php');
         $data = json_decode($content);
 

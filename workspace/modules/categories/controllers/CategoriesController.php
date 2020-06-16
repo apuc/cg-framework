@@ -5,6 +5,7 @@ namespace workspace\modules\categories\controllers;
 use core\App;
 use core\Controller;
 use workspace\models\Category;
+use workspace\modules\categories\requests\CategorySearchRequest;
 
 class CategoriesController extends Controller
 {
@@ -21,7 +22,8 @@ class CategoriesController extends Controller
 
     public function actionIndex()
     {
-        $model = Category::all();
+        $request = new CategorySearchRequest();
+        $model = Category::search($request);
 
         $options = [
             'serial' => '#',

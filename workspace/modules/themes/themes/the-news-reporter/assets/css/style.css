@@ -384,8 +384,13 @@ div {
 }
 
 .article_text_small {
-    height: 50px;
+    height: 49px;
     margin-bottom: 10px;
+}
+
+.title-height {
+    height: 26px;
+    overflow: hidden;
 }
 
 .article_text {

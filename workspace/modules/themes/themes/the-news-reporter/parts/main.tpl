@@ -9,8 +9,8 @@
                     {if $i++ < $amount}
                         <div class="single_left_coloum floatleft">
                             {$item->image}
-                            <h3> {$item->name} </h3>
-                            <div class="article_text_small"><p> {$item->text} </p></div>
+                            <h3 class="title-height"> {$item->name} </h3>
+                            <div class="article_text_small"><p> {$item->description} </p></div>
                             <a class="readmore" href="/read/{$item->id}">read more</a>
                         </div>
                     {else}

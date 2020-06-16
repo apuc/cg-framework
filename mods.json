@@ -14,14 +14,14 @@
   },
   "promocode": {
     "version": "0.1",
-    "status": "active"
+    "status": "inactive"
   },
   "product": {
     "version": "0.1",
-    "status": "active"
+    "status": "inactive"
   },
   "order": {
     "version": "0.1",
-    "status": "active"
+    "status": "inactive"
   }
 }

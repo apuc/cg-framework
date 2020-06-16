@@ -30,7 +30,7 @@ class FrontendController extends Controller
 
     public function actionIndex()
     {
-        $settings = Settings::where('key', 'title')->first();
+        //$settings = Settings::where('key', 'title')->first();
         $this->view->setTitle('Home');
 
         $theme = Settings::where('key', 'theme')->first();
@@ -42,8 +42,7 @@ class FrontendController extends Controller
             $username = $_SESSION['username'];
             $role = $_SESSION['role'];
 
-        }
-        else {
+        } else {
             $username = '';
             $role = '';
         }
@@ -74,7 +73,8 @@ class FrontendController extends Controller
             foreach ($article as $value)
                 array_push($articles,
                     new \workspace\classes\Article($value->id, $value->name, $value->text, $value->language_id,
-                        $value->image_name, $value->image, $value->parent_id));
+                        $value->image_name, $value->image, $value->parent_id, '', '',
+                        $value->description, '', ''));
         }
 
         if(isset($_SESSION['username']) && isset($_SESSION['role'])) {
@@ -85,6 +85,10 @@ class FrontendController extends Controller
             $username = '';
             $role = '';
         }
+
+//        foreach ($articles as $article)
+//            Debug::prn($article->name);
+//        Debug::dd('');
 
         try {
             return $this->render($theme->value . '/category.tpl', ['categories' => $categories,
