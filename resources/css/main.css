@@ -46,6 +46,11 @@
     text-align: center;
 }
 
+.content-center {
+    margin-top: 2%;
+    text-align: center;
+}
+
 .transparent {
     opacity: 0;
 }

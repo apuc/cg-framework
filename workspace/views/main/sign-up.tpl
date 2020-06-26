@@ -1,4 +1,4 @@
-<h1 class="title-center">Sign Up</h1>
+<h1 class="title-center">Регистрация</h1>
 
 <div class="container custom-container">
     {if !empty($errors)}
@@ -22,7 +22,7 @@
             <input type="password" name="password" id="password" class="form-control" required="required" />
         </div>
         <div class="form-group">
-            <input type="submit" id="submit_button" class="btn btn-dark" value="Submit">
+            <input type="submit" id="submit_button" class="btn btn-dark" value="Зарегестрироваться">
         </div>
     </form>
 </div>

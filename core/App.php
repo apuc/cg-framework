@@ -129,6 +129,7 @@ class App
     protected function setMods()
     {
         $filesystem = new Filesystem();
+        if(App::$activeMods)
         foreach (App::$activeMods as $key => $mod) {
             $modulePath = WORKSPACE_DIR . "/modules/" . $key;
             if ($filesystem->exists($modulePath . "/manifest.json")) {

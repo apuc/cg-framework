@@ -1,6 +1,7 @@
 {
   "name": "users",
-  "version": "0.1",
+  "version": "0.2",
+  "type": "module",
   "class": "workspace\\modules\\users\\Users",
   "description": "users module",
   "configFile": "config/users.php",

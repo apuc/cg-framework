@@ -14,14 +14,14 @@ class Adminlte
         $config['adminTopMenu'] = [
             [
                 'title' => 'Home',
-                'url' => '#',
+                'url' => '/admin/adminlte',
                 'icon' => '',
             ],
-            [
-                'title' => 'Contact',
-                'url' => 'page',
-                'icon' => '',
-            ],
+//            [
+//                'title' => 'Contact',
+//                'url' => 'page',
+//                'icon' => '',
+//            ],
         ];
 
         $config['adminLeftMenu'] = [

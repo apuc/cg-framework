@@ -1,9 +1,0 @@
-{
-  "name": "order",
-  "version": "0.1",
-  "class": "workspace\\modules\\order\\Order",
-  "description": "order module",
-  "configFile": "config/order.php",
-  "routFile": "routing/rout.php",
-  "migrationPath": "migrations"
-}

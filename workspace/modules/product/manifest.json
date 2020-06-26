@@ -1,9 +1,0 @@
-{
-  "name": "product",
-  "version": "0.1",
-  "class": "workspace\\modules\\product\\Product",
-  "description": "product module",
-  "configFile": "config/product.php",
-  "routFile": "routing/rout.php",
-  "migrationPath": "migrations"
-}

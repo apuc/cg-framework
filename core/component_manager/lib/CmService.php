@@ -147,6 +147,15 @@ class CmService
     }
 
     /**
+     * @param string $name
+     * @return array
+     */
+    public function getByName(string $name)
+    {
+        return $this->mod->getByName($name);
+    }
+
+    /**
      * @param string $slug
      * @return bool
      */

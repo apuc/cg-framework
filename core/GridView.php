@@ -3,13 +3,34 @@
 namespace workspace\modules\settings;
 
 
-use core\App;
-
 namespace core;
 
-
+/*
+* available params for $options:
+* 'serial' => '#',
+* 'actions' => 'view, edit, delete',
+* 'table_class' => 'class_1 class_2 ... class_m',
+* 'thead_class' => 'class_1 class_2 ... class_m',
+* 'baseUri' => 'url',
+* 'fields' => ['attr_1', ..., 'attr_m']
+*/
 class GridView extends Widget
 {
+    protected $model;
+    /**
+     * @var $pagination Pagination
+     */
+    protected $pagination;
+
+    /**
+     * @var array $options
+     */
+    protected $options;
+
+    protected $defaultOptions = [
+        'filters' => true,
+    ];
+
     public $actionsBtn = [
         'view' => ['class' => 'custom-link', 'id' => '', 'icon' => '<i class="nav-icon fas fa-eye"></i>',
             'url' => '/{id}'],
@@ -19,54 +40,29 @@ class GridView extends Widget
             'icon' => '<i class="nav-icon fas fa-trash"></i>', 'url' => '/delete/{id}'],
     ];
 
-    protected $model;
-    protected $options;
-    protected $defaultOptions = [
-        'filters' => true,
-    ];
-
-    /**
-     * @var $pagination Pagination
-     * available params for $options:
-     * 'serial' => '#',
-     * 'actions' => 'view, edit, delete',
-     * 'table_class' => 'class_1 class_2 ... class_m',
-     * 'thead_class' => 'class_1 class_2 ... class_m',
-     * 'baseUri' => 'url',
-     * 'fields' => ['attr_1', ..., 'attr_m']
-     */
-    protected $pagination;
-
     public function run()
     {
         $this->view->registerJs('/resources/js/gridView.js', [], true);
 
-        return self::getTable() . $this->pagination->run();
+        return $this->getTable() . $this->pagination->run();
     }
 
     public function setParams($data = [], $options = [])
     {
         $this->model = $data;
         $this->options = array_merge($this->defaultOptions, $options);
+        $this->pagination = Pagination::widget();
+        $this->pagination->setParams($this->options['baseUri'], count($this->model),
+            isset($this->options['pagination']) ? $this->options['pagination'] : []);
 
-        return self::getTable() . $this->pagination->run();
+        return $this;
     }
-
-//    public function setParams($data = [], $options = [])
-//    {
-//        $this->model = $data;
-//        $this->options = $options;
-//
-//        $this->pagination = Pagination::widget();
-//
-//        return $this;
-//    }
 
     public function getTable()
     {
         $table = '';
-        $table .= self::setTableSettings($table, 'table', 'table_class', 'table table-striped');
-        $table .= self::setTableSettings($table, 'thead', 'thead_class', 'thead-dark');
+        $table .= $this->setTableSettings($table, 'table', 'table_class', 'table table-striped');
+        $table .= $this->setTableSettings($table, 'thead', 'thead_class', 'thead-dark');
 
         $table .= '<tr>';
 
@@ -82,9 +78,6 @@ class GridView extends Widget
 
         $table .= '</tr>';
         $table .= '</thead>';
-
-        $this->pagination->setParams($this->options['baseUri'], count($this->model),
-            isset($this->options['pagination']) ? $this->options['pagination'] : []);
 
         $end = $this->pagination->getPage() * $this->pagination->getPerPage();
         $start = ($end - ($this->pagination->getPerPage() - 1)) - 1;

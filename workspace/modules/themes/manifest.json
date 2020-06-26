@@ -1,9 +1,0 @@
-{
-  "name": "themes",
-  "version": "0.1",
-  "class": "workspace\\modules\\themes\\Themes",
-  "description": "themes module",
-  "configFile": "config/themes.php",
-  "routFile": "routing/rout.php",
-  "migrationPath": "console/migrations"
-}

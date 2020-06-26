@@ -68,6 +68,15 @@ class CM
     }
 
     /**
+     * @param $name
+     * @return array
+     */
+    public function getByName($name)
+    {
+        return $this->service->getByName($name);
+    }
+
+    /**
      * @param string $slug
      * @return string
      */

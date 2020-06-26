@@ -7,7 +7,7 @@
  */
 
 return [
-    'app_name' => 'LovedShop',
+    'app_name' => 'CG Framework',
     'adminLeftMenu' => [
     ],
     'component_manager' => [

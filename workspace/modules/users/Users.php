@@ -11,9 +11,9 @@ class Users
     {
         $config['adminLeftMenu'] = [
             [
-                'title' => 'Users',
-                'url' => '/users',
-                'icon' => '<i class="nav-icon fas fa-copy"></i>',
+                'title' => 'Пользователи',
+                'url' => '/admin/users',
+                'icon' => '<i class="nav-icon fa fa-users"></i>',
             ],
         ];
 

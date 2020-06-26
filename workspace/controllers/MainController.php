@@ -10,10 +10,13 @@ use core\Controller;
 
 use workspace\classes\Button;
 use workspace\classes\Modules;
+use workspace\classes\ModulesSearchRequest;
 use workspace\models\User;
 use core\Debug;
 use core\helpers\Form;
 use core\Request;
+use workspace\modules\article\models\Article;
+use workspace\modules\article\requests\ArticleSearchRequest;
 use workspace\requests\LoginRequest;
 use workspace\requests\RegistrationRequest;
 use workspace\widgets\Language;
@@ -24,12 +27,17 @@ class MainController extends Controller
 
     public function actionIndex()
     {
-
         $this->view->setTitle('Main Page');
         $this->view->addMeta('keywords', 'главная', ['some' => 'text']);
         $this->view->registerJs('/resources/js/bodyScript.js', [], true);
 
-        return $this->render('main/index.tpl', ['h1' => 'Проект ' . App::$config['app_name']]);
+        $buttons[0] = '<a href="/modules" class="btn btn-dark">Модули</a>';
+
+        $mod = new Mod();
+        if($mod->getModInfo('adminlte')['status'] == 'active')
+            $buttons[1] = '<a href="/admin/adminlte" class="btn btn-dark">AdminLTE</a>';
+
+        return $this->render('main/index.tpl', ['h1' => App::$config['app_name'], 'buttons' => $buttons]);
     }
 
 
@@ -63,19 +71,27 @@ class MainController extends Controller
     {
         $this->view->setTitle('Sign In');
 
-        $request = new LoginRequest();
-        if ($request->isPost() && $request->validate()) {
-            $model = User::where('username', $request->username)->first();
+        $mod = new Mod();
+        if($mod->getModInfo('users')['status'] != 'active') {
+            $message =  'Чтобы сделать доступной регистрацию и авторизацию установите и активируйте модуль пользователей.';
 
-            if (password_verify($request->password, $model->password_hash)) {
-                $_SESSION['role'] = $model->role;
-                $_SESSION['username'] = $model->username;
-
-                $this->redirect('');
-            }
+            return $this->render('main/info.tpl', ['message' => $message]);
         }
+        else {
+            $request = new LoginRequest();
+            if ($request->isPost() && $request->validate()) {
+                $model = User::where('username', $request->username)->first();
 
-        return $this->render('main/sign-in.tpl', ['errors' => $request->getMessagesArray()]);
+                if (password_verify($request->password, $model->password_hash)) {
+                    $_SESSION['role'] = $model->role;
+                    $_SESSION['username'] = $model->username;
+
+                    $this->redirect('');
+                }
+            }
+
+            return $this->render('main/sign-in.tpl', ['errors' => $request->getMessagesArray()]);
+        }
     }
 
     public function actionLogout()
@@ -90,10 +106,18 @@ class MainController extends Controller
         $content = file_get_contents('https://rep.craft-group.xyz/handler.php');
         $data = json_decode($content);
 
+        $request = new ModulesSearchRequest();
+
+        $mod = new Mod();
         $model = array();
         foreach ($data as $value)
-            if ($value->type == 'module')
-                array_push($model, new Modules($value->name, $value->version, $value->description));
+            if ($value->type == 'module') {
+                $module = new Modules();
+                $module->init($value->name, $value->version, $value->description, $mod->getModInfo($value->name)['status']);
+                array_push($model, $module);
+            }
+
+        $model = Modules::search($request, $model);
 
         $options = [
             'serial' => '#',
@@ -101,16 +125,17 @@ class MainController extends Controller
                 'action' => [
                     'label' => '',
                     'value' => function ($model) {
-                        $mod = new Mod();
+                        //$mod = new Mod();
                         $button = new Button();
 
-                        if ($mod->getModInfo($model->name)['status'] == 'active')
+                        if ($model->status == 'active')
                             return $button->button('module-set-inactive', 'Отключить', $model->name, $model->name, 'toggle-on');
-                        elseif ($mod->getModInfo($model->name)['status'] == 'inactive')
+                        elseif ($model->status == 'inactive')
                             return $button->button('module-set-active', 'Включить', $model->name, $model->name, 'toggle-off');
                         else
                             return $button->button('module-download', 'Скачать', $model->name, $model->name, 'download');
-                    }
+                    },
+                    'showFilter' => false,
                 ],
                 'delete' => [
                     'label' => '',
@@ -122,13 +147,14 @@ class MainController extends Controller
                             return $button->button('fixed-width module-delete', 'Удалить', $model->name, $model->name, 'trash');
                         else
                             return '<div class="fixed-width"></div>';
-                    }
+                    },
+                    'showFilter' => false,
                 ],
                 'status' => [
                     'label' => 'Статус',
                     'value' => function ($model) {
                         $mod = new Mod();
-                        return '<div class="fixed-width">' . $mod->getModInfo($model->name)['status'] . '</div>';
+                        return '<div class="fixed-width">' . $model->status . '</div>';
                     }
                 ],
                 'name' => 'Название',

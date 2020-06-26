@@ -106,6 +106,20 @@ class Mod
     }
 
     /**
+     * @param $name
+     * @return array
+     */
+    public function getByName($name)
+    {
+        $all = [];
+        foreach ($this->mod as $key => $value)
+            if (in_array($name, $value))
+                $all[$key] = $value;
+
+        return $all;
+    }
+
+    /**
      * @param string $slug
      * @return mixed
      */

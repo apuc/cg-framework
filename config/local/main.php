@@ -6,7 +6,7 @@ return [
         'host' => '',
         'user' => '',
         'pass' => '',
-        'db_name' => ROOT_DIR . '/destination.db',
+        'db_name' => ROOT_DIR . '/default.db',
         'charset' => 'utf8',
         'collation' => 'utf8_unicode_ci',
         'prefix' => '',

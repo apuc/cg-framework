@@ -1,6 +1,7 @@
 {
   "name": "adminlte",
-  "version": "0.1",
+  "version": "0.2",
+  "type": "module",
   "class": "workspace\\modules\\adminlte\\Adminlte",
   "description": "adminlte module",
   "configFile": "config/adm.php",

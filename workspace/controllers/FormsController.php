@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: kirill
- * Date: 14.06.19
- * Time: 23:50
- */
+
 
 namespace workspace\controllers;
 
@@ -16,7 +11,6 @@ use workspace\forms_vue\Forms;
 
 class FormsController extends Controller
 {
-
     public function actionShow($id)
     {
         App::$responseType = ResponseType::APPLICATION_JSON;
@@ -24,5 +18,4 @@ class FormsController extends Controller
 
         return json_encode(Forms::find($id));
     }
-
 }
