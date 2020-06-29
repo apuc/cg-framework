@@ -12,11 +12,6 @@ use workspace\classes\Button;
 use workspace\classes\Modules;
 use workspace\classes\ModulesSearchRequest;
 use workspace\models\User;
-use core\Debug;
-use core\helpers\Form;
-use core\Request;
-use workspace\modules\article\models\Article;
-use workspace\modules\article\requests\ArticleSearchRequest;
 use workspace\requests\LoginRequest;
 use workspace\requests\RegistrationRequest;
 use workspace\widgets\Language;
@@ -39,7 +34,6 @@ class MainController extends Controller
 
         return $this->render('main/index.tpl', ['h1' => App::$config['app_name'], 'buttons' => $buttons]);
     }
-
 
     public function actionLanguage()
     {
