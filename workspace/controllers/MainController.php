@@ -155,7 +155,7 @@ class MainController extends Controller
                 'description' => 'Описание',
                 'version' => 'Версия'
             ],
-            'baseUri' => 'modules'
+            'baseUri' => 'modules',
         ];
 
         App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);
