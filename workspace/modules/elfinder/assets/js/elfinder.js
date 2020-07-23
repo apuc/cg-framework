@@ -10,7 +10,6 @@ $(function () {
 
             // Connector URL
             url: '/finder-connector',
-            lang: 'ru',
 
             // Callback when a file is double-clicked
             getFileCallback: function (file) {
@@ -23,7 +22,6 @@ $(function () {
         var name = $(this).data('name')
         var fm = $('<div/>').dialogelfinder({
             url: '/finder-connector',
-            lang: 'ru',
             width : 840,
             destroyOnClose : true,
             getFileCallback : function(files, fm) {
