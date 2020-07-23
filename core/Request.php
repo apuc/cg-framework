@@ -27,10 +27,10 @@ class Request
     public $errors = [];
 
 
-    public function __construct()
+    public function __construct($data = [])
     {
         $this->headers = $this->getRequestHeaders();
-        $this->load();
+        $this->load($data);
     }
 
 
@@ -160,11 +160,18 @@ class Request
 
     /**
      * Загружаем свойсва
+     * @param array $data
      */
-    public function load()
+    public function load($data = [])
     {
         if (!empty($_REQUEST)) {
             foreach ($_REQUEST as $key => $item) {
+                $this->{$key} = $item;
+                $this->data[$key] = $item;
+            }
+        }
+        elseif (!empty($data)){
+            foreach ($data as $key => $item){
                 $this->{$key} = $item;
                 $this->data[$key] = $item;
             }

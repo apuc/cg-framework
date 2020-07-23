@@ -28,13 +28,13 @@
 {/capture}
 
 {capture name=js_head}
-{/capture}
-
-{capture name=js_body}
     <!-- jQuery -->
     <script src="/workspace/modules/adminlte/resources/plugins/jquery/jquery.min.js"></script>
     <!-- jQuery UI 1.11.4 -->
     <script src="/workspace/modules/adminlte/resources/plugins/jquery-ui/jquery-ui.min.js"></script>
+{/capture}
+
+{capture name=js_body}
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
     <script>$.widget.bridge('uibutton', $.ui.button)</script>
     <!-- Bootstrap 4 -->
