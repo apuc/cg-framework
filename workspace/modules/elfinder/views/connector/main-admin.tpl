@@ -1,3 +1,3 @@
 <div>
-    {workspace\modules\elfinder\widgets\ElfinderWidget::widget(['name' => 'some'])->run()}
+    {workspace\modules\elfinder\widgets\ElfinderBtnWidget::widget(['name' => 'some'])->run()}
 </div>
