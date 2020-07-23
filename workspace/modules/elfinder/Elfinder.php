@@ -22,7 +22,7 @@ class Elfinder
         $config['adminLeftMenu'] = [
             [
                 'title' => 'Elfinder',
-                'url' => 'admin/elfinder',
+                'url' => '/admin/elfinder',
                 'icon' => '<i class="fas fa-folder-open"></i>',
             ],
         ];
