@@ -54,3 +54,22 @@
 .transparent {
     opacity: 0;
 }
+
+.gen-info {
+    background: #eaeaea;
+    border: 1px solid #dedede;
+    border-radius: 4px;
+    padding: 15px;
+}
+
+.gen_success {
+    color: darkgreen;
+}
+
+.gen_existed {
+    color: orangered;
+}
+
+.back {
+    margin: 10px;
+}

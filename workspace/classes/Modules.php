@@ -11,19 +11,22 @@ class Modules
     public $version;
     public $description;
     public $status;
+    public $localStatus;
 
     /**
      * @param string $name
      * @param string $version
      * @param string $description
      * @param string $status
+     * @param string $localStatus
      */
-    public function init($name, $version, $description, $status)
+    public function init($name, $version, $description, $status, $localStatus)
     {
         $this->name = $name;
         $this->version = $version;
         $this->description = $description;
         $this->status = $status;
+        $this->localStatus = $localStatus;
     }
 
     /**

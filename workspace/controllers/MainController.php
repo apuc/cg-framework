@@ -3,11 +3,14 @@
 namespace workspace\controllers;
 
 use core\App;
+use core\code_generator\CodeGeneratorController;
 use core\component_manager\lib\CM;
+use core\component_manager\lib\CmService;
 use core\component_manager\lib\Config;
 use core\component_manager\lib\Mod;
 use core\Controller;
 
+use core\Debug;
 use workspace\classes\Button;
 use workspace\classes\Modules;
 use workspace\classes\ModulesSearchRequest;
@@ -16,23 +19,47 @@ use workspace\requests\LoginRequest;
 use workspace\requests\RegistrationRequest;
 use workspace\widgets\Language;
 
+use Exception;
+use Illuminate\Database\Capsule\Manager as DB;
+
 
 class MainController extends Controller
 {
-
     public function actionIndex()
     {
         $this->view->setTitle('Main Page');
         $this->view->addMeta('keywords', 'главная', ['some' => 'text']);
-        $this->view->registerJs('/resources/js/bodyScript.js', [], true);
 
-        $buttons[0] = '<a href="/modules" class="btn btn-dark">Модули</a>';
+        $buttons[0] = '<a href="/codegen" class="btn btn-dark">CodeGen</a>';
+
+        $buttons[1] = '<a href="/modules" class="btn btn-dark">Модули</a>';
 
         $mod = new Mod();
         if($mod->getModInfo('adminlte')['status'] == 'active')
-            $buttons[1] = '<a href="/admin/adminlte" class="btn btn-dark">AdminLTE</a>';
+            $buttons[2] = '<a href="/admin/adminlte" class="btn btn-dark">AdminLTE</a>';
 
         return $this->render('main/index.tpl', ['h1' => App::$config['app_name'], 'buttons' => $buttons]);
+    }
+
+    public function actionCodeGenerator()
+    {
+        $info = '';
+        $sql = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = '"
+            . App::$config['db']['db_name'] . "'";
+        $tables = DB::select($sql);
+
+        if(isset($_POST['table']) && isset($_POST['slug']) && isset($_POST['module']) && isset($_POST['model'])) {
+            $cg = new CodeGeneratorController();
+            $info = $cg->genModule($_POST['table'], $_POST['slug'], $_POST['module'], $_POST['model']);
+
+            $manifest = file_get_contents('workspace/modules/' . $_POST['module'] . '/manifest.json');
+            $manifest = json_decode($manifest);
+            $data = ['version' => $manifest->version, 'status' => 'inactive', 'type' => 'module'];
+            $cm = new CmService();
+            $cm->mod->save($_POST['module'], $data);
+        }
+
+        return $this->render('main/codegen.tpl', ['info' => $info, 'tables' => $tables]);
     }
 
     public function actionLanguage()
@@ -101,33 +128,58 @@ class MainController extends Controller
         $data = json_decode($content);
 
         $request = new ModulesSearchRequest();
-
         $mod = new Mod();
         $model = array();
+
+        $local_modules = $this->getModules();
         foreach ($data as $value)
             if ($value->type == 'module') {
                 $module = new Modules();
-                $module->init($value->name, $value->version, $value->description, $mod->getModInfo($value->name)['status']);
+                $module->init($value->name, $value->version, $value->description, $mod->getModInfo($value->name)['status'], '');
                 array_push($model, $module);
+
+                if(in_array($value->name, $local_modules))
+                    unset($local_modules[array_search($value->name, $local_modules)]);
             }
+
+        foreach ($local_modules as $local_module) {
+            $module = new Modules();
+            $manifest = file_get_contents('workspace/modules/' . $local_module . '/manifest.json');
+            $manifest = json_decode($manifest);
+            $module->init($local_module, $manifest->version, $manifest->description, $mod->getModInfo($local_module)['status'], 'exists only locally');
+            array_push($model, $module);
+        }
 
         $model = Modules::search($request, $model);
 
         $options = [
             'serial' => '#',
             'fields' => [
+                'location' => [
+                    'label' => '',
+                    'value' => function ($model) {
+                        $button = new Button();
+
+                        if ($model->localStatus == '')
+                            return $button->button('', 'Модуль находится в облаке', $model->name, $model->name, 'cloud');
+                        else
+                            return $button->button('', 'Модуль существует только локально', $model->name, $model->name, 'hdd');
+                    },
+                    'showFilter' => false,
+                ],
                 'action' => [
                     'label' => '',
                     'value' => function ($model) {
-                        //$mod = new Mod();
                         $button = new Button();
 
                         if ($model->status == 'active')
                             return $button->button('module-set-inactive', 'Отключить', $model->name, $model->name, 'toggle-on');
                         elseif ($model->status == 'inactive')
                             return $button->button('module-set-active', 'Включить', $model->name, $model->name, 'toggle-off');
+                        elseif ($model->localStatus == 'exists only locally')
+                            return '<div class="fixed-width"></div>';
                         else
-                            return $button->button('module-download', 'Скачать', $model->name, $model->name, 'download');
+                            return $button->button('module-download', 'Скачать', $model->name, $model->name, 'cloud-download-alt');
                     },
                     'showFilter' => false,
                 ],
@@ -147,7 +199,6 @@ class MainController extends Controller
                 'status' => [
                     'label' => 'Статус',
                     'value' => function ($model) {
-                        $mod = new Mod();
                         return '<div class="fixed-width">' . $model->status . '</div>';
                     }
                 ],
@@ -169,8 +220,8 @@ class MainController extends Controller
         try {
             $cm = new CM();
             $cm->download($_POST['slug']);
-        } catch (\Exception $e) {
-            return $e;
+        } catch (Exception $e) {
+            echo $e;
         }
     }
 
@@ -179,8 +230,8 @@ class MainController extends Controller
         try {
             $cm = new CM();
             $cm->modChangeStatusToActive($_POST['slug']);
-        } catch (\Exception $e) {
-            return $e;
+        } catch (Exception $e) {
+            echo $e;
         }
     }
 
@@ -189,8 +240,8 @@ class MainController extends Controller
         try {
             $cm = new CM();
             $cm->modChangeStatusToInactive($_POST['slug']);
-        } catch (\Exception $e) {
-            return $e;
+        } catch (Exception $e) {
+            echo $e;
         }
     }
 
@@ -201,9 +252,30 @@ class MainController extends Controller
             $mod = new Mod();
             $mod->deleteDirectory(ROOT_DIR . Config::get()->byKey($mod->getModInfo($_POST['slug'])['type'] . 'Path') . $_POST['slug']);
             $cm->modDeleteFromJson($_POST['slug']);
-        } catch (\Exception $e) {
-            return $e;
+        } catch (Exception $e) {
+            echo $e;
         }
     }
 
+    public function getModules()
+    {
+        $dirs = scandir('workspace/modules/');
+        unset($dirs[0]);
+        unset($dirs[1]);
+
+        return $dirs;
+    }
+
+    public function activateLocalModules()
+    {
+        $modules = $this->getModules();
+        foreach ($modules as $module) {
+            $manifest = file_get_contents('workspace/modules/' . $module . '/manifest.json');
+            $manifest = json_decode($manifest);
+            $data = ['version' => $manifest->version, 'status' => 'inactive', 'type' => 'module'];
+            $cm = new CmService();
+            $cm->mod->save($module, $data);
+        }
+        $this->redirect('modules');
+    }
 }

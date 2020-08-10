@@ -1,0 +1,10 @@
+{
+  "name": "tour",
+  "version": "0.1",
+  "type": "module",
+  "class": "workspace\\modules\\tour\\Tour",
+  "description": "tour module",
+  "configFile": "config/tour.php",
+  "routFile": "routing/rout.php",
+  "migrationPath": "console/migrations"
+}

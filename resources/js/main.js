@@ -17,9 +17,7 @@ jQuery(document).ready(function ($) {
             }
         });
     });
-});
 
-jQuery(document).ready(function ($) {
     $( ".action" ).click(function(e) {
         e.preventDefault();
         let theme = $(this).attr('data-theme');
@@ -38,9 +36,7 @@ jQuery(document).ready(function ($) {
             }
         });
     });
-});
 
-jQuery(document).ready(function ($) {
     $( ".module-download" ).click(function(e) {
         e.preventDefault();
         let slug = $(this).attr('data-name');
@@ -60,10 +56,7 @@ jQuery(document).ready(function ($) {
             }
         });
     });
-});
 
-
-jQuery(document).ready(function ($) {
     $( ".module-set-active" ).click(function(e) {
         e.preventDefault();
         let slug = $(this).attr('data-name');
@@ -83,10 +76,7 @@ jQuery(document).ready(function ($) {
             }
         });
     });
-});
 
-
-jQuery(document).ready(function ($) {
     $( ".module-set-inactive" ).click(function(e) {
         e.preventDefault();
         let slug = $(this).attr('data-name');
@@ -106,9 +96,7 @@ jQuery(document).ready(function ($) {
             }
         });
     });
-});
 
-jQuery(document).ready(function ($) {
     $( ".theme-set-active" ).click(function(e) {
         e.preventDefault();
         let slug = $(this).attr('data-name');
@@ -128,9 +116,7 @@ jQuery(document).ready(function ($) {
             }
         });
     });
-});
 
-jQuery(document).ready(function ($) {
     $( ".module-delete" ).click(function(e) {
         e.preventDefault();
         let slug = $(this).attr('data-name');
