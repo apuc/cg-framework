@@ -1,4 +1,24 @@
 jQuery(document).ready(function ($) {
+    $( ".modalUpload" ).click(function(e) {
+        $('#modalCGCloudUpload').modal('show');
+        $("#cgcloud_button").attr("data-name", e.target.id);
+    });
+
+    $('.module-upload').on('click', function () {
+        let module = $(this).data('name')
+        $.ajax({
+            url: '/authentication',
+            type: 'POST',
+            data: { module: module },
+            success: function (res) {
+                // if(JSON.parse(res) === 1)
+                //     console.log('download')
+                console.log(res)
+            },
+            error: function (res) { console.log(res) }
+        });
+    });
+
     $( ".download" ).click(function(e) {
         e.preventDefault();
         let theme = $(this).attr('data-theme');

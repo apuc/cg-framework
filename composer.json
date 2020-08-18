@@ -7,6 +7,7 @@
     "ext-dom": "*",
     "ext-ftp": "*",
     "ext-zip": "*",
+    "ext-apache": "*",
     "craft-group/phroute": "^2.1.1",
     "illuminate/events": "^6.0",
     "illuminate/database": "^6.0",

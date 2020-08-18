@@ -3,6 +3,7 @@
 namespace workspace\controllers;
 
 use core\App;
+use core\Authorization;
 use core\code_generator\CodeGeneratorController;
 use core\component_manager\lib\CM;
 use core\component_manager\lib\CmService;
@@ -11,6 +12,8 @@ use core\component_manager\lib\Mod;
 use core\Controller;
 
 use core\Debug;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use workspace\classes\Button;
 use workspace\classes\Modules;
 use workspace\classes\ModulesSearchRequest;
@@ -21,21 +24,19 @@ use workspace\widgets\Language;
 
 use Exception;
 use Illuminate\Database\Capsule\Manager as DB;
+use ZipArchive;
 
 
 class MainController extends Controller
 {
     public function actionIndex()
     {
-        $this->view->setTitle('Main Page');
-        $this->view->addMeta('keywords', 'главная', ['some' => 'text']);
+        $mod = new Mod();
+        $this->view->setTitle('CG Framework');
 
         $buttons[0] = '<a href="/codegen" class="btn btn-dark">CodeGen</a>';
-
         $buttons[1] = '<a href="/modules" class="btn btn-dark">Модули</a>';
-
-        $mod = new Mod();
-        if($mod->getModInfo('adminlte')['status'] == 'active')
+        if ($mod->getModInfo('adminlte')['status'] == 'active')
             $buttons[2] = '<a href="/admin/adminlte" class="btn btn-dark">AdminLTE</a>';
 
         return $this->render('main/index.tpl', ['h1' => App::$config['app_name'], 'buttons' => $buttons]);
@@ -48,12 +49,11 @@ class MainController extends Controller
             . App::$config['db']['db_name'] . "'";
         $tables = DB::select($sql);
 
-        if(isset($_POST['table']) && isset($_POST['slug']) && isset($_POST['module']) && isset($_POST['model'])) {
+        if (isset($_POST['table']) && isset($_POST['slug']) && isset($_POST['module']) && isset($_POST['model'])) {
             $cg = new CodeGeneratorController();
             $info = $cg->genModule($_POST['table'], $_POST['slug'], $_POST['module'], $_POST['model']);
 
-            $manifest = file_get_contents('workspace/modules/' . $_POST['module'] . '/manifest.json');
-            $manifest = json_decode($manifest);
+            $manifest = json_decode(file_get_contents('workspace/modules/' . $_POST['module'] . '/manifest.json'));
             $data = ['version' => $manifest->version, 'status' => 'inactive', 'type' => 'module'];
             $cm = new CmService();
             $cm->mod->save($_POST['module'], $data);
@@ -93,12 +93,11 @@ class MainController extends Controller
         $this->view->setTitle('Sign In');
 
         $mod = new Mod();
-        if($mod->getModInfo('users')['status'] != 'active') {
-            $message =  'Чтобы сделать доступной регистрацию и авторизацию установите и активируйте модуль пользователей.';
+        if ($mod->getModInfo('users')['status'] != 'active') {
+            $message = 'Чтобы сделать доступной регистрацию и авторизацию установите и активируйте модуль пользователей.';
 
             return $this->render('main/info.tpl', ['message' => $message]);
-        }
-        else {
+        } else {
             $request = new LoginRequest();
             if ($request->isPost() && $request->validate()) {
                 $model = User::where('username', $request->username)->first();
@@ -124,6 +123,9 @@ class MainController extends Controller
     public function actionModules()
     {
         App::$header->add('Access-Control-Allow-Origin', '*');
+        App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);
+        App::$breadcrumbs->addItem(['text' => 'Modules', 'url' => 'modules']);
+
         $content = file_get_contents('https://rep.craft-group.xyz/handler.php');
         $data = json_decode($content);
 
@@ -135,10 +137,11 @@ class MainController extends Controller
         foreach ($data as $value)
             if ($value->type == 'module') {
                 $module = new Modules();
-                $module->init($value->name, $value->version, $value->description, $mod->getModInfo($value->name)['status'], '');
+                $module->init($value->name, $value->version, $value->description,
+                    $mod->getModInfo($value->name)['status'], '');
                 array_push($model, $module);
 
-                if(in_array($value->name, $local_modules))
+                if (in_array($value->name, $local_modules))
                     unset($local_modules[array_search($value->name, $local_modules)]);
             }
 
@@ -146,73 +149,13 @@ class MainController extends Controller
             $module = new Modules();
             $manifest = file_get_contents('workspace/modules/' . $local_module . '/manifest.json');
             $manifest = json_decode($manifest);
-            $module->init($local_module, $manifest->version, $manifest->description, $mod->getModInfo($local_module)['status'], 'exists only locally');
+            $module->init($local_module, $manifest->version, $manifest->description,
+                $mod->getModInfo($local_module)['status'], 'exists only locally');
             array_push($model, $module);
         }
-
         $model = Modules::search($request, $model);
 
-        $options = [
-            'serial' => '#',
-            'fields' => [
-                'location' => [
-                    'label' => '',
-                    'value' => function ($model) {
-                        $button = new Button();
-
-                        if ($model->localStatus == '')
-                            return $button->button('', 'Модуль находится в облаке', $model->name, $model->name, 'cloud');
-                        else
-                            return $button->button('', 'Модуль существует только локально', $model->name, $model->name, 'hdd');
-                    },
-                    'showFilter' => false,
-                ],
-                'action' => [
-                    'label' => '',
-                    'value' => function ($model) {
-                        $button = new Button();
-
-                        if ($model->status == 'active')
-                            return $button->button('module-set-inactive', 'Отключить', $model->name, $model->name, 'toggle-on');
-                        elseif ($model->status == 'inactive')
-                            return $button->button('module-set-active', 'Включить', $model->name, $model->name, 'toggle-off');
-                        elseif ($model->localStatus == 'exists only locally')
-                            return '<div class="fixed-width"></div>';
-                        else
-                            return $button->button('module-download', 'Скачать', $model->name, $model->name, 'cloud-download-alt');
-                    },
-                    'showFilter' => false,
-                ],
-                'delete' => [
-                    'label' => '',
-                    'value' => function ($model) {
-                        $mod = new Mod();
-                        $button = new Button();
-
-                        if ($mod->getModInfo($model->name)['status'] == 'inactive')
-                            return $button->button('fixed-width module-delete', 'Удалить', $model->name, $model->name, 'trash');
-                        else
-                            return '<div class="fixed-width"></div>';
-                    },
-                    'showFilter' => false,
-                ],
-                'status' => [
-                    'label' => 'Статус',
-                    'value' => function ($model) {
-                        return '<div class="fixed-width">' . $model->status . '</div>';
-                    }
-                ],
-                'name' => 'Название',
-                'description' => 'Описание',
-                'version' => 'Версия'
-            ],
-            'baseUri' => 'modules',
-        ];
-
-        App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);
-        App::$breadcrumbs->addItem(['text' => 'Modules', 'url' => 'modules']);
-
-        return $this->render('main/modules.tpl', ['model' => $model, 'options' => $options]);
+        return $this->render('main/modules.tpl', ['model' => $model, 'options' => $this->setModulesOptions()]);
     }
 
     public function actionModuleDownload()
@@ -250,7 +193,8 @@ class MainController extends Controller
         try {
             $cm = new CM();
             $mod = new Mod();
-            $mod->deleteDirectory(ROOT_DIR . Config::get()->byKey($mod->getModInfo($_POST['slug'])['type'] . 'Path') . $_POST['slug']);
+            $mod->deleteDirectory(ROOT_DIR . Config::get()->byKey($mod->getModInfo($_POST['slug'])['type']
+                    . 'Path') . $_POST['slug']);
             $cm->modDeleteFromJson($_POST['slug']);
         } catch (Exception $e) {
             echo $e;
@@ -277,5 +221,176 @@ class MainController extends Controller
             $cm->mod->save($module, $data);
         }
         $this->redirect('modules');
+    }
+
+    public function setModulesOptions()
+    {
+        return [
+            'serial' => '#',
+            'fields' => [
+                'location' => [
+                    'label' => '',
+                    'showFilter' => false,
+                    'value' => function ($model) {
+                        $button = new Button();
+
+                        return ($model->localStatus == '') ?
+                            $button->button('', 'Модуль находится в облаке', $model->name, $model->name, 'cloud') :
+                            $button->button('', 'Модуль существует только локально', $model->name, $model->name, 'hdd');
+                    },
+                ],
+                'functional' => [
+                    'label' => '',
+                    'showFilter' => false,
+                    'value' => function ($model) {
+                        $mod = new Mod();
+                        $button = new Button();
+
+                        return $button->button('module-download', 'Скачать/Переустановить', $model->name, $model->name, 'cloud-download-alt')
+                            . $button->button('fixed-width module-update', 'Обновить', $model->name, $model->name, 'redo')
+                            . $button->button('fixed-width module-upload', 'Загрузить в облако', $model->name, $model->name, 'cloud-upload-alt');
+                    }
+                ],
+                'action' => [
+                    'label' => '',
+                    'showFilter' => false,
+                    'value' => function ($model) {
+                        $button = new Button();
+
+                        if ($model->status == 'active')
+                            return $button->button('module-set-inactive', 'Отключить', $model->name, $model->name, 'toggle-on');
+                        elseif ($model->status == 'inactive')
+                            return $button->button('module-set-active', 'Включить', $model->name, $model->name, 'toggle-off');
+                        else
+                            return '<div class="fixed-width"></div>';
+                    },
+                ],
+                'delete' => [
+                    'label' => '',
+                    'showFilter' => false,
+                    'value' => function ($model) {
+                        $mod = new Mod();
+                        $button = new Button();
+
+                        return ($mod->getModInfo($model->name)['status'] == 'inactive') ?
+                            $button->button('fixed-width module-delete', 'Удалить', $model->name, $model->name, 'trash') :
+                            '<div class="fixed-width"></div>';
+                    },
+                ],
+                'status' => [
+                    'label' => 'Статус',
+                    'value' => function ($model) {
+                        return '<div class="fixed-width">' . $model->status . '</div>';
+                    }
+                ],
+                'name' => 'Название',
+                'description' => 'Описание',
+                'version' => 'Версия'
+            ],
+            'baseUri' => 'modules',
+        ];
+    }
+
+    public function CGCloud()
+    {
+        $this->zip('workspace/modules/' . $_POST['module'] . '/', 'temp.zip');
+
+        $res = '';
+        switch ($_POST['code']) {
+            case 0:
+                $res = ($this->send_to_cloud($_POST['module'])) ?
+                    'Модуль успешно обновлен' :
+                    'При обновлении модуля возникли ошибки';
+                break;
+            case 1:
+                $res = ($this->send_to_cloud($_POST['module'])) ?
+                    'Модуль успешно загружен' :
+                    'При загрузке модуля возникли ошибки';
+                break;
+            case 2:
+                $res = 'Данный пользователь не сущесвует';
+                break;
+            case 3:
+                $res = 'Неправильно введен пароль';
+                break;
+            case 4:
+                $res = 'Модуль с таким именем уже есть в облаке и вы не являетесь его владельцем.';
+                break;
+        }
+
+        //unlink('temp.zip');
+
+        return $res;
+    }
+
+    public function send_to_cloud($data)
+    {
+        App::$header->add('Access-Control-Allow-Origin', '*');
+
+        $postdata = http_build_query([
+            'module' => $data,
+        ]);
+
+        $opts = array('http' => [
+            'method' => 'POST',
+            'header' => 'Content-Type: application/x-www-form-urlencoded',
+            'content' => $postdata
+        ]);
+
+        $context = stream_context_create($opts);
+
+        return file_get_contents('http://rep.loc/save', false, $context);
+    }
+
+    public function zip($source, $destination)
+    {
+        if (!extension_loaded('zip') || !file_exists($source))
+            return -1;
+
+        $zip = new ZipArchive();
+        if (!$zip->open($destination, ZIPARCHIVE::CREATE))
+            return -2;
+
+        $source = str_replace('\\', '/', realpath($source));
+
+        if (is_dir($source) === true) {
+            $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source),
+                RecursiveIteratorIterator::SELF_FIRST);
+
+            foreach ($files as $file) {
+                $file = str_replace('\\', '/', $file);
+
+                if (in_array(substr($file, strrpos($file, '/') + 1), array('.', '..')))
+                    continue;
+
+                $file = realpath($file);
+                $file = str_replace('\\', '/', $file);
+
+                if (is_dir($file) === true)
+                    $zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
+                elseif (is_file($file) === true)
+                    $zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
+            }
+        } elseif (is_file($source) === true)
+            $zip->addFromString(basename($source), file_get_contents($source));
+
+        return $zip->close();
+    }
+
+    public function authentication()
+    {
+        if(!isset($_SERVER['PHP_AUTH_USER']) && !isset($_SERVER['PHP_AUTH_PW'])) {
+            header('HTTP/1.1 401 Authorization Required');
+            header('WWW-Authenticate: Basic realm="My Realm"');
+            exit;
+        } else {
+            $auth = new Authorization();
+
+            if (!json_decode($auth->getBasicAuthData())) {
+                header('HTTP/1.1 401 Authorization Required');
+                header('WWW-Authenticate: Basic realm="Access denied"');
+                exit;
+            }
+        }
     }
 }

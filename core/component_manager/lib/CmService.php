@@ -182,6 +182,11 @@ class CmService
             return false;
     }
 
+    public function uploadToCloud(string $slug)
+    {
+
+    }
+
     /**
      * @param string $slug
      * @return bool

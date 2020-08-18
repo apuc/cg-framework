@@ -9,6 +9,7 @@
 
 {capture name=js_body}
     <script src="/resources/js/jquery/jquery.min.js"></script>
+    <script src="/resources/js/bootstrap.js"></script>
     <script src="/resources/js/main.js"></script>
 {/capture}
 
