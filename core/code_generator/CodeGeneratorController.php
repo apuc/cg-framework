@@ -4,7 +4,7 @@
 namespace core\code_generator;
 
 
-use core\Debug;
+use core\App;
 use Illuminate\Database\Capsule\Manager as DB;
 
 
@@ -232,5 +232,13 @@ class CodeGeneratorController
         } else {
             return '<span class="gen_existed">' . $filePath . '</span> already exist<br>';
         }
+    }
+
+    public function getTables() : array
+    {
+        $sql = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = '"
+            . App::$config['db']['db_name'] . "'";
+
+        return DB::select($sql);
     }
 }

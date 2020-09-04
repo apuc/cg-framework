@@ -9,11 +9,13 @@ interface Rep
 
     public function getComponent();
 
-    public function getManifest(string $slug):?array;
+    public function getManifest(string $slug): ?array;
 
     public function raw();
 
     public function asArray();
 
-    public function download(string $url, string $path):bool;
+    public function download(string $url, string $path): bool;
+
+    public function upload(string $url, string $path): bool;
 }

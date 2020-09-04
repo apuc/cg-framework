@@ -1,6 +1,6 @@
 <?php
 
-namespace workspace\classes;
+namespace core\modules;
 
 
 use Illuminate\Support\Collection;
@@ -31,6 +31,7 @@ class Modules
 
     /**
      * @param ModulesSearchRequest $request
+     * @param array $modules
      * @return Collection
      */
     public static function search(ModulesSearchRequest $request, array $modules)
@@ -38,29 +39,42 @@ class Modules
         $all = array();
         $hasRequest = false;
 
-        if ($request->name) {
+        if (isset($request->data['name']) && $request->data['name']) {
             $hasRequest = true;
             foreach ($modules as $value)
-                if (stristr($value->name, $request->name))
-                    array_push($all, $value);
+                foreach ($value as $item)
+                    if (stristr($item->name, $request->data['name'])) {
+                        array_push($all, $value);
+                        break;
+                    }
         }
-        if ($request->version) {
+        if (isset($request->data['version']) && $request->data['version']) {
             $hasRequest = true;
             foreach ($modules as $value)
-                if (stristr($value->version, $request->version))
-                    array_push($all, $value);
+                foreach ($value as $item)
+                    if (stristr($item->version, $request->data['version'])) {
+                        array_push($all, $value);
+                        break;
+                    }
+
         }
-        if ($request->description) {
+        if (isset($request->data['description']) && $request->data['description']) {
             $hasRequest = true;
             foreach ($modules as $value)
-                if (stristr($value->description, $request->description))
-                    array_push($all, $value);
+                foreach ($value as $item)
+                    if (stristr($item->description, $request->data['description'])) {
+                        array_push($all, $value);
+                        break;
+                    }
         }
-        if ($request->status) {
+        if (isset($request->data['status']) && $request->data['status']) {
             $hasRequest = true;
             foreach ($modules as $value)
-                if (stristr($value->status, $request->status))
-                    array_push($all, $value);
+                foreach ($value as $item)
+                    if (stristr($item->status, $request->data['status'])) {
+                        array_push($all, $value);
+                        break;
+                    }
         }
 
         if(empty($all) && !$hasRequest)

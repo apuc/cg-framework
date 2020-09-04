@@ -1,8 +1,5 @@
 <?php
 
-namespace workspace\modules\settings;
-
-
 namespace core;
 
 /*
@@ -40,6 +37,19 @@ class GridView extends Widget
             'icon' => '<i class="nav-icon fas fa-trash"></i>', 'url' => '/delete/{id}'],
     ];
 
+    public function __construct($options = [])
+    {
+        parent::__construct();
+
+        $this->model = $options['data'];
+        $this->options = array_merge($this->defaultOptions, $options);
+        $this->pagination = Pagination::widget();
+        $this->pagination->setParams($this->options['baseUri'], count($this->model),
+            isset($this->options['pagination']) ? $this->options['pagination'] : []);
+
+        return $this;
+    }
+
     public function run()
     {
         $this->view->registerJs('/resources/js/gridView.js', [], true);
@@ -60,6 +70,9 @@ class GridView extends Widget
 
     public function getTable()
     {
+        if (isset($this->options['actionBtn']) && $this->options['actionBtn'] == 'del_all')
+            $this->deleteActionButtons();
+
         $table = '';
         $table .= $this->setTableSettings($table, 'table', 'table_class', 'table table-striped');
         $table .= $this->setTableSettings($table, 'thead', 'thead_class', 'thead-dark');
@@ -120,6 +133,15 @@ class GridView extends Widget
     public function addActionBtn($data)
     {
         $this->actionsBtn = array_merge($this->actionsBtn, $data);
+
+        return $this;
+    }
+
+    public function deleteActionButtons()
+    {
+        unset($this->actionsBtn['view']);
+        unset($this->actionsBtn['edit']);
+        unset($this->actionsBtn['delete']);
 
         return $this;
     }

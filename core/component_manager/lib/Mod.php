@@ -38,6 +38,18 @@ class Mod
 
     /**
      * @param string $slug
+     * @return array
+     */
+    public function getRelations(string $slug) : array
+    {
+        $rel = new RelationsHandler();
+        $rel->init($slug);
+
+        return $rel->arr();
+    }
+
+    /**
+     * @param string $slug
      * @return mixed
      */
     public function getVersion(string $slug)
@@ -75,6 +87,19 @@ class Mod
             $mods = '{"name":""}';
 
         return $mod = json_decode($mods, true);
+    }
+
+    /**
+     * @param $path
+     * @return array
+     */
+    public function getLocModByFolder($path) :array
+    {
+        $dirs = scandir($path);
+        unset($dirs[0]);
+        unset($dirs[1]);
+
+        return $dirs;
     }
 
     /**
@@ -168,12 +193,12 @@ class Mod
 
     /**
      * @param string $slug
-     * @param array $data
+     * @param array $status
      * @return bool
      */
-    public function changeStatus(string $slug, array $data = []): bool
+    public function changeStatus(string $slug, array $status = []): bool
     {
-        return $this->save($slug, $data);
+        return $this->save($slug, $status);
     }
 
     /**

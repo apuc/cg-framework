@@ -19,7 +19,7 @@ trait Unpack
        if($zip->open(ROOT_DIR  . $url) === TRUE) {
            $zip->extractTo(ROOT_DIR . $path);
            $zip->close();
-           chmod(ROOT_DIR . $path . $slug, 0775);
+           //chmod(ROOT_DIR . $path . $slug, 0775);
            return true;
        } else {
            return false;

@@ -77,12 +77,31 @@ class CM
     }
 
     /**
-     * @param string $slug
+     * @param string $data
      * @return string
      */
-    public function download(string $slug)
+    public function download(string $data)
     {
-        return $this->service->download($slug);
+        return $this->service->download($data);
+    }
+
+    /**
+     * @param string $data
+     * @return string
+     */
+    public function update(string $data)
+    {
+        return $this->service->update($data);
+    }
+
+
+    /**
+     * @param string $data
+     * @return string
+     */
+    public function upload(string $data)
+    {
+        return $this->service->upload($data);
     }
 
     /**
@@ -105,21 +124,21 @@ class CM
     }
 
     /**
-     * @param string $slug
+     * @param string $data
      * @return bool
      */
-    public function modChangeStatusToActive(string $slug)
+    public function modChangeStatusToActive(string $data)
     {
-        return $this->service->modChangeStatusToActive($slug);
+        return $this->service->modChangeStatusToActive($data);
     }
 
     /**
-     * @param string $slug
+     * @param string $data
      * @return bool
      */
-    public function modChangeStatusToInactive(string $slug)
+    public function modChangeStatusToInactive(string $data)
     {
-        return $this->service->modChangeStatusToInactive($slug);
+        return $this->service->modChangeStatusToInactive($data);
     }
 
     /**

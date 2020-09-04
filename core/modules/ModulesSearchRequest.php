@@ -1,7 +1,7 @@
 <?php
 
 
-namespace workspace\classes;
+namespace core\modules;
 
 
 use core\RequestSearch;

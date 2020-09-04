@@ -7,27 +7,20 @@ namespace core;
 class Authorization
 {
     /**
+     * @param $url
+     * @param $username
+     * @param $password
      * @return string
      */
-    public function getBasicAuthData() : string
+    public function basicAuth($url, $username, $password) : string
     {
-        $opts = ['http' => ['header'  => 'Authorization: ' . apache_request_headers()['Authorization']]];
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: ' .
+            base64_encode('Basic ' . $username . ':' . $password)]);
+        $res = curl_exec($ch);
+        curl_close($ch);
 
-        $context  = stream_context_create($opts);
-
-        return file_get_contents("http://rep.loc/authentication", false, $context);
-    }
-
-    /**
-     * @param $auth
-     * @return array
-     */
-    public function parseBasicAuthData($auth) : array
-    {
-        $data = base64_decode(str_replace('Basic ', '', $auth));
-        $username = strstr($data, ':', true);
-        $password = str_replace($username . ':', '', $data);
-
-        return ['username' => $username, 'password' => $password];
+        return $res;
     }
 }
