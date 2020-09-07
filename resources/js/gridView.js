@@ -10,8 +10,8 @@ jQuery(document).ready(function ($) {
             data: {
                 id: id
             },
-            success: function () {
-                window.location.reload();
+            success: function (res) {
+                console.log(res);
             },
             error: function (res) {
                 console.log(res)

@@ -11,7 +11,6 @@ class UsersController  extends Controller
 {
     protected function init()
     {
-        if(!isset($_SESSION['role']) || $_SESSION['role'] != 1) $this->redirect('');
         $this->viewPath = '/modules/users/views/';
         $this->layoutPath = App::$config['adminLayoutPath'];
         App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);
@@ -23,20 +22,8 @@ class UsersController  extends Controller
         $request = new UsersSearchRequest();
         $model = User::search($request);
 
-        $options = [
-            'serial' => '#',
-            'fields' => [
-                'username' => 'Логин',
-                'email' => 'Email',
-                'role' => 'Роль',
-            ],
-            'baseUri' => 'users',
-            'pagination' => [
-                'per_page' => 25,
-            ],
-        ];
         return $this->render('users/index.tpl',
-            ['model' => $model, 'options' => $options, 'h1' => 'Пользователи']);
+            ['options' => $this->setOptions($model), 'h1' => 'Пользователи']);
     }
 
     public function actionView($id)
@@ -88,5 +75,19 @@ class UsersController  extends Controller
     public function actionDelete($id)
     {
         User::where('id', $_POST['id'])->delete();
+    }
+
+    public function setOptions($data)
+    {
+        return [
+            'data' => $data,
+            'serial' => '#',
+            'fields' => [
+                'username' => 'Логин',
+                'email' => 'Email',
+                'role' => 'Роль',
+            ],
+            'baseUri' => 'users',
+        ];
     }
 }
