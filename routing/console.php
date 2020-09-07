@@ -11,3 +11,5 @@ App::$collector->console('migration/rollback', ['workspace\console\controllers\M
 App::$collector->console('mod/list', ['workspace\console\controllers\ModController', 'actionList']);
 
 App::$collector->console('cm/download', ['workspace\console\controllers\CmController', 'actionDownload']);
+
+App::$collector->console('db/init', ['workspace\console\controllers\DbController', 'actionInit']);

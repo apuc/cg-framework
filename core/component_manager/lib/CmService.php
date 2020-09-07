@@ -174,7 +174,7 @@ class CmService
             $version = $data->version;
             $filename = "$slug.zip";
 
-            $this->rep->download("http://rep.loc/cloud/modules/$slug/$version/$filename", "/$filename");
+            $this->rep->download("https://rep.craft-group.xyz/cloud/modules/$slug/$version/$filename", "/$filename");
             $this->unpack("/$filename", $path, $slug);
             unlink($filename);
 
@@ -197,7 +197,7 @@ class CmService
             $data = json_decode($data);
             $slug = $data->name;
 
-            $this->rep->download("http://rep.loc/cloud/modules/$slug/$data->version/$slug.zip", "/$slug.zip");
+            $this->rep->download("https://rep.craft-group.xyz/cloud/modules/$slug/$data->version/$slug.zip", "/$slug.zip");
             $this->unpack("/$slug.zip", "/workspace/modules/$slug/temp", $slug);
 
             HZip::zipDir("workspace/modules/$slug/temp/$slug/core","core.zip");
@@ -227,7 +227,7 @@ class CmService
 
         $file = "http://cg.loc/$slug.zip";
 
-        $request = curl_init('http://rep.loc/save');
+        $request = curl_init('https://rep.craft-group.xyz/save');
         curl_setopt($request, CURLOPT_POST, true);
         curl_setopt($request, CURLOPT_POSTFIELDS, ['file' => $file, 'slug' => $slug, 'version' => $version]);
         curl_setopt($request, CURLOPT_RETURNTRANSFER, true);

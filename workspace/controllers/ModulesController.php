@@ -13,6 +13,19 @@ use core\modules\ModulesSearchRequest;
 
 class ModulesController extends Controller
 {
+    public function actionModules()
+    {
+        $this->view->setTitle('Modules');
+
+        $modules = new ModulesHandler();
+        $request = new ModulesSearchRequest();
+
+        $model = $modules->getAllModules();
+        $model = Modules::search($request, $model);
+
+        return $this->render('main/modules.tpl', ['options' => $this->setModulesOptions($model)]);
+    }
+
     public function actionModuleUpload()
     {
         $module = new ModulesHandler();
@@ -110,19 +123,6 @@ class ModulesController extends Controller
         $mh = new ModulesHandler();
 
         return GridView::widget($this->setModulesOptions($mh->versionChanged()))->run();
-    }
-
-    public function actionModules()
-    {
-        $this->view->setTitle('Modules');
-
-        $modules = new ModulesHandler();
-        $request = new ModulesSearchRequest();
-
-        $model = $modules->getAllModules();
-        $model = Modules::search($request, $model);
-
-        return $this->render('main/modules.tpl', ['options' => $this->setModulesOptions($model)]);
     }
 
     public function setModulesOptions($data)

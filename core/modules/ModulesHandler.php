@@ -17,7 +17,7 @@ class ModulesHandler
     {
         $mod = new Mod();
         $local_modules = $mod->getLocModByFolder('workspace/modules/');
-        $server_modules = json_decode(file_get_contents('http://rep.loc/server-modules'));
+        $server_modules = json_decode(file_get_contents('https://rep.craft-group.xyz/server-modules'));
 
         for ($i = 0; $i < count($server_modules); $i++)
             for ($j = 0; $j < count($server_modules[$i]); $j++)
@@ -69,7 +69,7 @@ class ModulesHandler
             $cm->download($_POST['data']);
 
             $data = json_decode($_POST['data']);
-            $rel_arr = $this->post_file_get_contents('http://rep.loc/relations',
+            $rel_arr = $this->post_file_get_contents('https://rep.craft-group.xyz/relations',
                 ['slug' => $data->name, 'version' => $data->version]);
 
             foreach ($rel_arr as $value)
