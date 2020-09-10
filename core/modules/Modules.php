@@ -12,6 +12,10 @@ class Modules
     public $description;
     public $status;
     public $localStatus;
+    public $type;
+    public $created_at;
+    public $updated_at;
+    public $relations;
 
     /**
      * @param string $name
@@ -19,14 +23,16 @@ class Modules
      * @param string $description
      * @param string $status
      * @param string $localStatus
+     * @param $relations
      */
-    public function init($name, $version, $description, $status, $localStatus)
+    public function init(string $name, string $version, string $description, string $status, string $localStatus, $relations)
     {
         $this->name = $name;
         $this->version = $version;
         $this->description = $description;
         $this->status = $status;
         $this->localStatus = $localStatus;
+        $this->relations = $relations;
     }
 
     /**

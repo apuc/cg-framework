@@ -14,15 +14,9 @@ jQuery(document).ready(function ($) {
             type: type,
             data: {data: data, changed: changed},
             success: function (res) {
-                let massage = '<div class="alert alert-success alert-dismissible fade show" role="alert">' +
-                    ' Дейтвие выполнено успешно' +
-                    ' <button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
-                    '   <span aria-hidden="true">&times;</span>' +
-                    ' </button>' +
-                    '</div>';
                 if(action === "module-upload" || action === "module-update")
-                    $('#' + target).html(massage + res);
-                else $('#' + target).html(res);
+                    alert('Дейтвие выполнено успешно');
+                $('#' + target).html(res);
             },
             error: function (res) {
                 console.log(res);

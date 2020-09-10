@@ -3,7 +3,7 @@
   "version": "1.0",
   "type": "module",
   "class": "workspace\\modules\\users\\Users",
-  "description": "users module",
+  "description": "users module updated at 08.09.20 15:39",
   "configFile": "config/users.php",
   "routFile": "routing/rout.php",
   "migrationPath": "console/migrations",

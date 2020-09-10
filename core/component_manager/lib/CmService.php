@@ -3,6 +3,7 @@
 namespace core\component_manager\lib;
 
 
+use core\App;
 use core\component_manager\interfaces\Rep;
 use core\component_manager\traits\Delete;
 use core\component_manager\traits\Unpack;
@@ -174,9 +175,10 @@ class CmService
             $version = $data->version;
             $filename = "$slug.zip";
 
-            $this->rep->download("https://rep.craft-group.xyz/cloud/modules/$slug/$version/$filename", "/$filename");
+            $this->rep->download(App::$config['component_manager']['url'] . "/cloud/modules/$slug/$version/$filename", "/$filename");
+
             $this->unpack("/$filename", $path, $slug);
-            unlink($filename);
+            //unlink($filename);
 
             $this->mod->save($slug, ['version' => $version, 'status' => 'active', 'type' => 'module']);
 
@@ -197,7 +199,7 @@ class CmService
             $data = json_decode($data);
             $slug = $data->name;
 
-            $this->rep->download("https://rep.craft-group.xyz/cloud/modules/$slug/$data->version/$slug.zip", "/$slug.zip");
+            $this->rep->download(App::$config['component_manager']['url'] . "/cloud/modules/$slug/$data->version/$slug.zip", "/$slug.zip");
             $this->unpack("/$slug.zip", "/workspace/modules/$slug/temp", $slug);
 
             HZip::zipDir("workspace/modules/$slug/temp/$slug/core","core.zip");
@@ -216,6 +218,7 @@ class CmService
     /**
      * @param string $data
      * @return bool
+     * @throws Exception
      */
     public function upload(string $data): bool
     {
@@ -225,14 +228,16 @@ class CmService
 
         HZip::zipDir("workspace/modules/$slug", "$slug.zip");
 
-        $file = "http://cg.loc/$slug.zip";
-
-        $request = curl_init('https://rep.craft-group.xyz/save');
+        $request = curl_init(App::$config['component_manager']['url'] . '/save');
         curl_setopt($request, CURLOPT_POST, true);
-        curl_setopt($request, CURLOPT_POSTFIELDS, ['file' => $file, 'slug' => $slug, 'version' => $version]);
+
+        $file = file_get_contents("$slug.zip");
+
+        curl_setopt($request, CURLOPT_POSTFIELDS, ['file' => base64_encode($file), 'slug' => $slug, 'version' => $version]);
         curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
         $result = curl_exec($request);
         curl_close($request);
+
         unlink("$slug.zip");
 
         return $result;

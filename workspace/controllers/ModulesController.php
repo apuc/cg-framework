@@ -28,84 +28,42 @@ class ModulesController extends Controller
 
     public function actionModuleUpload()
     {
-        $module = new ModulesHandler();
-        $module->upload();
-        $module->clearRequest();
-
-        $request = new ModulesSearchRequest();
-
-        $model = $module->getAllModules();
-        $model = Modules::search($request, $model);
+        $model = ModulesHandler::upload();
 
         return GridView::widget($this->setModulesOptions($model))->run();
     }
 
     public function actionModuleDownload()
     {
-        $module = new ModulesHandler();
-        $module->download();
-        $module->clearRequest();
-
-        $request = new ModulesSearchRequest();
-
-        $model = $module->getAllModules();
-        $model = Modules::search($request, $model);
+        $model = ModulesHandler::download();
 
         return GridView::widget($this->setModulesOptions($model))->run();
     }
 
     public function actionModuleUpdate()
     {
-        $module = new ModulesHandler();
-        $module->update();
-        $module->clearRequest();
-
-        $request = new ModulesSearchRequest();
-
-        $model = $module->getAllModules();
-        $model = Modules::search($request, $model);
+        $model = ModulesHandler::update();
 
         return GridView::widget($this->setModulesOptions($model))->run();
     }
 
     public function actionSetActive()
     {
-        $module = new ModulesHandler();
-        $module->active();
-        $module->clearRequest();
-
-        $request = new ModulesSearchRequest();
-
-        $model = $module->getAllModules();
-        $model = Modules::search($request, $model);
+        $model = ModulesHandler::active();
 
         return GridView::widget($this->setModulesOptions($model))->run();
     }
 
     public function actionSetInactive()
     {
-        $module = new ModulesHandler();
-        $module->inactive();
-        $module->clearRequest();
-
-        $request = new ModulesSearchRequest();
-
-        $model = $module->getAllModules();
-        $model = Modules::search($request, $model);
+        $model = ModulesHandler::inactive();
 
         return GridView::widget($this->setModulesOptions($model))->run();
     }
 
     public function actionModuleDelete()
     {
-        $module = new ModulesHandler();
-        $module->delete();
-        $module->clearRequest();
-
-        $request = new ModulesSearchRequest();
-
-        $model = $module->getAllModules();
-        $model = Modules::search($request, $model);
+        $model = ModulesHandler::delete();
 
         return GridView::widget($this->setModulesOptions($model))->run();
     }
@@ -226,9 +184,24 @@ class ModulesController extends Controller
                         return GridViewHelper::select($model, '__cjax', 'data-name="'
                             . $model[0]->name . '" data-action="change-version" data-target="cjax"');
                     }
-                ]
+                ],
+                'linked' => [
+                    'label' => 'Связанные модули',
+                    'value' => function($model) {
+                        $relations = '';
+                        if(isset($model[0]->relations) && $model[0]->relations)
+                            foreach ($model[0]->relations as $relation)
+                                $relations .= "$relation->name - $relation->version <br>";
+
+                        return GridViewHelper::div($relations);
+                    },
+                    'showFilter' => false,
+                ],
             ],
             'baseUri' => 'modules',
+            'pagination' => [
+                'per_page' => 10
+            ]
         ];
     }
 }

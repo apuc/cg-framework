@@ -1,0 +1,10 @@
+{
+  "name": "feature",
+  "version": "0.1",
+  "type": "module",
+  "class": "workspace\\modules\\feature\\Feature",
+  "description": "feature module updated at 08.09.20",
+  "configFile": "config/feature.php",
+  "routFile": "routing/rout.php",
+  "migrationPath": "console/migrations"
+}
