@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: kirill
- * Date: 15.06.19
- * Time: 0:00
- */
 
 return [
     'app_name' => 'CG Framework',
@@ -15,8 +9,11 @@ return [
         'url' => 'https://rep.craft-group.xyz',
         'modulePath' => '/workspace/modules/',
         'themePath' => '/workspace/modules/themes/themes/',
-    ]
+    ],
+    'codegen' => 'on',
+    'modules_store' => 'on'
 ];
+
 /* Пример настройки локальной базы
 return [
     'db' => [

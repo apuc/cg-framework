@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: kirill
- * Date: 27.02.20
- * Time: 23:52
- */
+
 
 namespace workspace\console\controllers;
 

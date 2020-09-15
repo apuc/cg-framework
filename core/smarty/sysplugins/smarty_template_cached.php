@@ -1,12 +1,5 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Uwe Tews
- * Date: 04.12.2014
- * Time: 06:08
- */
-
-/**
  * Smarty Resource Data Object
  * Cache Data Container for Template Files
  *

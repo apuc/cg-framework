@@ -24,9 +24,7 @@ class {dummyController} extends Controller
         $request = new {dummySearchRequest}();
         $model = {dummyModel}::search($request);
 
-        $options = $this->setOptions();
-
-        return $this->render('{dummyModule}/index.tpl', ['h1' => '{dummyModel}', 'model' => $model, 'options' => $options]);
+        return $this->render('{dummyModule}/index.tpl', ['h1' => '{dummyModel}', 'options' => $this->setOptions($model)]);
     }
 
     public function actionView($id)
@@ -66,9 +64,10 @@ class {dummyController} extends Controller
         {dummyModel}::where('id', $_POST['id'])->delete();
     }
 
-    public function setOptions()
+    public function setOptions($data)
     {
         return [
+            'data' => $data,
             'serial' => '#',
             'fields' => [
 {dummyOptionFields}

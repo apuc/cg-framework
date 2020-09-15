@@ -8,7 +8,6 @@ use core\App;
 use core\component_manager\lib\CM;
 use core\component_manager\lib\CmService;
 use core\component_manager\lib\Mod;
-use core\Debug;
 use Exception;
 
 class ModulesHandler
@@ -188,13 +187,15 @@ class ModulesHandler
     {
         $mod = new Mod();
         $local_modules = $mod->getLocModByFolder('workspace/modules/');
-        $server_modules = json_decode(file_get_contents(App::$config['component_manager']['url'] . '/server-modules'));
+        $server_modules = json_decode(file_get_contents(
+            App::$config['component_manager']['url'] . '/server-modules'));
 
         for ($i = 0; $i < count($server_modules); $i++)
             for ($j = 0; $j < count($server_modules[$i]); $j++)
                 foreach ($local_modules as $key => $local_module) {
-                    $manifest = json_decode(file_get_contents('workspace/modules/' . $local_module . '/manifest.json'));
-                    if ($manifest->name == $server_modules[$i][$j]->name && $manifest->version == $server_modules[$i][$j]->version) {
+                    $manifest = json_decode(file_get_contents("workspace/modules/$local_module/manifest.json"));
+                    if ($manifest->name == $server_modules[$i][$j]->name
+                        && $manifest->version == $server_modules[$i][$j]->version) {
                         $module = new Modules();
                         $module->init($manifest->name, $manifest->version, $manifest->description,
                             $mod->getModInfo($local_module)['status'], 'local',
@@ -205,9 +206,10 @@ class ModulesHandler
                 }
         if (isset($local_modules))
             foreach ($local_modules as $local_module) {
-                $manifest = json_decode(file_get_contents('workspace/modules/' . $local_module . '/manifest.json'));
+                $manifest = json_decode(file_get_contents("workspace/modules/$local_module/manifest.json"));
                 $module = new Modules();
-                $module->init($manifest->name, $manifest->version, $manifest->description, $mod->getModInfo($local_module)['status'], 'local', $manifest->relations);
+                $module->init($manifest->name, $manifest->version, $manifest->description,
+                    $mod->getModInfo($local_module)['status'], 'local', $manifest->relations);
                 $mod_arr = [];
                 array_push($mod_arr, $module);
                 array_push($server_modules, $mod_arr);
@@ -215,5 +217,12 @@ class ModulesHandler
         file_put_contents('modules.json', json_encode($server_modules));
 
         return $server_modules;
+    }
+
+    public function addExtToComposer($extension, $version)
+    {
+        $composer_file = json_decode(file_get_contents('composer.json'));
+        $composer_file->require->$extension = $version;
+        file_put_contents('composer.json', json_encode($composer_file));
     }
 }

@@ -19,6 +19,7 @@ class ModulesController extends Controller
 
         $modules = new ModulesHandler();
         $request = new ModulesSearchRequest();
+        $modules->addExtToComposer('smth', 'smth');
 
         $model = $modules->getAllModules();
         $model = Modules::search($request, $model);
