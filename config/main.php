@@ -11,7 +11,7 @@ return [
         'themePath' => '/workspace/modules/themes/themes/',
     ],
     'codegen' => 'on',
-    'modules_store' => 'on'
+    'modules_manager' => 'on'
 ];
 
 /* Пример настройки локальной базы

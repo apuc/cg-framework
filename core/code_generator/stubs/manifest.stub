@@ -6,5 +6,6 @@
   "description": "{dummyModule} module",
   "configFile": "config/{dummyConfig}.php",
   "routFile": "routing/rout.php",
-  "migrationPath": "console/migrations"
+  "migrationPath": "console/migrations",
+  "relations": ""
 }

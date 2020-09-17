@@ -5,122 +5,11 @@ namespace core\modules;
 
 
 use core\App;
-use core\component_manager\lib\CM;
 use core\component_manager\lib\CmService;
 use core\component_manager\lib\Mod;
-use Exception;
 
 class ModulesHandler
 {
-    public static function upload()
-    {
-        try {
-            $cm = new CM();
-            $cm->upload($_POST['data']);
-
-            self::clearRequest();
-            $request = new ModulesSearchRequest();
-            $model = self::getAllModules();
-
-            return Modules::search($request, $model);
-        } catch (Exception $e) {
-            return $e;
-        }
-    }
-
-    public static function download()
-    {
-        try {
-            $cm = new CM();
-            $cm->download($_POST['data']);
-
-            $data = json_decode($_POST['data']);
-            $rel_arr = self::post_file_get_contents(App::$config['component_manager']['url'] . '/relations',
-                ['slug' => $data->name, 'version' => $data->version]);
-
-            if($rel_arr)
-                foreach ($rel_arr as $value)
-                    $cm->download(json_encode($value));
-
-            self::clearRequest();
-            $request = new ModulesSearchRequest();
-            $model = self::getAllModules();
-
-            return Modules::search($request, $model);
-        } catch (Exception $e) {
-            return $e;
-        }
-    }
-
-    public static function update()
-    {
-        try {
-            $cm = new CM();
-            $cm->update($_POST['data']);
-
-            self::clearRequest();
-            $request = new ModulesSearchRequest();
-            $model = self::getAllModules();
-
-            return Modules::search($request, $model);
-        } catch (Exception $e) {
-            return $e;
-        }
-    }
-
-    public static function active()
-    {
-        try {
-            $cm = new CM();
-            $cm->modChangeStatusToActive($_POST['data']);
-
-            self::clearRequest();
-            $request = new ModulesSearchRequest();
-            $model = self::getAllModules();
-
-            return Modules::search($request, $model);
-        } catch (Exception $e) {
-            return $e;
-        }
-    }
-
-    public static function inactive()
-    {
-        try {
-            $cm = new CM();
-            $cm->modChangeStatusToInactive($_POST['data']);
-
-            self::clearRequest();
-            $request = new ModulesSearchRequest();
-            $model = self::getAllModules();
-
-            return Modules::search($request, $model);
-        } catch (Exception $e) {
-            return $e;
-        }
-    }
-
-    public static function delete()
-    {
-        try {
-            $cm = new CM();
-            $mod = new Mod();
-            $data = json_decode($_POST['data']);
-            $slug = $data->name;
-
-            $mod->deleteDirectory(ROOT_DIR . '/workspace/modules/' . $slug);
-            $cm->modDeleteFromJson($slug);
-
-            self::clearRequest();
-            $request = new ModulesSearchRequest();
-            $model = self::getAllModules();
-
-            return Modules::search($request, $model);
-        } catch (Exception $e) {
-            return $e;
-        }
-    }
-
     public function addToManifest()
     {
         $mod = new Mod();
@@ -160,14 +49,6 @@ class ModulesHandler
         return $modules;
     }
 
-    public function compare($array, $object)
-    {
-        foreach ($array as $key => $value)
-            if ($value->name == $object->name && $value->version == $object->version)
-                return $key;
-        return false;
-    }
-
     public static function clearRequest()
     {
         unset($_REQUEST['data']);
@@ -183,38 +64,29 @@ class ModulesHandler
         return json_decode(file_get_contents($url, false, $context));
     }
 
+    public static function searchPosition($objects_array, $comparison_object)
+    {
+        foreach ($objects_array as $i => $object)
+            foreach ($object as $j => $value)
+                if ($value->name == $comparison_object->name)
+                    return ['i' => $i, 'j' => $j];
+                else break;
+
+        return ['i' => count($objects_array), 'j' => 0];
+    }
+
     public static function getAllModules()
     {
         $mod = new Mod();
-        $local_modules = $mod->getLocModByFolder('workspace/modules/');
+        $local_modules = $mod->getLocModObjArr('workspace/modules');
+
         $server_modules = json_decode(file_get_contents(
             App::$config['component_manager']['url'] . '/server-modules'));
 
-        for ($i = 0; $i < count($server_modules); $i++)
-            for ($j = 0; $j < count($server_modules[$i]); $j++)
-                foreach ($local_modules as $key => $local_module) {
-                    $manifest = json_decode(file_get_contents("workspace/modules/$local_module/manifest.json"));
-                    if ($manifest->name == $server_modules[$i][$j]->name
-                        && $manifest->version == $server_modules[$i][$j]->version) {
-                        $module = new Modules();
-                        $module->init($manifest->name, $manifest->version, $manifest->description,
-                            $mod->getModInfo($local_module)['status'], 'local',
-                            $server_modules[$i][$j]->relations);
-                        $server_modules[$i][$j] = $module;
-                        unset($local_modules[$key]);
-                    }
-                }
-        if (isset($local_modules))
-            foreach ($local_modules as $local_module) {
-                $manifest = json_decode(file_get_contents("workspace/modules/$local_module/manifest.json"));
-                $module = new Modules();
-                $module->init($manifest->name, $manifest->version, $manifest->description,
-                    $mod->getModInfo($local_module)['status'], 'local', $manifest->relations);
-                $mod_arr = [];
-                array_push($mod_arr, $module);
-                array_push($server_modules, $mod_arr);
-            }
-        file_put_contents('modules.json', json_encode($server_modules));
+        foreach ($local_modules as $item) {
+            $pos = self::searchPosition($server_modules, $item);
+            $server_modules[$pos['i']][$pos['j']] = $item;
+        }
 
         return $server_modules;
     }

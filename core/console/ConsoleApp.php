@@ -25,6 +25,14 @@ class ConsoleApp extends App
         echo $response;
     }
 
+    public function setConfig($configListFile = 'list.php')
+    {
+        if($this->argv[1] !== 'init'){
+            return parent::setConfig($configListFile);
+        }
+        return $this;
+    }
+
     public function setArgv($argv)
     {
         $this->argv = $argv;

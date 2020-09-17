@@ -5,6 +5,7 @@ namespace core\component_manager\lib;
 
 use core\component_manager\interfaces\Rep;
 use core\Debug;
+use core\modules\Modules;
 
 class Mod
 {
@@ -100,6 +101,23 @@ class Mod
         unset($dirs[1]);
 
         return $dirs;
+    }
+
+    public function getLocModObjArr($modules_path)
+    {
+        $local_modules = $this->getLocModByFolder("$modules_path/");
+        $modules = [];
+
+        if (isset($local_modules))
+            foreach ($local_modules as $local_module) {
+                $manifest = json_decode(file_get_contents("$modules_path/$local_module/manifest.json"));
+                $module = new Modules();
+                $module->init($manifest->name, $manifest->version, $manifest->description,
+                    $this->getModInfo($local_module)['status'], 'local', $manifest->relations);
+                array_push($modules, $module);
+            }
+
+        return $modules;
     }
 
     /**

@@ -8,8 +8,9 @@ App::$collector->console('migration/init', ['workspace\console\controllers\Migra
 App::$collector->console('migration/create', ['workspace\console\controllers\MigrationController', 'actionCreate']);
 App::$collector->console('migration/rollback', ['workspace\console\controllers\MigrationController', 'actionRollback']);
 
+App::$collector->console('mod/init', ['workspace\console\controllers\ModController', 'actionInit']);
 App::$collector->console('mod/list', ['workspace\console\controllers\ModController', 'actionList']);
 
 App::$collector->console('cm/download', ['workspace\console\controllers\CmController', 'actionDownload']);
 
-App::$collector->console('db/init', ['workspace\console\controllers\DbController', 'actionInit']);
+App::$collector->console('init', ['workspace\console\controllers\DbController', 'actionInit']);

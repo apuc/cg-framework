@@ -4,6 +4,9 @@
 namespace workspace\controllers;
 
 
+use core\App;
+use core\component_manager\lib\CM;
+use core\component_manager\lib\Mod;
 use core\Controller;
 use core\GridView;
 use core\GridViewHelper;
@@ -17,54 +20,86 @@ class ModulesController extends Controller
     {
         $this->view->setTitle('Modules');
 
-        $modules = new ModulesHandler();
-        $request = new ModulesSearchRequest();
-        $modules->addExtToComposer('smth', 'smth');
-
-        $model = $modules->getAllModules();
-        $model = Modules::search($request, $model);
+        $model = Modules::search(new ModulesSearchRequest(), ModulesHandler::getAllModules());
 
         return $this->render('main/modules.tpl', ['options' => $this->setModulesOptions($model)]);
     }
 
     public function actionModuleUpload()
     {
-        $model = ModulesHandler::upload();
+        $cm = new CM();
+        $cm->upload($_POST['data']);
+
+        ModulesHandler::clearRequest();
+        $model = Modules::search(new ModulesSearchRequest(), ModulesHandler::getAllModules());
 
         return GridView::widget($this->setModulesOptions($model))->run();
     }
 
     public function actionModuleDownload()
     {
-        $model = ModulesHandler::download();
+        $cm = new CM();
+        $cm->download($_POST['data']);
+
+        $data = json_decode($_POST['data']);
+        $rel_arr = ModulesHandler::post_file_get_contents(App::$config['component_manager']['url'] . '/relations',
+            ['slug' => $data->name, 'version' => $data->version]);
+
+        if($rel_arr)
+            foreach ($rel_arr as $value)
+                $cm->download(json_encode($value));
+
+        ModulesHandler::clearRequest();
+        $model = Modules::search(new ModulesSearchRequest(), ModulesHandler::getAllModules());
 
         return GridView::widget($this->setModulesOptions($model))->run();
     }
 
     public function actionModuleUpdate()
     {
-        $model = ModulesHandler::update();
+        $cm = new CM();
+        $cm->update($_POST['data']);
+
+        ModulesHandler::clearRequest();
+        $model = Modules::search(new ModulesSearchRequest(), ModulesHandler::getAllModules());
 
         return GridView::widget($this->setModulesOptions($model))->run();
     }
 
     public function actionSetActive()
     {
-        $model = ModulesHandler::active();
+        $cm = new CM();
+        $cm->modChangeStatusToActive($_POST['data']);
+
+        ModulesHandler::clearRequest();
+        $model =  Modules::search(new ModulesSearchRequest(), ModulesHandler::getAllModules());
 
         return GridView::widget($this->setModulesOptions($model))->run();
     }
 
     public function actionSetInactive()
     {
-        $model = ModulesHandler::inactive();
+        $cm = new CM();
+        $cm->modChangeStatusToInactive($_POST['data']);
+
+        ModulesHandler::clearRequest();
+        $model = Modules::search( new ModulesSearchRequest(), ModulesHandler::getAllModules());
 
         return GridView::widget($this->setModulesOptions($model))->run();
     }
 
     public function actionModuleDelete()
     {
-        $model = ModulesHandler::delete();
+        $slug = json_decode($_POST['data'])->name;
+
+        $mod = new Mod();
+        $mod->deleteDirectory(ROOT_DIR . '/workspace/modules/' . $slug);
+
+        $cm = new CM();
+        $cm->modDeleteFromJson($slug);
+
+        ModulesHandler::clearRequest();
+        $model = Modules::search(new ModulesSearchRequest(), ModulesHandler::getAllModules());
 
         return GridView::widget($this->setModulesOptions($model))->run();
     }

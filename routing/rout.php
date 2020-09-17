@@ -12,9 +12,12 @@ App::$collector->any('sign-up', ['workspace\controllers\MainController', 'action
 App::$collector->any('sign-in', ['workspace\controllers\MainController', 'actionSignIn']);
 App::$collector->any('logout', ['workspace\controllers\MainController', 'actionLogout']);
 
-App::$collector->any('codegen', ['workspace\controllers\CodegenController', 'actionCodeGenerator']);
+if (App::$config['codegen'] == 'on')
+    App::$collector->any('codegen', ['workspace\controllers\CodegenController', 'actionCodeGenerator']);
 
-App::$collector->cors('modules', ['workspace\controllers\ModulesController'], ['actionModules']);
+if (App::$config['modules_manager'] == 'on')
+    App::$collector->cors('modules', ['workspace\controllers\ModulesController'], ['actionModules']);
+
 App::$collector->any('module-upload', ['workspace\controllers\ModulesController', 'actionModuleUpload']);
 App::$collector->any('module-update', ['workspace\controllers\ModulesController', 'actionModuleUpdate']);
 App::$collector->any('module-download', ['workspace\controllers\ModulesController', 'actionModuleDownload']);

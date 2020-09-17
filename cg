@@ -3,5 +3,5 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-\core\console\ConsoleApp::start()->setConfig()->setRouting('console-list.php')->setArgv($argv)->run();
+\core\console\ConsoleApp::start()->setArgv($argv)->setConfig()->setRouting('console-list.php')->run();
 
