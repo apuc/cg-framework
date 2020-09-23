@@ -4,6 +4,7 @@
     {$smarty.capture.meta}
     <title>{$title}</title>
     {$meta}
+    {$css}
     {$smarty.capture.css}
     {$smarty.capture.js_head}
     {$jsHead}
