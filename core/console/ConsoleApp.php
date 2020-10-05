@@ -27,9 +27,17 @@ class ConsoleApp extends App
 
     public function setConfig($configListFile = 'list.php')
     {
+        $this->activeMod();
+
         if($this->argv[1] !== 'init'){
-            return parent::setConfig($configListFile);
+            App::$configList = (include(CONFIG_DIR . '/' . $configListFile));
+            foreach (App::$configList as $item) {
+                App::$config = array_merge(App::$config, (include(CONFIG_DIR . '/' . $item)));
+            }
         }
+
+        $this->setStat();
+
         return $this;
     }
 
