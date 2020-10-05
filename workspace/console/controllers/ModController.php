@@ -12,9 +12,15 @@ class ModController extends ConsoleController
 {
     public function actionInit()
     {
-        file_put_contents('mods.json', '');
-        $modules = new ModulesHandler();
-        $modules->addToManifest();
+        try {
+            file_put_contents('mods.json', '');
+            $modules = new ModulesHandler();
+            $modules->addToManifest();
+
+            $this->out->r("mods.json created successfully", 'green');
+        }   catch (\Exception $e){
+            $this->out->r($e->getMessage(), 'red');
+        }
     }
 
     public function actionList()
@@ -24,5 +30,4 @@ class ModController extends ConsoleController
             $this->out->r($key . ' ' . $mod['version'], $mod['status'] === 'active' ? 'green' : 'yellow');
         }
     }
-
 }

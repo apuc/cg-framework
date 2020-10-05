@@ -178,7 +178,7 @@ class CmService
             $this->rep->download(App::$config['component_manager']['url'] . "/cloud/modules/$slug/$version/$filename", "/$filename");
 
             $this->unpack("/$filename", $path, $slug);
-            //unlink($filename);
+            unlink($filename);
 
             $this->mod->save($slug, ['version' => $version, 'status' => 'active', 'type' => 'module']);
 

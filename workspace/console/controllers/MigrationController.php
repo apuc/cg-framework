@@ -19,7 +19,7 @@ use samejack\PHP\PHP_ArgvParser;
 class MigrationController extends ConsoleController
 {
     //create migrations table
-    public function actionCreateMigrationTable()
+    public function actionInit()
     {
         try {
             App::$db->schema->create('migration', function (Blueprint $table) {
@@ -27,9 +27,8 @@ class MigrationController extends ConsoleController
                 $table->string('migration', 255);
                 $table->integer('batch');
             });
-            $this->out->r("Success", 'green');
-        }
-        catch (\Exception $e){
+            $this->out->r("Migration initialized successfully", 'green');
+        } catch (\Exception $e){
             $this->out->r($e->getMessage(), 'red');
         }
     }

@@ -115,7 +115,7 @@ class App
     {
         $mods = self::getMods();
         foreach ((array)$mods as $key => $mod) {
-            if ($mod['status'] === 'active') {
+            if (isset($mod['status']) && $mod['status'] === 'active') {
                 App::$activeMods[$key] = $mod;
             }
         }

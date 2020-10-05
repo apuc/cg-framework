@@ -7,6 +7,7 @@ namespace core\modules;
 use core\App;
 use core\component_manager\lib\CmService;
 use core\component_manager\lib\Mod;
+use core\Debug;
 
 class ModulesHandler
 {
@@ -30,7 +31,9 @@ class ModulesHandler
         $version = $_POST['changed'];
 
         $fl = 0;
-        $modules = json_decode(file_get_contents('modules.json'));
+        $mods = json_decode(file_get_contents('mods.json'));
+        $modules = $mods->__table;
+
         foreach ($modules as $k => $module)
             if (!$fl)
                 foreach ($module as $key => $item) {
@@ -44,7 +47,9 @@ class ModulesHandler
                     }
                 }
             else break;
-        file_put_contents('modules.json', json_encode($modules));
+
+        $mods->__table = $modules;
+        file_put_contents('mods.json', json_encode($mods));
 
         return $modules;
     }
@@ -75,6 +80,25 @@ class ModulesHandler
         return ['i' => count($objects_array), 'j' => 0];
     }
 
+    public static function getCore()
+    {
+        $core = json_decode(file_get_contents(
+            App::$config['component_manager']['url'] . '/get-core'));
+        $local_core = json_decode(file_get_contents('core/manifest.json'));
+
+        $core_arr = [];
+        foreach ($core as $item) {
+            $core_obj = new Modules();
+            if($local_core->version == $item->version)
+                $core_obj->init('core', $item->version, $item->description, 'active', 'local', '');
+            else
+                $core_obj->init('core', $item->version, $item->description, 'inactive', 'server', '');
+            array_push($core_arr, $core_obj);
+        }
+
+        return $core_arr;
+    }
+
     public static function getAllModules()
     {
         $mod = new Mod();
@@ -87,6 +111,10 @@ class ModulesHandler
             $pos = self::searchPosition($server_modules, $item);
             $server_modules[$pos['i']][$pos['j']] = $item;
         }
+
+        $mods = json_decode(file_get_contents('mods.json'));
+        $mods->__table = $server_modules;
+        file_put_contents('mods.json', json_encode($mods));
 
         return $server_modules;
     }

@@ -1,7 +1,8 @@
-<a href="/" class="back">вернуться на главную</a>
 <h1 class="title-center">CodeGen</h1>
-
 <div class="container">
+    <div class="margin">
+        <a href="/" class="btn btn-dark"><i class="fas fa-arrow-circle-left"></i> на главную</a>
+    </div>
     <form class="form-horizontal" name="create_form" id="create_form" method="post" action="codegen">
         <div class="form-group">
             <label for="table">Название таблицы:

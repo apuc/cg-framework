@@ -8,6 +8,7 @@ use core\App;
 use core\component_manager\lib\CM;
 use core\component_manager\lib\Mod;
 use core\Controller;
+use core\Debug;
 use core\GridView;
 use core\GridViewHelper;
 use core\modules\Modules;
@@ -20,9 +21,12 @@ class ModulesController extends Controller
     {
         $this->view->setTitle('Modules');
 
+        $core = ModulesHandler::getCore();
+
         $model = Modules::search(new ModulesSearchRequest(), ModulesHandler::getAllModules());
 
-        return $this->render('main/modules.tpl', ['options' => $this->setModulesOptions($model)]);
+        return $this->render('main/modules.tpl', ['options' => $this->setModulesOptions($model),
+            'core_options' => $this->setCoreOptions($core)]);
     }
 
     public function actionModuleUpload()
@@ -45,7 +49,7 @@ class ModulesController extends Controller
         $rel_arr = ModulesHandler::post_file_get_contents(App::$config['component_manager']['url'] . '/relations',
             ['slug' => $data->name, 'version' => $data->version]);
 
-        if($rel_arr)
+        if ($rel_arr)
             foreach ($rel_arr as $value)
                 $cm->download(json_encode($value));
 
@@ -72,7 +76,7 @@ class ModulesController extends Controller
         $cm->modChangeStatusToActive($_POST['data']);
 
         ModulesHandler::clearRequest();
-        $model =  Modules::search(new ModulesSearchRequest(), ModulesHandler::getAllModules());
+        $model = Modules::search(new ModulesSearchRequest(), ModulesHandler::getAllModules());
 
         return GridView::widget($this->setModulesOptions($model))->run();
     }
@@ -83,7 +87,7 @@ class ModulesController extends Controller
         $cm->modChangeStatusToInactive($_POST['data']);
 
         ModulesHandler::clearRequest();
-        $model = Modules::search( new ModulesSearchRequest(), ModulesHandler::getAllModules());
+        $model = Modules::search(new ModulesSearchRequest(), ModulesHandler::getAllModules());
 
         return GridView::widget($this->setModulesOptions($model))->run();
     }
@@ -117,6 +121,102 @@ class ModulesController extends Controller
         $mh = new ModulesHandler();
 
         return GridView::widget($this->setModulesOptions($mh->versionChanged()))->run();
+    }
+
+    public function actionUpdateCore()
+    {
+        //download core
+        //get version and update manifest
+        //archive old core
+    }
+
+    public function setCoreOptions($data)
+    {
+        return [
+            'data' => $data,
+            'serial' => '#',
+            'actionBtn' => 'del_all',
+            'fields' => [
+                'download' => [
+                    'label' => '',
+                    'showFilter' => false,
+                    'value' => function ($model) {
+                        $name = $model->name;
+                        $version = $model->version;
+                        $fl = 0;
+
+                        if ($model->localStatus == 'local')
+                            $fl = 1;
+                        if ($model->localStatus == 'server' && $fl == 0)
+                            return GridViewHelper::button("download-$name", '__cjax', 'Скачать',
+                                'cloud-download-alt', 'data-name="' . $name . '" data-version="' . $version
+                                . '" data-action="module-download" data-target="cjax"');
+                        elseif ($model->localStatus == 'local')
+                            return GridViewHelper::button("update-$name", '__cjax', 'Обновить',
+                                'redo', 'data-name="' . $name . '" data-version="' . $version
+                                . '" data-action="module-update" data-target="cjax"');
+                        else return GridViewHelper::div('', 'fixed-width');
+                    }
+                ],
+                'upload' => [
+                    'label' => '',
+                    'showFilter' => false,
+                    'value' => function ($model) {
+                        $name = $model->name;
+
+                        return ($model->localStatus == 'local')
+                            ? GridViewHelper::button("upload-$name", '__cjax', 'Загрузить в облако',
+                                'cloud-upload-alt', 'data-name="' . $name . '" data-version="' . $model->version
+                                . '" data-action="module-upload" data-target="cjax"')
+                            : GridViewHelper::div('', 'fixed-width');
+                    }
+                ],
+                'toggle' => [
+                    'label' => '',
+                    'showFilter' => false,
+                    'value' => function ($model) {
+                        $name = $model->name;
+                        $version = $model->version;
+                        $status = $model->status;
+
+                        if ($status == 'active')
+                            return GridViewHelper::button("set-inactive-$name", '__cjax', 'Отключить',
+                                'toggle-on', 'data-name="' . $name . '" data-version="' . $version
+                                . '" data-action="module-set-inactive" data-target="cjax"');
+                        elseif ($status == 'inactive')
+                            return GridViewHelper::button("set-active-$name", '__cjax', 'Включить',
+                                'toggle-off', 'data-name="' . $name . '" data-version="' . $version
+                                . '" data-action="module-set-active" data-target="cjax"');
+                        else
+                            return GridViewHelper::div('', 'fixed-width');
+                    },
+                ],
+                'delete' => [
+                    'label' => '',
+                    'showFilter' => false,
+                    'value' => function ($model) {
+                        $name = $model->name;
+
+                        return ($model->localStatus == 'local')
+                            ? GridViewHelper::button("delete-$name", '__cjax', 'Удалить',
+                                'trash', 'data-name="' . $name . '" data-version="' . $model->version
+                                . '" data-action="module-delete" data-target="cjax"')
+                            : GridViewHelper::div('', 'fixed-width');
+                    },
+                ],
+                'version' => [
+                    'label' => 'Версия',
+                    'value' => function ($model) {
+                        return GridViewHelper::select($model, '__cjax', 'data-name="'
+                            . $model->name . '" data-action="change-version" data-target="cjax"');
+                    }
+                ],
+            ],
+            'baseUri' => 'modules',
+            'pagination' => [
+                'per_page' => 10
+            ]
+        ];
     }
 
     public function setModulesOptions($data)
@@ -223,9 +323,9 @@ class ModulesController extends Controller
                 ],
                 'linked' => [
                     'label' => 'Связанные модули',
-                    'value' => function($model) {
+                    'value' => function ($model) {
                         $relations = '';
-                        if(isset($model[0]->relations) && $model[0]->relations)
+                        if (isset($model[0]->relations) && $model[0]->relations)
                             foreach ($model[0]->relations as $relation)
                                 $relations .= "$relation->name - $relation->version <br>";
 
