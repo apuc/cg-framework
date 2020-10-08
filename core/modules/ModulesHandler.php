@@ -92,7 +92,7 @@ class ModulesHandler
             if($local_core->version == $item->version)
                 $core_obj->init('core', $item->version, $item->description, 'active', 'local', '');
             else
-                $core_obj->init('core', $item->version, $item->description, 'inactive', 'server', '');
+                $core_obj->init('core', $item->version, $item->description, '', 'server', '');
             array_push($core_arr, $core_obj);
         }
 

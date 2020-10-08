@@ -20,8 +20,9 @@ class MainController extends Controller
 
         $buttons[0] = '<a href="/codegen" class="btn btn-dark">CodeGen</a>';
         $buttons[1] = '<a href="/modules" class="btn btn-dark">Модули</a>';
+        $buttons[2] = '<a href="/core-versions" class="btn btn-dark">Ядро</a>';
         if ($mod->getModInfo('adminlte')['status'] == 'active')
-            $buttons[2] = '<a href="/admin/adminlte" class="btn btn-dark">AdminLTE</a>';
+            $buttons[3] = '<a href="/admin/adminlte" class="btn btn-dark">AdminLTE</a>';
 
         return $this->render('main/index.tpl', ['h1' => App::$config['app_name'], 'buttons' => $buttons]);
     }

@@ -78,11 +78,12 @@ class CM
 
     /**
      * @param string $data
+     * @param string $type
      * @return string
      */
-    public function download(string $data)
+    public function download(string $data, string $type = '')
     {
-        return $this->service->download($data);
+        return $this->service->download($data, $type);
     }
 
     /**

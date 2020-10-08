@@ -4,7 +4,7 @@ jQuery(document).ready(function ($) {
         let data = JSON.stringify($(this).data());
         let changed = $(this).val();
 
-        let action = $(this).data('action');
+        let action = '/' + $(this).data('action');
         let target = $(this).data('target');
         let type = $(this).data('type');
         if (!type) type = 'POST';
@@ -14,7 +14,8 @@ jQuery(document).ready(function ($) {
             type: type,
             data: {data: data, changed: changed},
             success: function (res) {
-                if(action === "module-upload" || action === "module-update")
+                if(action === "module-upload" || action === "module-update"
+                    || action === "core-update" || action === "core-upload")
                     alert('Дейтвие выполнено успешно');
                 $('#' + target).html(res);
             },

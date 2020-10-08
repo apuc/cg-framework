@@ -26,3 +26,10 @@ App::$collector->any('module-set-inactive', ['workspace\controllers\ModulesContr
 App::$collector->any('module-delete', ['workspace\controllers\ModulesController', 'actionModuleDelete']);
 App::$collector->any('change-version', ['workspace\controllers\ModulesController', 'actionChangeVersion']);
 App::$collector->any('update-manifest', ['workspace\controllers\ModulesController', 'actionAddLocalModulesToManifest']);
+
+App::$collector->cors('core-versions', ['workspace\controllers\CoreController'], ['actionIndexCore']);
+App::$collector->any('download-core', ['workspace\controllers\CoreController', 'actionDownloadCore']);
+App::$collector->any('update-core', ['workspace\controllers\CoreController', 'actionUpdateCore']);
+App::$collector->any('upload-core', ['workspace\controllers\CoreController', 'actionUploadCore']);
+App::$collector->any('set-active-core', ['workspace\controllers\CoreController', 'actionSetActiveCore']);
+App::$collector->any('delete-core', ['workspace\controllers\CoreController', 'actionDeleteCore']);

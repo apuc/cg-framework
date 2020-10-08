@@ -164,23 +164,34 @@ class CmService
 
     /**
      * @param string $data
+     * @param string $type
      * @return bool
      */
-    public function download(string $data): bool
+    public function download(string $data, string $type = ''): bool
     {
         try {
-            $path = "/workspace/modules/";
+            if($type == 'core') {
+                $localPath = "/core/";
+                $serverPath = "/cloud/core";
+            } else {
+                $localPath = "/workspace/modules/";
+                $serverPath = "/cloud/modules";
+            }
+
             $data = json_decode($data);
             $slug = $data->name;
             $version = $data->version;
             $filename = "$slug.zip";
 
-            $this->rep->download(App::$config['component_manager']['url'] . "/cloud/modules/$slug/$version/$filename", "/$filename");
-
-            $this->unpack("/$filename", $path, $slug);
-            unlink($filename);
-
-            $this->mod->save($slug, ['version' => $version, 'status' => 'active', 'type' => 'module']);
+            if($type == 'core') {
+                $this->rep->download(App::$config['component_manager']['url'] . "$serverPath/$version/$filename", "/$filename");
+                $this->mod->save($slug, ['version' => $version, 'status' => 'inactive', 'type' => 'module']);
+            } else {
+                $this->rep->download(App::$config['component_manager']['url'] . "$serverPath/$slug/$version/$filename", "/$filename");
+                $this->unpack("/$filename", $localPath, $slug);
+                unlink($filename);
+                $this->mod->save($slug, ['version' => $version, 'status' => 'active', 'type' => 'module']);
+            }
 
             return true;
         } catch (Exception $e) {
