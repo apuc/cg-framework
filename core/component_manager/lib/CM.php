@@ -79,11 +79,14 @@ class CM
     /**
      * @param string $data
      * @param string $type
+     * @param string $serverPath
+     * @param string $savePath
+     * @param string $unpackPath
      * @return string
      */
-    public function download(string $data, string $type = '')
+    public function download(string $data, string $type, string $serverPath, string $savePath, string $unpackPath)
     {
-        return $this->service->download($data, $type);
+        return $this->service->download($data, $type, $serverPath, $savePath, $unpackPath);
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace core\modules;
+namespace core\component_manager\models;
 
 
 use Illuminate\Support\Collection;

@@ -1,13 +1,10 @@
 <?php
 
 
-namespace core\modules;
+namespace core\component_manager\lib;
 
 
 use core\App;
-use core\component_manager\lib\CmService;
-use core\component_manager\lib\Mod;
-use core\Debug;
 
 class ModulesHandler
 {
@@ -54,21 +51,6 @@ class ModulesHandler
         return $modules;
     }
 
-    public static function clearRequest()
-    {
-        unset($_REQUEST['data']);
-        unset($_REQUEST['changed']);
-    }
-
-    public static function post_file_get_contents($url, $data)
-    {
-        $opts = array('http' => ['method' => 'POST', 'header' => 'Content-Type: application/x-www-form-urlencoded',
-            'content' => http_build_query($data)]);
-        $context = stream_context_create($opts);
-
-        return json_decode(file_get_contents($url, false, $context));
-    }
-
     public static function searchPosition($objects_array, $comparison_object)
     {
         foreach ($objects_array as $i => $object)
@@ -78,25 +60,6 @@ class ModulesHandler
                 else break;
 
         return ['i' => count($objects_array), 'j' => 0];
-    }
-
-    public static function getCore()
-    {
-        $core = json_decode(file_get_contents(
-            App::$config['component_manager']['url'] . '/get-core'));
-        $local_core = json_decode(file_get_contents('core/manifest.json'));
-
-        $core_arr = [];
-        foreach ($core as $item) {
-            $core_obj = new Modules();
-            if($local_core->version == $item->version)
-                $core_obj->init('core', $item->version, $item->description, 'active', 'local', '');
-            else
-                $core_obj->init('core', $item->version, $item->description, '', 'server', '');
-            array_push($core_arr, $core_obj);
-        }
-
-        return $core_arr;
     }
 
     public static function getAllModules()

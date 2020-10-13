@@ -10,7 +10,6 @@ use workspace\requests\LoginRequest;
 use workspace\requests\RegistrationRequest;
 use workspace\widgets\Language;
 
-
 class MainController extends Controller
 {
     public function actionIndex()

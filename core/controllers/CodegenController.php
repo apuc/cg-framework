@@ -1,7 +1,7 @@
 <?php
 
 
-namespace workspace\controllers;
+namespace core\controllers;
 
 
 use core\code_generator\CodeGeneratorController;

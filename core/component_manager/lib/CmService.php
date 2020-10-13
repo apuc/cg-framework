@@ -165,34 +165,34 @@ class CmService
     /**
      * @param string $data
      * @param string $type
+     * @param string $serverPath
+     * @param string $savePath
+     * @param string $unpackPath
      * @return bool
      */
-    public function download(string $data, string $type = ''): bool
+    public function download(string $data, string $type, string $serverPath, string $savePath, string $unpackPath): bool
     {
         try {
-            if($type == 'core') {
-                $localPath = "/core/";
-                $serverPath = "/cloud/core";
-            } else {
-                $localPath = "/workspace/modules/";
-                $serverPath = "/cloud/modules";
-            }
-
+            $path = "/workspace/modules/";
             $data = json_decode($data);
             $slug = $data->name;
             $version = $data->version;
             $filename = "$slug.zip";
 
+            $this->rep->download(App::$config['component_manager']['url'] . "$serverPath/$version/$filename", "$savePath/$filename");
+
             if($type == 'core') {
-                $this->rep->download(App::$config['component_manager']['url'] . "$serverPath/$version/$filename", "/$filename");
-                $this->mod->save($slug, ['version' => $version, 'status' => 'inactive', 'type' => 'module']);
+                $mods = json_decode(file_get_contents('mods.json'));
+                $cores = $mods->__core;
+                array_push($cores, ['version' => $version, 'status' => 'inactive', 'localStatus' => '', 'type' => 'core']);
+                $mods->__core = $cores;
+                file_put_contents('mods.json', json_encode($mods));
             } else {
-                $this->rep->download(App::$config['component_manager']['url'] . "$serverPath/$slug/$version/$filename", "/$filename");
-                $this->unpack("/$filename", $localPath, $slug);
+                $this->unpack("$savePath/$filename", $path, $slug);
                 unlink($filename);
+
                 $this->mod->save($slug, ['version' => $version, 'status' => 'active', 'type' => 'module']);
             }
-
             return true;
         } catch (Exception $e) {
             return false;

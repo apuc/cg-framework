@@ -1,18 +1,20 @@
 <?php
 
 
-namespace workspace\controllers;
+namespace core\controllers;
 
 
 use core\App;
 use core\component_manager\lib\CM;
+use core\component_manager\lib\CmHelper;
 use core\component_manager\lib\Mod;
+use core\component_manager\lib\ModulesHandler;
+use core\component_manager\models\Modules;
+use core\component_manager\models\ModulesSearchRequest;
 use core\Controller;
 use core\GridView;
 use core\GridViewHelper;
-use core\modules\Modules;
-use core\modules\ModulesHandler;
-use core\modules\ModulesSearchRequest;
+
 
 class ModulesController extends Controller
 {
@@ -30,7 +32,7 @@ class ModulesController extends Controller
         $cm = new CM();
         $cm->upload($_POST['data']);
 
-        ModulesHandler::clearRequest();
+        CmHelper::clearRequest();
         $model = Modules::search(new ModulesSearchRequest(), ModulesHandler::getAllModules());
 
         return GridView::widget($this->setModulesOptions($model))->run();
@@ -39,17 +41,19 @@ class ModulesController extends Controller
     public function actionModuleDownload()
     {
         $cm = new CM();
-        $cm->download($_POST['data']);
-
         $data = json_decode($_POST['data']);
-        $rel_arr = ModulesHandler::post_file_get_contents(App::$config['component_manager']['url'] . '/relations',
-            ['slug' => $data->name, 'version' => $data->version]);
+        $slug = $data->name;
+
+        $cm->download($_POST['data'], 'module', "/cloud/modules/$slug", "", '/workspace/modules');
+
+        $rel_arr = CmHelper::post_file_get_contents(App::$config['component_manager']['url'] . '/relations',
+            ['slug' => $slug, 'version' => $data->version]);
 
         if ($rel_arr)
             foreach ($rel_arr as $value)
-                $cm->download(json_encode($value));
+                $cm->download(json_encode($value), 'module', "/cloud/modules/$slug", "", '/workspace/modules');
 
-        ModulesHandler::clearRequest();
+        CmHelper::clearRequest();
         $model = Modules::search(new ModulesSearchRequest(), ModulesHandler::getAllModules());
 
         return GridView::widget($this->setModulesOptions($model))->run();
@@ -60,7 +64,7 @@ class ModulesController extends Controller
         $cm = new CM();
         $cm->update($_POST['data']);
 
-        ModulesHandler::clearRequest();
+        CmHelper::clearRequest();
         $model = Modules::search(new ModulesSearchRequest(), ModulesHandler::getAllModules());
 
         return GridView::widget($this->setModulesOptions($model))->run();
@@ -71,7 +75,7 @@ class ModulesController extends Controller
         $cm = new CM();
         $cm->modChangeStatusToActive($_POST['data']);
 
-        ModulesHandler::clearRequest();
+        CmHelper::clearRequest();
         $model = Modules::search(new ModulesSearchRequest(), ModulesHandler::getAllModules());
 
         return GridView::widget($this->setModulesOptions($model))->run();
@@ -82,7 +86,7 @@ class ModulesController extends Controller
         $cm = new CM();
         $cm->modChangeStatusToInactive($_POST['data']);
 
-        ModulesHandler::clearRequest();
+        CmHelper::clearRequest();
         $model = Modules::search(new ModulesSearchRequest(), ModulesHandler::getAllModules());
 
         return GridView::widget($this->setModulesOptions($model))->run();
@@ -98,7 +102,7 @@ class ModulesController extends Controller
         $cm = new CM();
         $cm->modDeleteFromJson($slug);
 
-        ModulesHandler::clearRequest();
+        CmHelper::clearRequest();
         $model = Modules::search(new ModulesSearchRequest(), ModulesHandler::getAllModules());
 
         return GridView::widget($this->setModulesOptions($model))->run();

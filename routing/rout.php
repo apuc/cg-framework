@@ -13,23 +13,24 @@ App::$collector->any('sign-in', ['workspace\controllers\MainController', 'action
 App::$collector->any('logout', ['workspace\controllers\MainController', 'actionLogout']);
 
 if (App::$config['codegen'] == 'on')
-    App::$collector->any('codegen', ['workspace\controllers\CodegenController', 'actionCodeGenerator']);
+    App::$collector->any('codegen', ['core\controllers\CodegenController', 'actionCodeGenerator']);
 
 if (App::$config['modules_manager'] == 'on')
-    App::$collector->cors('modules', ['workspace\controllers\ModulesController'], ['actionModules']);
+    App::$collector->cors('modules', ['core\controllers\ModulesController'], ['actionModules']);
 
-App::$collector->any('module-upload', ['workspace\controllers\ModulesController', 'actionModuleUpload']);
-App::$collector->any('module-update', ['workspace\controllers\ModulesController', 'actionModuleUpdate']);
-App::$collector->any('module-download', ['workspace\controllers\ModulesController', 'actionModuleDownload']);
-App::$collector->any('module-set-active', ['workspace\controllers\ModulesController', 'actionSetActive']);
-App::$collector->any('module-set-inactive', ['workspace\controllers\ModulesController', 'actionSetInactive']);
-App::$collector->any('module-delete', ['workspace\controllers\ModulesController', 'actionModuleDelete']);
-App::$collector->any('change-version', ['workspace\controllers\ModulesController', 'actionChangeVersion']);
-App::$collector->any('update-manifest', ['workspace\controllers\ModulesController', 'actionAddLocalModulesToManifest']);
+App::$collector->any('module-upload', ['core\controllers\ModulesController', 'actionModuleUpload']);
+App::$collector->any('module-update', ['core\controllers\ModulesController', 'actionModuleUpdate']);
+App::$collector->any('module-download', ['core\controllers\ModulesController', 'actionModuleDownload']);
+App::$collector->any('module-set-active', ['core\controllers\ModulesController', 'actionSetActive']);
+App::$collector->any('module-set-inactive', ['core\controllers\ModulesController', 'actionSetInactive']);
+App::$collector->any('module-delete', ['core\controllers\ModulesController', 'actionModuleDelete']);
+App::$collector->any('change-version', ['core\controllers\ModulesController', 'actionChangeVersion']);
+App::$collector->any('update-manifest', ['core\controllers\ModulesController', 'actionAddLocalModulesToManifest']);
 
-App::$collector->cors('core-versions', ['workspace\controllers\CoreController'], ['actionIndexCore']);
-App::$collector->any('download-core', ['workspace\controllers\CoreController', 'actionDownloadCore']);
-App::$collector->any('update-core', ['workspace\controllers\CoreController', 'actionUpdateCore']);
-App::$collector->any('upload-core', ['workspace\controllers\CoreController', 'actionUploadCore']);
-App::$collector->any('set-active-core', ['workspace\controllers\CoreController', 'actionSetActiveCore']);
-App::$collector->any('delete-core', ['workspace\controllers\CoreController', 'actionDeleteCore']);
+App::$collector->cors('core-versions', ['core\controllers\CoreController'], ['actionIndexCore']);
+App::$collector->any('download-core', ['core\controllers\CoreController', 'actionDownloadCore']);
+App::$collector->any('update-core', ['core\controllers\CoreController', 'actionUpdateCore']);
+App::$collector->any('upload-core', ['core\controllers\CoreController', 'actionUploadCore']);
+App::$collector->any('set-active-core', ['core\controllers\CoreController', 'actionSetActiveCore']);
+App::$collector->any('delete-core', ['core\controllers\CoreController', 'actionDeleteCore']);
+App::$collector->any('update-core-mods', ['core\controllers\CoreController', 'actionAddLocCoreToMods']);

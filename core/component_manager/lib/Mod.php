@@ -3,9 +3,7 @@
 namespace core\component_manager\lib;
 
 
-use core\component_manager\interfaces\Rep;
-use core\Debug;
-use core\modules\Modules;
+use core\component_manager\models\Modules;
 
 class Mod
 {
