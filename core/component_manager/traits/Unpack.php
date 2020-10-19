@@ -13,7 +13,7 @@ trait Unpack
      * @param string $slug
      * @return bool
      */
-   public function unpack(string $url, string $path, string $slug): bool
+   public function unpack(string $url, string $path, string $slug = ''): bool
    {
        $zip = new \ZipArchive();
        if($zip->open(ROOT_DIR  . $url) === TRUE) {

@@ -64,10 +64,15 @@ class CoreController extends Controller
 
         HZip::zipDir('core','archives/' . $current_version . '.zip');
         $mod->deleteDirectory("core");
-        $cms->unpack("/archives/$new_version.zip", "", 'core');
+        $cms->unpack("/archives/$new_version.zip", "/core/");
 
         $cm->coreChangeStatusToInactive($current_version);
         $cm->coreChangeStatusToActive($new_version);
+
+        CmHelper::clearRequest();
+        $model = CoreHandler::getCore();
+
+        return GridView::widget($this->setOptions($model))->run();
     }
 
     public function actionDeleteCore()
