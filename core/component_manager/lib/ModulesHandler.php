@@ -5,6 +5,7 @@ namespace core\component_manager\lib;
 
 
 use core\App;
+use core\Debug;
 
 class ModulesHandler
 {

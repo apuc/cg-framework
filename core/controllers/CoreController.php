@@ -80,6 +80,11 @@ class CoreController extends Controller
 
     }
 
+    public function actionArchiveCore()
+    {
+        HZip::zipDir('core','archives/' . $_GET['name'] . '.zip');
+    }
+
     public function setOptions($data)
     {
         return [

@@ -34,3 +34,5 @@ App::$collector->any('upload-core', ['core\controllers\CoreController', 'actionU
 App::$collector->any('set-active-core', ['core\controllers\CoreController', 'actionSetActiveCore']);
 App::$collector->any('delete-core', ['core\controllers\CoreController', 'actionDeleteCore']);
 App::$collector->any('update-core-mods', ['core\controllers\CoreController', 'actionAddLocCoreToMods']);
+
+App::$collector->any('archive-core', ['core\controllers\CoreController', 'actionArchiveCore']);

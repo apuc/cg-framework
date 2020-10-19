@@ -181,7 +181,7 @@ class CmService
             if($type == 'core') {
                 $this->rep->download(App::$config['component_manager']['url'] . "$serverPath/$version/$filename", "$savePath/$version.zip");
                 $mods = json_decode(file_get_contents('mods.json'));
-                array_push($mods->__core, ['version' => $version, 'status' => 'inactive', 'localStatus' => '', 'type' => 'core']);
+                array_push($mods->__core, ['version' => $version, 'status' => 'inactive', 'localStatus' => 'local', 'type' => 'core']);
                 file_put_contents('mods.json', json_encode($mods));
             } else {
                 $this->rep->download(App::$config['component_manager']['url'] . "$serverPath/$version/$filename", "$savePath/$filename");
