@@ -145,6 +145,25 @@ class CM
         return $this->service->modChangeStatusToInactive($data);
     }
 
+
+    /**
+     * @param string $data
+     * @return bool
+     */
+    public function coreChangeStatusToActive(string $data)
+    {
+        return $this->service->coreChangeStatusToActive($data);
+    }
+
+    /**
+     * @param string $data
+     * @return bool
+     */
+    public function coreChangeStatusToInactive(string $data)
+    {
+        return $this->service->coreChangeStatusToInactive($data);
+    }
+
     /**
      * @param string $slug
      * @param array $data

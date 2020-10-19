@@ -10,6 +10,7 @@ use core\component_manager\lib\CmService;
 use core\component_manager\lib\CoreHandler;
 use core\component_manager\lib\Mod;
 use core\Controller;
+use core\Debug;
 use core\GridView;
 use core\GridViewHelper;
 use core\HZip;
@@ -55,18 +56,18 @@ class CoreController extends Controller
 
     public function actionSetActiveCore()
     {
-        $version = json_decode($_POST['data'])->version;
-        $date = new DateTime();
-        $date->getTimestamp();
-        HZip::zipDir('archives/',
-            json_decode(file_get_contents('core/manifest.json'))->version . '-'
-            . $date->getTimestamp() . '.zip');
-
+        $cm = new CM();
         $mod = new Mod();
-        $mod->deleteDirectory("core");
-
         $cms = new CmService();
-        $cms->unpack("/archives/$version.zip", "", 'core');
+        $new_version = json_decode($_POST['data'])->version;
+        $current_version = json_decode(file_get_contents('core/manifest.json'))->version;
+
+        HZip::zipDir('core','archives/' . $current_version . '.zip');
+        $mod->deleteDirectory("core");
+        $cms->unpack("/archives/$new_version.zip", "", 'core');
+
+        $cm->coreChangeStatusToInactive($current_version);
+        $cm->coreChangeStatusToActive($new_version);
     }
 
     public function actionDeleteCore()

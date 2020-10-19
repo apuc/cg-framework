@@ -173,24 +173,20 @@ class CmService
     public function download(string $data, string $type, string $serverPath, string $savePath, string $unpackPath): bool
     {
         try {
-            $path = "/workspace/modules/";
             $data = json_decode($data);
-            $slug = $data->name;
+            $slug = ($type == 'core') ? 'core' : $data->name;
             $version = $data->version;
             $filename = "$slug.zip";
 
-            $this->rep->download(App::$config['component_manager']['url'] . "$serverPath/$version/$filename", "$savePath/$filename");
-
             if($type == 'core') {
+                $this->rep->download(App::$config['component_manager']['url'] . "$serverPath/$version/$filename", "$savePath/$version.zip");
                 $mods = json_decode(file_get_contents('mods.json'));
-                $cores = $mods->__core;
-                array_push($cores, ['version' => $version, 'status' => 'inactive', 'localStatus' => '', 'type' => 'core']);
-                $mods->__core = $cores;
+                array_push($mods->__core, ['version' => $version, 'status' => 'inactive', 'localStatus' => '', 'type' => 'core']);
                 file_put_contents('mods.json', json_encode($mods));
             } else {
-                $this->unpack("$savePath/$filename", $path, $slug);
+                $this->rep->download(App::$config['component_manager']['url'] . "$serverPath/$version/$filename", "$savePath/$filename");
+                $this->unpack("$savePath/$filename", $unpackPath, $slug);
                 unlink($filename);
-
                 $this->mod->save($slug, ['version' => $version, 'status' => 'active', 'type' => 'module']);
             }
             return true;
@@ -324,6 +320,40 @@ class CmService
         $status = ['status' => 'inactive'];
 
         return $this->modChangeStatus($slug, $status);
+    }
+
+    /**
+     * @param string $data
+     * @return bool
+     */
+    public function coreChangeStatusToActive(string $data): bool
+    {
+        $mods = json_decode(file_get_contents('mods.json'));
+        foreach ($mods as $i => $item)
+            if($item->version == $data) {
+                $mods->__core[$i]->status = 'active';
+                break;
+            }
+        file_put_contents('mods.json', json_encode($mods));
+
+        return 1;
+    }
+
+    /**
+     * @param string $data
+     * @return bool
+     */
+    public function coreChangeStatusToInactive(string $data): bool
+    {
+        $mods = json_decode(file_get_contents('mods.json'));
+        foreach ($mods as $i => $item)
+            if($item->version == $data) {
+                $mods->__core[$i]->status = 'inactive';
+                break;
+            }
+        file_put_contents('mods.json', json_encode($mods));
+
+        return 1;
     }
 
     /**
