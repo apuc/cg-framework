@@ -329,7 +329,7 @@ class CmService
     public function coreChangeStatusToActive(string $data): bool
     {
         $mods = json_decode(file_get_contents('mods.json'));
-        foreach ($mods as $i => $item)
+        foreach ($mods->__core as $i => $item)
             if($item->version == $data) {
                 $mods->__core[$i]->status = 'active';
                 break;
@@ -346,7 +346,7 @@ class CmService
     public function coreChangeStatusToInactive(string $data): bool
     {
         $mods = json_decode(file_get_contents('mods.json'));
-        foreach ($mods as $i => $item)
+        foreach ($mods->__core as $i => $item)
             if($item->version == $data) {
                 $mods->__core[$i]->status = 'inactive';
                 break;

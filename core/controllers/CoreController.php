@@ -63,8 +63,8 @@ class CoreController extends Controller
         $current_version = json_decode(file_get_contents('core/manifest.json'))->version;
 
         HZip::zipDir('core','archives/' . $current_version . '.zip');
-        $mod->deleteDirectory("core");
-        $cms->unpack("/archives/$new_version.zip", "/core/");
+//        $mod->deleteDirectory("core");
+//        $cms->unpack("/archives/$new_version.zip", "/core/");
 
         $cm->coreChangeStatusToInactive($current_version);
         $cm->coreChangeStatusToActive($new_version);
