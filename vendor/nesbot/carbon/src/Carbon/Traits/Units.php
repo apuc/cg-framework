@@ -10,11 +10,9 @@
  */
 namespace Carbon\Traits;
 
-use Carbon\CarbonConverterInterface;
 use Carbon\CarbonInterface;
 use Carbon\CarbonInterval;
 use Carbon\Exceptions\UnitException;
-use Closure;
 use DateInterval;
 
 /**
@@ -169,27 +167,15 @@ trait Units
     }
 
     /**
-     * Call native PHP DateTime/DateTimeImmutable add() method.
-     *
-     * @param DateInterval $interval
-     *
-     * @return static
-     */
-    public function rawAdd(DateInterval $interval)
-    {
-        return parent::add($interval);
-    }
-
-    /**
      * Add given units or interval to the current instance.
      *
      * @example $date->add('hour', 3)
      * @example $date->add(15, 'days')
      * @example $date->add(CarbonInterval::days(4))
      *
-     * @param string|DateInterval|Closure|CarbonConverterInterface $unit
-     * @param int                                                  $value
-     * @param bool|null                                            $overflow
+     * @param string|DateInterval $unit
+     * @param int                 $value
+     * @param bool|null           $overflow
      *
      * @return static
      */
@@ -197,14 +183,6 @@ trait Units
     {
         if (is_string($unit) && func_num_args() === 1) {
             $unit = CarbonInterval::make($unit);
-        }
-
-        if ($unit instanceof CarbonConverterInterface) {
-            return $this->resolveCarbon($unit->convertDate($this, false));
-        }
-
-        if ($unit instanceof Closure) {
-            return $this->resolveCarbon($unit($this, false));
         }
 
         if ($unit instanceof DateInterval) {
@@ -328,27 +306,15 @@ trait Units
     }
 
     /**
-     * Call native PHP DateTime/DateTimeImmutable sub() method.
-     *
-     * @param DateInterval $interval
-     *
-     * @return static
-     */
-    public function rawSub(DateInterval $interval)
-    {
-        return parent::sub($interval);
-    }
-
-    /**
      * Subtract given units or interval to the current instance.
      *
      * @example $date->sub('hour', 3)
      * @example $date->sub(15, 'days')
      * @example $date->sub(CarbonInterval::days(4))
      *
-     * @param string|DateInterval|Closure|CarbonConverterInterface $unit
-     * @param int                                                  $value
-     * @param bool|null                                            $overflow
+     * @param string|DateInterval $unit
+     * @param int                 $value
+     * @param bool|null           $overflow
      *
      * @return static
      */
@@ -356,14 +322,6 @@ trait Units
     {
         if (is_string($unit) && func_num_args() === 1) {
             $unit = CarbonInterval::make($unit);
-        }
-
-        if ($unit instanceof CarbonConverterInterface) {
-            return $this->resolveCarbon($unit->convertDate($this, true));
-        }
-
-        if ($unit instanceof Closure) {
-            return $this->resolveCarbon($unit($this, true));
         }
 
         if ($unit instanceof DateInterval) {

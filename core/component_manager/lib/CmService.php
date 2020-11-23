@@ -7,10 +7,7 @@ use core\App;
 use core\component_manager\interfaces\Rep;
 use core\component_manager\traits\Delete;
 use core\component_manager\traits\Unpack;
-use core\Debug;
 use core\HZip;
-use core\modules\ModulesHandler;
-use core\Request;
 use Exception;
 
 
@@ -69,24 +66,34 @@ class CmService
 
     /**
      * @param string $slug
+     * @param string $data
+     * @param string $type
+     * @param string $serverPath
+     * @param string $savePath
+     * @param string $unpackPath
      * @return bool
      */
-    public function updateCurrentVersion(string $slug): bool
+    public function updateCurrentVersion(string $slug, string $data, string $type, string $serverPath, string $savePath, string $unpackPath): bool
     {
         if ($this->checkVersion($slug) === FALSE)
-            return $this->download($slug);
+            return $this->download($data, $type,  $serverPath,  $savePath, $unpackPath);
         else
             return false;
     }
 
     /**
      * @param string $slug
+     * @param string $data
+     * @param string $type
+     * @param string $serverPath
+     * @param string $savePath
+     * @param string $unpackPath
      * @return bool
      */
-    public function getIsInstalled(string $slug): bool
+    public function getIsInstalled(string $slug, string $data, string $type, string $serverPath, string $savePath, string $unpackPath): bool
     {
         if ($this->isInstalled($slug) === FALSE)
-            return $this->download($slug);
+            return $this->download($data, $type,  $serverPath,  $savePath, $unpackPath);
         else
             return false;
     }
@@ -372,6 +379,7 @@ class CmService
     private function getRep()
     {
         $class = Config::get()->byKey('repType');
-        $this->rep = new $class();
+        //$this->rep = new $class();
+        $this->rep = new CurlRep();
     }
 }

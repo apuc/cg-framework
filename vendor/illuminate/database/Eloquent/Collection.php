@@ -335,7 +335,7 @@ class Collection extends BaseCollection implements QueueableCollection
      *
      * @param  string|callable|null  $key
      * @param  bool  $strict
-     * @return static
+     * @return static|\Illuminate\Support\Collection
      */
     public function unique($key = null, $strict = false)
     {

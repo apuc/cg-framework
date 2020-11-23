@@ -3,8 +3,10 @@
 namespace workspace\controllers;
 
 use core\App;
+use core\component_manager\lib\Config;
 use core\component_manager\lib\Mod;
 use core\Controller;
+use core\Debug;
 use workspace\modules\users\models\User;
 use workspace\requests\LoginRequest;
 use workspace\requests\RegistrationRequest;

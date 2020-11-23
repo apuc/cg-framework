@@ -3,6 +3,8 @@
 namespace core\component_manager\lib;
 
 
+use Exception;
+
 class CM
 {
     public $service;
@@ -102,6 +104,7 @@ class CM
     /**
      * @param string $data
      * @return string
+     * @throws Exception
      */
     public function upload(string $data)
     {

@@ -5,8 +5,8 @@ namespace workspace\console\controllers;
 
 
 use core\App;
+use core\component_manager\lib\ModulesHandler;
 use core\console\ConsoleController;
-use core\modules\ModulesHandler;
 
 class ModController extends ConsoleController
 {

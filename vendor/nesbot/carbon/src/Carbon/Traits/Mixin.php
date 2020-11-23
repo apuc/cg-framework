@@ -17,9 +17,22 @@ use ReflectionMethod;
 use Throwable;
 
 /**
- * Trait Mixin.
+ * Trait Boundaries.
  *
- * Allows mixing in entire classes with multiple macros.
+ * startOf, endOf and derived method for each unit.
+ *
+ * Depends on the following properties:
+ *
+ * @property int $year
+ * @property int $month
+ * @property int $daysInMonth
+ * @property int $quarter
+ *
+ * Depends on the following methods:
+ *
+ * @method $this setTime(int $hour, int $minute, int $second = 0, int $microseconds = 0)
+ * @method $this setDate(int $year, int $month, int $day)
+ * @method $this addMonths(int $value = 1)
  */
 trait Mixin
 {
@@ -111,7 +124,7 @@ trait Mixin
 
                 try {
                     $closure = $closureBase->bindTo($context);
-                } catch (Throwable $throwable) {
+                } catch (Throwable $e) {
                     $closure = $closureBase;
                 }
 

@@ -36,10 +36,9 @@
     "require-dev": {
         "doctrine/orm": "^2.7",
         "friendsofphp/php-cs-fixer": "^2.14 || ^3.0",
-        "kylekatarnls/multi-tester": "^2.0",
-        "phpmd/phpmd": "^2.9",
-        "phpstan/extension-installer": "^1.0",
-        "phpstan/phpstan": "^0.12.35",
+        "kylekatarnls/multi-tester": "^1.1",
+        "phpmd/phpmd": "^2.8",
+        "phpstan/phpstan": "^0.11",
         "phpunit/phpunit": "^7.5 || ^8.0",
         "squizlabs/php_codesniffer": "^3.4"
     },
@@ -69,7 +68,7 @@
         ],
         "phpunit": "phpunit --verbose",
         "phpcs": "php-cs-fixer fix -v --diff --dry-run",
-        "phpstan": "phpstan analyse --configuration phpstan.neon",
+        "phpstan": "phpstan analyse --configuration phpstan.neon --level 3 src tests",
         "phpmd": "phpmd src text /phpmd.xml",
         "phpdoc": "php phpdoc.php"
     },
@@ -81,11 +80,6 @@
         "laravel": {
             "providers": [
                 "Carbon\\Laravel\\ServiceProvider"
-            ]
-        },
-        "phpstan": {
-            "includes": [
-                "extension.neon"
             ]
         }
     }

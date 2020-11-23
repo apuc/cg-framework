@@ -13,10 +13,12 @@ class ModulesHandler
     {
         $mod = new Mod();
         $modules = $mod->getLocModByFolder('workspace/modules/');
+
         foreach ($modules as $module) {
             $manifest = file_get_contents("workspace/modules/$module/manifest.json");
             $manifest = json_decode($manifest);
             $data = ['version' => $manifest->version, 'status' => 'active', 'type' => 'module'];
+
             $cm = new CmService();
             $cm->mod->save($module, $data);
         }
