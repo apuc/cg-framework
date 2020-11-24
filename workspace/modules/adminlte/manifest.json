@@ -1,6 +1,6 @@
 {
   "name": "adminlte",
-  "version": "1.0",
+  "version": "1.1",
   "type": "module",
   "class": "workspace\\modules\\adminlte\\Adminlte",
   "description": "adminlte module",

@@ -14,12 +14,18 @@ use core\Debug;
 use core\GridView;
 use core\GridViewHelper;
 use core\HZip;
+use core\ZipCore;
 use DateTime;
 
 class CoreController extends Controller
 {
     public function actionIndexCore()
     {
+//        ZipCore::zipDir('core','archives/0.4.zip');
+//        $cms = new CmService();
+//        $cms->unpack("/archives/0.4.zip", "/archives/core", "0.4");
+//        rmdir('archives/core/core');
+
         $this->view->setTitle('Core');
 
         $model = CoreHandler::getCore();
@@ -35,7 +41,7 @@ class CoreController extends Controller
     public function actionDownloadCore()
     {
         $cm = new CM();
-        $cm->download($_POST['data'], 'core', "/cloud/core","/archives/", '');
+        $cm->download($_POST['data'], 'core', "/cloud/core", "/archives/", '');
 
         CmHelper::clearRequest();
         $model = CoreHandler::getCore();
@@ -61,9 +67,11 @@ class CoreController extends Controller
         $new_version = json_decode($_POST['data'])->version;
         $current_version = json_decode(file_get_contents('core/manifest.json'))->version;
 
-        HZip::zipDir('core','archives/' . $current_version . '.zip');
-//        $mod->deleteDirectory("core");
-//        $cms->unpack("/archives/$new_version.zip", "/core/");
+        ZipCore::zipDir("core", "archives/$current_version.zip");
+        $mod->deleteDirectory("core");
+
+        $cms->unpack("/archives/$new_version.zip", "/core");
+        rmdir('/core/core');
 
         $cm->coreChangeStatusToInactive($current_version);
         $cm->coreChangeStatusToActive($new_version);
@@ -81,7 +89,8 @@ class CoreController extends Controller
 
     public function actionArchiveCore()
     {
-        HZip::zipDir('core','archives/' . $_GET['name'] . '.zip');
+        $current_version = $_GET['name'];
+        ZipCore::zipDir("core", "archives/$current_version.zip");
     }
 
     public function setOptions($data)
