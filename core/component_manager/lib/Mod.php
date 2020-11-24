@@ -197,6 +197,16 @@ class Mod
     }
 
     /**
+     * @param string $version
+     */
+    public function core_save(string $version)
+    {
+        $mods = json_decode(file_get_contents('mods.json'));
+        array_push($mods->__core, ['version' => $version, 'status' => 'inactive', 'localStatus' => 'local', 'type' => 'core']);
+        file_put_contents('mods.json', json_encode($mods));
+    }
+
+    /**
      * @param string $slug
      * @return bool
      */

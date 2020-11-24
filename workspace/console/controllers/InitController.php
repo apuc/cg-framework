@@ -14,10 +14,7 @@ class InitController extends ConsoleController
         $config = new ModController();
         $config->actionInit();
 
-        $config = new ConfigController();
-        $config->actionInit();
-
-        $config = new MigrationController();
-        $config->actionInit();
+        $mod = new ConfigController();
+        $mod->actionInit();
     }
 }

@@ -21,7 +21,6 @@ class CoreController extends Controller
     public function actionIndexCore()
     {
         $this->view->setTitle('Core');
-        //$this->viewPath = '/core/views/';
 
         $model = CoreHandler::getCore();
 

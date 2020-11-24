@@ -6,6 +6,7 @@ namespace core\component_manager\lib;
 
 use core\App;
 use core\component_manager\models\Core;
+use core\Debug;
 
 class CoreHandler
 {
@@ -20,6 +21,9 @@ class CoreHandler
 
     public static function getCore()
     {
+        $cms = new CmService();
+        $cms->mod->core_save(json_decode(file_get_contents('core/manifest.json'))->version);
+
         $local_cores = json_decode(file_get_contents('mods.json'))->__core;
 
         $cores = [];

@@ -22,6 +22,9 @@ class ModulesHandler
             $cm = new CmService();
             $cm->mod->save($module, $data);
         }
+        $mods = json_decode(file_get_contents('mods.json'));
+        $mods->__core = [];
+        file_put_contents('mods.json', json_encode($mods));
     }
 
     public function versionChanged()
