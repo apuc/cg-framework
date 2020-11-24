@@ -20,7 +20,7 @@
 
 {capture name=js_body}
     <!-- jQuery -->
-    <script src="/workspace/modules/adminlte/resources/plugins/jquery/jquery.min.js"></script>
+    <script src="/resources/js/jquery/jquery.min.js"></script>
     <!-- AdminLTE App -->
     <script src="/workspace/modules/adminlte/resources/dist/js/adminlte.js"></script>
 
