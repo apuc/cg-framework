@@ -63,7 +63,8 @@ class CoreController extends Controller
         ZipCore::zipDir("core", "archives/$current_version.zip");
         $mod->deleteDirectory("core");
 
-        $cms->unpack("/archives/$new_version.zip", "/core");
+        $cms->unpack("/archives/$new_version.zip", "/");
+        rmdir('/core/core');
 
         $cm->coreChangeStatusToInactive($current_version);
         $cm->coreChangeStatusToActive($new_version);
