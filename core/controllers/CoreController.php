@@ -9,6 +9,9 @@ use core\component_manager\lib\CmHelper;
 use core\component_manager\lib\CmService;
 use core\component_manager\lib\CoreHandler;
 use core\component_manager\lib\Mod;
+use core\component_manager\lib\ModulesHandler;
+use core\component_manager\models\Modules;
+use core\component_manager\models\ModulesSearchRequest;
 use core\Controller;
 use core\Debug;
 use core\GridView;
@@ -42,7 +45,12 @@ class CoreController extends Controller
 
     public function actionUploadCore()
     {
+//        $cm = new CM();
+//        $cm->upload($_POST['data']);
 
+        CmHelper::clearRequest();
+
+        return GridView::widget($this->setOptions(CoreHandler::getCore()))->run();
     }
 
     public function actionSetActiveCore()

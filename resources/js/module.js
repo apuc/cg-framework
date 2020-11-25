@@ -14,8 +14,9 @@ jQuery(document).ready(function ($) {
             type: type,
             data: {data: data, changed: changed},
             success: function (res) {
-                if(action === "module-upload" || action === "module-update"
-                    || action === "core-update" || action === "core-upload")
+                console.log(action);
+                if(action === "/module-upload" || action === "/module-update"
+                    || action === "/core-update" || action === "/core-upload")
                     alert('Дейтвие выполнено успешно');
                 $('#' + target).html(res);
             },
