@@ -21,16 +21,10 @@ class CoreController extends Controller
 {
     public function actionIndexCore()
     {
-//        ZipCore::zipDir('core','archives/0.4.zip');
-//        $cms = new CmService();
-//        $cms->unpack("/archives/0.4.zip", "/archives/core", "0.4");
-//        rmdir('archives/core/core');
-
         $this->view->setTitle('Core');
 
-        $model = CoreHandler::getCore();
-
-        return $this->render('main/core.tpl', ['options' => $this->setOptions($model)]);
+        return $this->render('main/core.tpl', [
+            'options' => $this->setOptions(CoreHandler::getCore())]);
     }
 
     public function actionAddLocCoreToMods()
@@ -44,9 +38,8 @@ class CoreController extends Controller
         $cm->download($_POST['data'], 'core', "/cloud/core", "/archives/", '');
 
         CmHelper::clearRequest();
-        $model = CoreHandler::getCore();
 
-        return GridView::widget($this->setOptions($model))->run();
+        return GridView::widget($this->setOptions(CoreHandler::getCore()))->run();
     }
 
     public function actionUpdateCore()
@@ -70,16 +63,15 @@ class CoreController extends Controller
         ZipCore::zipDir("core", "archives/$current_version.zip");
         $mod->deleteDirectory("core");
 
-        $cms->unpack("/archives/$new_version.zip", "/core");
+        $cms->unpack("/archives/$new_version.zip", "/");
         rmdir('/core/core');
 
         $cm->coreChangeStatusToInactive($current_version);
         $cm->coreChangeStatusToActive($new_version);
 
         CmHelper::clearRequest();
-        $model = CoreHandler::getCore();
 
-        return GridView::widget($this->setOptions($model))->run();
+        return GridView::widget($this->setOptions(CoreHandler::getCore()))->run();
     }
 
     public function actionDeleteCore()
