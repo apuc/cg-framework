@@ -9,11 +9,7 @@ use core\component_manager\lib\CmHelper;
 use core\component_manager\lib\CmService;
 use core\component_manager\lib\CoreHandler;
 use core\component_manager\lib\Mod;
-use core\component_manager\lib\ModulesHandler;
-use core\component_manager\models\Modules;
-use core\component_manager\models\ModulesSearchRequest;
 use core\Controller;
-use core\Debug;
 use core\GridView;
 use core\GridViewHelper;
 use core\ZipCore;
@@ -109,18 +105,17 @@ class CoreController extends Controller
                     'value' => function ($model) {
                         $version = $model->version;
                         $fl = 0;
-
                         if ($model->localStatus == 'local')
                             $fl = 1;
                         if ($model->localStatus == 'server' && $fl == 0)
                             return GridViewHelper::button("download-$version", '__cjax', 'Скачать',
                                 'cloud-download-alt', 'data-name="' . $version . '" data-version="' . $version
                                 . '" data-action="download-core" data-target="cjax"');
-//                        elseif ($model->localStatus == 'local')
-//                            return GridViewHelper::button("update-$version", '__cjax', 'Обновить',
-//                                'redo', 'data-name="' . $version . '" data-version="' . $version
-//                                . '" data-action="update-core" data-target="cjax"');
-                        else return GridViewHelper::div('<i class="far fa-hdd"></i>', 'fixed-width');
+                        elseif ($model->localStatus == 'local')
+                            return GridViewHelper::button("update-$version", '__cjax', 'Обновить',
+                                'redo', 'data-name="' . $version . '" data-version="' . $version
+                                . '" data-action="update-core" data-target="cjax"');
+                        else return GridViewHelper::div('', 'fixed-width');
                     }
                 ],
                 'upload' => [
