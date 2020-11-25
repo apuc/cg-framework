@@ -21,10 +21,19 @@ class CoreHandler
 
     public static function getCore()
     {
-        $cms = new CmService();
-        $cms->mod->core_save(json_decode(file_get_contents('core/manifest.json'))->version);
-
+        $active_core = json_decode(file_get_contents('core/manifest.json'))->version;
         $local_cores = json_decode(file_get_contents('mods.json'))->__core;
+
+        $fl = 0;
+        foreach ($local_cores as $local_core)
+            if($local_core->version == $active_core) {
+                $fl = 1;
+                break;
+            }
+        if(!$fl) {
+            $cms = new CmService();
+            $cms->mod->core_save($active_core);
+        }
 
         $cores = [];
         $server_cores = json_decode(file_get_contents(App::$config['component_manager']['url'] . '/get-core'));
