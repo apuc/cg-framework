@@ -13,9 +13,7 @@ use core\Controller;
 use core\Debug;
 use core\GridView;
 use core\GridViewHelper;
-use core\HZip;
 use core\ZipCore;
-use DateTime;
 
 class CoreController extends Controller
 {
@@ -25,11 +23,6 @@ class CoreController extends Controller
 
         return $this->render('main/core.tpl', [
             'options' => $this->setOptions(CoreHandler::getCore())]);
-    }
-
-    public function actionAddLocCoreToMods()
-    {
-
     }
 
     public function actionDownloadCore()
@@ -75,7 +68,18 @@ class CoreController extends Controller
 
     public function actionDeleteCore()
     {
+        $version = json_decode($_POST['data'])->version;
+        unlink("archives/$version.zip");
 
+        $mods = json_decode(file_get_contents('mods.json'));
+        foreach ($mods->__core as $key => $item)
+            if($item->version == $version) {
+                unset($mods->__core[$key]);
+                break;
+            }
+        file_put_contents('mods.json', json_encode($mods));
+
+        return GridView::widget($this->setOptions(CoreHandler::getCore()))->run();
     }
 
     public function actionArchiveCore()
@@ -104,11 +108,11 @@ class CoreController extends Controller
                             return GridViewHelper::button("download-$version", '__cjax', 'Скачать',
                                 'cloud-download-alt', 'data-name="' . $version . '" data-version="' . $version
                                 . '" data-action="download-core" data-target="cjax"');
-                        elseif ($model->localStatus == 'local')
-                            return GridViewHelper::button("update-$version", '__cjax', 'Обновить',
-                                'redo', 'data-name="' . $version . '" data-version="' . $version
-                                . '" data-action="update-core" data-target="cjax"');
-                        else return GridViewHelper::div('', 'fixed-width');
+//                        elseif ($model->localStatus == 'local')
+//                            return GridViewHelper::button("update-$version", '__cjax', 'Обновить',
+//                                'redo', 'data-name="' . $version . '" data-version="' . $version
+//                                . '" data-action="update-core" data-target="cjax"');
+                        else return GridViewHelper::div('<i class="far fa-hdd"></i>', 'fixed-width');
                     }
                 ],
                 'upload' => [
@@ -140,19 +144,19 @@ class CoreController extends Controller
                             return GridViewHelper::div('', 'fixed-width');
                     },
                 ],
-//                'delete' => [
-//                    'label' => '',
-//                    'showFilter' => false,
-//                    'value' => function ($model) {
-//                        $name = $model->name;
-//
-//                        return ($model->localStatus == 'local')
-//                            ? GridViewHelper::button("core-delete-$name", '__cjax', 'Удалить',
-//                                'trash', 'data-name="' . $name . '" data-version="' . $model->version
-//                                . '" data-action="core-delete" data-target="cjax"')
-//                            : GridViewHelper::div('', 'fixed-width');
-//                    },
-//                ],
+                'delete' => [
+                    'label' => '',
+                    'showFilter' => false,
+                    'value' => function ($model) {
+                        $version = $model->version;
+
+                        return ($model->status == 'inactive')
+                            ? GridViewHelper::button("core-delete-$version", '__cjax', 'Удалить',
+                                'trash', 'data-name="' . $version . '" data-version="' . $model->version
+                                . '" data-action="delete-core" data-target="cjax"')
+                            : GridViewHelper::div('', 'fixed-width');
+                    },
+                ],
                 'version' => [
                     'label' => 'Версия',
                     'value' => function ($model) {
