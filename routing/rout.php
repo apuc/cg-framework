@@ -29,7 +29,6 @@ App::$collector->any('update-manifest', ['core\controllers\ModulesController', '
 
 App::$collector->cors('core-versions', ['core\controllers\CoreController'], ['actionIndexCore']);
 App::$collector->any('download-core', ['core\controllers\CoreController', 'actionDownloadCore']);
-App::$collector->any('update-core', ['core\controllers\CoreController', 'actionUpdateCore']);
 App::$collector->any('upload-core', ['core\controllers\CoreController', 'actionUploadCore']);
 App::$collector->any('set-active-core', ['core\controllers\CoreController', 'actionSetActiveCore']);
 App::$collector->any('delete-core', ['core\controllers\CoreController', 'actionDeleteCore']);

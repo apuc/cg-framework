@@ -34,15 +34,10 @@ class CoreController extends Controller
         return GridView::widget($this->setOptions(CoreHandler::getCore()))->run();
     }
 
-    public function actionUpdateCore()
-    {
-
-    }
-
     public function actionUploadCore()
     {
-//        $cm = new CM();
-//        $cm->upload($_POST['data']);
+        $cm = new CM();
+        $cm->upload($_POST['data']);
 
         CmHelper::clearRequest();
 
@@ -111,11 +106,7 @@ class CoreController extends Controller
                             return GridViewHelper::button("download-$version", '__cjax', 'Скачать',
                                 'cloud-download-alt', 'data-name="' . $version . '" data-version="' . $version
                                 . '" data-action="download-core" data-target="cjax"');
-                        elseif ($model->localStatus == 'local')
-                            return GridViewHelper::button("update-$version", '__cjax', 'Обновить',
-                                'redo', 'data-name="' . $version . '" data-version="' . $version
-                                . '" data-action="update-core" data-target="cjax"');
-                        else return GridViewHelper::div('', 'fixed-width');
+                        else return GridViewHelper::div('<i class="fas fa-hdd"></i>', 'fixed-width');
                     }
                 ],
                 'upload' => [
@@ -126,8 +117,8 @@ class CoreController extends Controller
 
                         return ($model->localStatus == 'local')
                             ? GridViewHelper::button("core-upload-$version", '__cjax', 'Загрузить в облако',
-                                'cloud-upload-alt', 'data-name="' . $version . '" data-version="' . $model->version
-                                . '" data-action="core-upload" data-target="cjax"')
+                                'cloud-upload-alt', 'data-name="' . $version . '" data-version="' . $version
+                                . '"data-category="core" data-action="upload-core" data-target="cjax"')
                             : GridViewHelper::div('', 'fixed-width');
                     }
                 ],

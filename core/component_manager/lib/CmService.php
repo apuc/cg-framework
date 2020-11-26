@@ -8,6 +8,7 @@ use core\component_manager\interfaces\Rep;
 use core\component_manager\traits\Delete;
 use core\component_manager\traits\Unpack;
 use core\HZip;
+use core\ZipCore;
 use Exception;
 
 
@@ -237,15 +238,19 @@ class CmService
         $data = json_decode($data);
         $slug = $data->name;
         $version = $data->version;
+        $type = (isset($data->category) && $data->category) ? $data->category : '';
 
-        HZip::zipDir("workspace/modules/$slug", "$slug.zip");
+        ($type == 'core')
+            ? ZipCore::zipDir("core", "$slug.zip")
+            : HZip::zipDir("workspace/modules/$slug", "$slug.zip");
 
         $request = curl_init(App::$config['component_manager']['url'] . '/save');
         curl_setopt($request, CURLOPT_POST, true);
 
         $file = file_get_contents("$slug.zip");
 
-        curl_setopt($request, CURLOPT_POSTFIELDS, ['file' => base64_encode($file), 'slug' => $slug, 'version' => $version]);
+        curl_setopt($request, CURLOPT_POSTFIELDS, ['file' => base64_encode($file), 'slug' => $slug,
+            'version' => $version, 'type' => $type]);
         curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
         $result = curl_exec($request);
         curl_close($request);
