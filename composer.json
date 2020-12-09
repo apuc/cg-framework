@@ -14,7 +14,8 @@
     "illuminate\/filesystem": "^6.16",
     "snapappointments\/bootstrap-select": "^1.13",
     "symfony\/filesystem": "^5.0",
-    "rakit\/validation": "^1.2"
+    "rakit\/validation": "^1.2",
+    "smarty/smarty": "^3.1"
   },
   "autoload": {
     "psr-4": {
