@@ -12,6 +12,16 @@ App::$collector->any('sign-up', ['workspace\controllers\MainController', 'action
 App::$collector->any('sign-in', ['workspace\controllers\MainController', 'actionSignIn']);
 App::$collector->any('logout', ['workspace\controllers\MainController', 'actionLogout']);
 
+//TODO
+App::$collector->crudVue('users', ['workspace\controllers\VueFormUserController']);
+//App::$collector->post('users/', ['workspace\controllers\VueFormUserController', 'create']);
+//App::$collector->put('users/{id}', ['workspace\controllers\VueFormUserController', 'update']);
+//App::$collector->get('users/', ['workspace\controllers\VueFormUserController', 'index']);
+//App::$collector->get('users/{id}', ['workspace\controllers\VueFormUserController', 'show']);
+//App::$collector->delete('users/{id}', ['workspace\controllers\VueFormUserController', 'delete']);
+
+
+
 if (App::$config['codegen'] == 'on')
     App::$collector->any('codegen', ['core\controllers\CodegenController', 'actionCodeGenerator']);
 

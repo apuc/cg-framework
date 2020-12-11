@@ -18,6 +18,16 @@ class CgRouteCollector extends RouteCollector
         return $this->addRoute(Route::ANY, $route . '/update/{id}', array_merge($handler, ['actionEdit']), $filters);
     }
 
+    public function crudVue($route, $handler, array $filters = [])
+    {
+        $this->addRoute(Route::GET, $route, array_merge($handler, ['index']), $filters);
+        $this->addRoute(Route::GET, $route . '/{id}', array_merge($handler, ['show']), $filters);
+        $this->addRoute(Route::POST, $route, array_merge($handler, ['create']), $filters);
+        $this->addRoute(Route::DELETE, $route, array_merge($handler, ['delete']), $filters);
+        $this->addRoute(Route::PUT, $route, array_merge($handler, ['update']), $filters);
+        return $this->addRoute(Route::ANY, $route . '/{id}', array_merge($handler, ['show']), $filters);
+    }
+
     public function gridView($route, $handler, array $filters = [])
     {
         $this->addRoute(Route::GET, $route, array_merge($handler, ['actionIndex']), $filters);

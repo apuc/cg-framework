@@ -7,8 +7,11 @@ namespace workspace\modules\users\models;
 use Illuminate\Database\Eloquent\Model;
 use workspace\modules\users\requests\UsersSearchRequest;
 
+
+
 class User extends Model
 {
+
     protected $table = "user";
 
     public $fillable = ['username', 'email', 'role', 'password_hash'];
