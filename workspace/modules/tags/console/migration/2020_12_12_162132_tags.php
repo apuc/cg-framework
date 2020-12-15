@@ -18,9 +18,16 @@ class Tags extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('slug');
+            $table->integer('status');
+            $table->timestamps();
+        });
+
+        App::$db->schema->create('tags_relations', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->string('type');
             $table->integer('type_id');
-            $table->integer('status');
+            $table->unsignedBigInteger('tag_id');
+            $table->foreign('tag_id')->references('id')->on('tags');
             $table->timestamps();
         });
     }
