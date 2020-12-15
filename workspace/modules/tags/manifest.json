@@ -1,0 +1,11 @@
+{
+  "name": "tags",
+  "version": "0.1",
+  "type": "module",
+  "class": "workspace\\modules\\tags\\Tags",
+  "description": "tags module",
+  "configFile": "config/tags.php",
+  "routFile": "routing/rout.php",
+  "migrationPath": "console/migrations",
+  "relations": []
+}
