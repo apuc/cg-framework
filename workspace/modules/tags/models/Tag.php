@@ -5,13 +5,19 @@ namespace workspace\modules\tags\models;
 
 use Illuminate\Database\Eloquent\Model;
 use workspace\modules\tags\requests\TagsRequest;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-class Tags extends Model
+class Tag extends Model
 {
     protected $table = "tags";
 
-    public $fillable = ['name', 'slug', 'type', 'type_id', 'status'];
+    public $fillable = ['name', 'slug', 'status'];
+
+
+    protected $cascadeDeletes = ['comments'];
+    protected $dates = ['deleted_at'];
+
 
     /**
      * @param TagsRequest $request
@@ -27,26 +33,46 @@ class Tags extends Model
         if ($request->slug)
             $query->where('slug', 'LIKE', "%$request->slug%");
 
-        if ($request->type)
-            $query->where('type', 'LIKE', "$request->type");
-
-        if ($request->type_id)
-            $query->where('type_id', 'LIKE', "$request->type_id");
+        if ($request->status)
+            $query->where('status', $request->status);
 
         return $query->get();
     }
 
-    public static function getCurrentTagName()
+    function makeSlug($string){
+        return $slug = \Transliterator::createFromRules(
+            ':: Any-Latin;'
+            . ':: NFD;'
+            . ':: [:Nonspacing Mark:] Remove;'
+            . ':: NFC;'
+            . ':: [:Punctuation:] Remove;'
+            . ':: Lower();'
+            . '[:Separator:] > \'-\''
+        )
+            ->transliterate( $string );
+    }
+
+    public static function beginTransaction()
     {
-        return $_SESSION['name'] ?? null;
+        self::getConnectionResolver()->connection()->beginTransaction();
+    }
+
+    public static function commit()
+    {
+        self::getConnectionResolver()->connection()->commit();
+    }
+
+    public static function rollBack()
+    {
+        self::getConnectionResolver()->connection()->rollBack();
     }
 
     public function _save($request)
     {
         $this->name = $request->name;
         $this->slug = $request->slug;
-        $this->type = $request->type;
-        $this->type_id = $request->type_id;
+        $this->status = (int)$request->type;
         $this->save();
     }
+
 }
