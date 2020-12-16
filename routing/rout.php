@@ -14,12 +14,6 @@ App::$collector->any('logout', ['workspace\controllers\MainController', 'actionL
 
 //TODO
 App::$collector->crudVue('users', ['workspace\controllers\VueFormUserController']);
-//App::$collector->post('users/', ['workspace\controllers\VueFormUserController', 'create']);
-//App::$collector->put('users/{id}', ['workspace\controllers\VueFormUserController', 'update']);
-//App::$collector->get('users/', ['workspace\controllers\VueFormUserController', 'index']);
-//App::$collector->get('users/{id}', ['workspace\controllers\VueFormUserController', 'show']);
-//App::$collector->delete('users/{id}', ['workspace\controllers\VueFormUserController', 'delete']);
-
 
 
 if (App::$config['codegen'] == 'on')
