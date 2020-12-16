@@ -52,21 +52,6 @@ class Tag extends Model
             ->transliterate( $string );
     }
 
-    public static function beginTransaction()
-    {
-        self::getConnectionResolver()->connection()->beginTransaction();
-    }
-
-    public static function commit()
-    {
-        self::getConnectionResolver()->connection()->commit();
-    }
-
-    public static function rollBack()
-    {
-        self::getConnectionResolver()->connection()->rollBack();
-    }
-
     public function _save($request)
     {
         $this->name = $request->name;
