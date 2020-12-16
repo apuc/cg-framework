@@ -95,10 +95,10 @@ class TagsController extends Controller
     public function actionDelete()
     {
         $model = Tag::search($this->request);
-        $this->tag->beginTransaction();
+        App::$db->capsule->getConnection()->transaction(function (){
             Type::getTypesByTagID($this->request->id)->delete();
             $this->tag->where('id', $this->request->id)->delete();
-        $this->tag->commit();
+        });
         return $this->render('tags/index.tpl',
             ['options' => $this->setOptions($model), 'h1' => 'Тэги']);
     }
