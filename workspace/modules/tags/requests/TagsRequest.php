@@ -1,12 +1,12 @@
 <?php
 
-namespace workspace\modules\users\requests;
+namespace workspace\modules\tags\requests;
 
 
 use core\RequestSearch;
 
 /**
- * Class TagsSearchRequest
+ * Class TagsRequest
  * @package workspace\modules\tags\requests
  *
  * @property string $name
@@ -17,13 +17,18 @@ use core\RequestSearch;
  */
 
 
-class TagsSearchRequest extends RequestSearch
+class TagsRequest extends RequestSearch
 {
+    public $id;
+
     public $name;
     public $slug;
+    public $status;
+
+    // for tags_relations
     public $type;
     public $type_id;
-    public $status;
+    public $tag_id;
 
     public function rules()
     {
