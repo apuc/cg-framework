@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "99a79e891d3aa1dbdbac5bd8d24ca13c",
+    "content-hash": "6cd337c246995302977a2c974c57a060",
     "packages": [
         {
             "name": "craft-group/phroute",
@@ -1788,7 +1788,8 @@
         "ext-curl": "*",
         "ext-dom": "*",
         "ext-ftp": "*",
-        "ext-zip": "*"
+        "ext-zip": "*",
+        "ext-intl": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "1.1.0"
