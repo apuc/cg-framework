@@ -31,11 +31,16 @@ class Type extends Model
         return $query->get();
     }
 
+
+    public static function getTypesByTagID($id){
+        return Type::where('tag_id', $id);
+    }
+
     public function _save($request)
     {
         $this->type = $request->type;
-        $this->tag_id = $request->tag_id;
-        $this->type_id = $request->type_id;
+        $this->tag_id = (int)$request->tag_id;
+        $this->type_id = (int)$request->type_id;
         $this->save();
     }
 
