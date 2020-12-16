@@ -2,4 +2,4 @@
 
 use core\App;
 
-App::$collector->any('users', ['workspace\modules\tags\controllers\TagsController']);
+App::$collector->crud('tags', ['workspace\modules\tags\controllers\TagsController']);
