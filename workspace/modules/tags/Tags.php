@@ -12,7 +12,7 @@ class Tags
         $config['adminLeftMenu'] = [
             [
                 'title' => 'Теги',
-                'url' => '/admin/tags',
+                'url' => '/tags',
                 'icon' => '<i class="nav-icon fa fa-users"></i>', //TODO
             ],
         ];
