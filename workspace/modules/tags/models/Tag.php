@@ -27,6 +27,9 @@ class Tag extends Model
     {
         $query = self::query();
 
+        if ($request->id)
+            $query->where('name', $request->id);
+
         if ($request->name)
             $query->where('name', 'LIKE', "%$request->name%");
 
