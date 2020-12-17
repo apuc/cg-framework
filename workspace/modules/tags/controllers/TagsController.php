@@ -60,7 +60,7 @@ class TagsController extends Controller
             $typeModel->tag_id = $tagModel->id;
             $typeModel->save();
 
-            $this->redirect('/tags');
+            $this->redirect('tags');
         } else {
             return $this->render('tags/store.tpl');
         }
@@ -95,12 +95,40 @@ class TagsController extends Controller
     public function actionDelete()
     {
         $model = Tag::search($this->request);
+
         App::$db->capsule->getConnection()->transaction(function (){
             Type::getTypesByTagID($this->request->id)->delete();
             $this->tag->where('id', $this->request->id)->delete();
         });
+
         return $this->render('tags/index.tpl',
             ['options' => $this->setOptions($model), 'h1' => 'Тэги']);
+    }
+
+    public function actionEdit($id)
+    {
+        $tagModel = Tag::where('id', $id)->first();
+
+        if($this->request->name || $this->request->status || $this->request->slug) {
+
+            if($this->request->name)
+                $tagModel->name = $this->request->name;
+
+            if($this->request->slug)
+                $tagModel->slug = $this->request->slug;
+
+            if($this->request->status)
+                $tagModel->status = (int)$this->request->status;
+
+            $tagModel->save();
+
+            $this->redirect('tags');
+
+        } else {
+
+            return $this->render('tags/edit.tpl',
+                ['model' => $tagModel, 'h1' => 'Редактировать Тэг']);
+    }
     }
 
     /**
@@ -117,7 +145,7 @@ class TagsController extends Controller
                 'slug' => 'Slug',
                 'status' => 'Status'
             ],
-            'baseUri' => 'tags',
+            'baseUri' => '/tags',
         ];
     }
 
