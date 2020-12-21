@@ -13,7 +13,7 @@ class Tags
             [
                 'title' => 'Теги',
                 'url' => '/tags',
-                'icon' => '<i class="nav-icon fa fa-users"></i>', //TODO
+                'icon' => '<i class="fas fa-tags"></i>',
             ],
         ];
 
