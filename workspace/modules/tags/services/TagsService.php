@@ -11,64 +11,66 @@ use workspace\modules\tags\requests\TagsRequestSearch;
 class TagsService
 {
 
-    public $tag = Tag::class;
+    public $tag;
 
-    public $type = Type::class;
+    public $type;
 
-    public function __construct(){
-        $this->tag = new $this->tag();
-        $this->type = new $this->type();
+    public function __construct()
+    {
+        $this->tag = new Tag();
+        $this->type = new Type();
     }
 
-    public static function createTag($request)
+    public function createTag($request)
     {
-        $tagModel = new Tag();
-        $typeModel = new Type();
-
-        $tagModel->name = $request->name;
+        $this->tag->name = $request->name;
 
         if ($request->slug) {
-            $tagModel->slug = $request->slug;
+            $this->tag->slug = $request->slug;
         } else {
-            $tagModel->slug = $tagModel->makeSlug($request->name);
+            $this->tag->slug = $this->tag->makeSlug($request->name);
         }
 
-        $tagModel->status = $request->status;
-        $tagModel->save();
+        $this->tag->status = $request->status;
+        $this->tag->save();
 
-        $typeModel->type = $request->type;
-        $typeModel->type_id = $request->type_id;
-        $typeModel->tag_id = $tagModel->id;
-        $typeModel->save();
+        $this->type->type = $request->type;
+        $this->type->type_id = $request->type_id;
+        $this->type->tag_id = $this->tag->id;
+        $this->type->save();
     }
 
-    public static function deleteTag($request){
-        $res = App::$db->capsule->getConnection()->transaction(function () use ($request) {
+    public static function deleteTag($request)
+    {
+        App::$db->capsule->getConnection()->transaction(function () use ($request) {
             Type::getTypesByTagID($request->id)->delete();
             Tag::where('id', $request->id)->delete();
-        })->callback;
-        var_dump($res);
+        });
+
     }
 
-    public static function editTag($request){
-        $tagModel = self::getTagById($request->id);
+    public function editTag($request)
+    {
+        $this->tag = self::getTagById($request->id);
 
-        $tagModel->name = $request->name;
+        $this->tag->name = $request->name;
 
         if ($request->slug) {
-            $tagModel->slug = $request->slug;
+            $this->tag->slug = $request->slug;
         } else {
-            $tagModel->slug = $tagModel->makeSlug($request->name);
+            $this->tag->slug = $this->tag->makeSlug($request->name);
         }
-        $tagModel->status = $request->status;
-        $tagModel->save();
+        $this->tag->status = $request->status;
+        $this->tag->save();
     }
 
-    public static function getTagById($id){
+    public static function getTagById($id)
+    {
         return Tag::where('id', $id)->first();
     }
 
-    public static function searchTag(TagsRequestSearch $request){
+    public static function searchTag(TagsRequestSearch $request)
+    {
         return Tag::search($request);
     }
 

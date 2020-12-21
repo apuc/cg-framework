@@ -4,29 +4,21 @@ namespace workspace\modules\tags\controllers;
 
 
 use core\App;
-use core\component_manager\lib\Config;
 use core\Controller;
-use core\Debug;
-use Illuminate\Support\Facades\DB;
-use Rakit\Validation\Validator;
 use workspace\modules\tags\models\Tag;
-use workspace\modules\tags\models\Type;
 use workspace\modules\tags\requests\TagRequest;
 use workspace\modules\tags\requests\TagRequestEdit;
 use workspace\modules\tags\requests\TagsRequestSearch;
-use Illuminate\Database\Capsule\Manager as Capsule;
 use workspace\modules\tags\services\TagsService;
-use workspace\modules\tags\Tags;
 
-//TODO
 
 class TagsController extends Controller
 {
-
-
+    public $service;
 
     protected function init()
     {
+        $this->service = new TagsService();
         $this->viewPath = '/modules/tags/views/';
         $this->layoutPath = App::$config['adminLayoutPath'];
         App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);
@@ -39,7 +31,7 @@ class TagsController extends Controller
         $request = new TagRequest();
 
         if ($request->validate()) {
-            TagsService::createTag($request);
+            $this->service->createTag($request);
             $this->redirect('tags');
         } else {
             $errors = $request->isPost() ? $request->errors->all() : null;
@@ -90,7 +82,7 @@ class TagsController extends Controller
 
         if ($request->validate()) {
             $request->id = $id;
-            TagsService::editTag($request);
+            $this->service->editTag($request);
             $this->redirect('tags');
         } else {
             $tagModel = TagsService::getTagById($id);
