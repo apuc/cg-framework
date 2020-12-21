@@ -18,8 +18,6 @@ class Widget
     {
         $this->view = View::get();
 
-        $this->view->setViewPath(WORKSPACE_DIR . $this->viewPath);
-
         if (!empty($data)) {
             foreach ($data as $key => $item) {
                 $this->{$key} = $item;
@@ -38,4 +36,13 @@ class Widget
         return new $class($data);
     }
 
+    public function render($tpl, $data = [])
+    {
+        $currentViewPath = $this->view->getViewPath();
+        $this->view->setViewPath(WORKSPACE_DIR . $this->viewPath);
+        $res = $this->view->getTpl($tpl, $data);
+        $this->view->setViewPath($currentViewPath);
+
+        return $res;
+    }
 }
