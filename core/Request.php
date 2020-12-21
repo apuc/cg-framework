@@ -2,6 +2,8 @@
 
 namespace core;
 
+use Rakit\Validation\ErrorBag;
+use Rakit\Validation\Validation;
 use Rakit\Validation\Validator;
 
 class Request
@@ -22,9 +24,19 @@ class Request
     public $data = [];
 
     /**
-     * @var array
+     * @var $errors ErrorBag
      */
     public $errors = [];
+
+    /**
+     * @var $validator Validator
+     */
+    public $validator;
+
+    /**
+     * @var $validation Validation
+     */
+    public $validation;
 
 
     public function __construct($data = [])
@@ -169,9 +181,8 @@ class Request
                 $this->{$key} = $item;
                 $this->data[$key] = $item;
             }
-        }
-        elseif (!empty($data)){
-            foreach ($data as $key => $item){
+        } elseif (!empty($data)) {
+            foreach ($data as $key => $item) {
                 $this->{$key} = $item;
                 $this->data[$key] = $item;
             }
@@ -183,15 +194,14 @@ class Request
      */
     public function validate()
     {
-        if (!empty($this->data)) {
-            $valid = new Validator();
-            $validation = $valid->make($this->data, $this->rules());
-            $validation->setMessages($this->messages());
-            $validation->validate();
-            if ($validation->fails()) {
-                $this->errors = $validation->errors();
-                return false;
-            }
+        $this->validator = new Validator();
+        $this->validation = $this->validator->make($this->data, $this->rules());
+        $this->validation->setMessages($this->messages());
+        $this->validation->validate();
+        if ($this->validation->fails()) {
+            $this->errors = $this->validation->errors();
+
+            return false;
         }
 
         return true;
@@ -203,8 +213,8 @@ class Request
     public function getMessagesArray()
     {
         $msgs = [];
-        if($this->errors){
-            foreach ($this->errors->toArray() as $item){
+        if ($this->errors) {
+            foreach ($this->errors->toArray() as $item) {
                 $msgs[] = array_values($item)[0];
             }
         }
