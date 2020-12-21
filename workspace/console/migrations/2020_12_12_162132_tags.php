@@ -15,15 +15,15 @@ class Tags extends Migration
     public function up()
     {
         App::$db->schema->create('tags', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigIncrements('id')->unique();
             $table->string('name');
-            $table->string('slug');
+            $table->string('slug')->unique();
             $table->integer('status');
             $table->timestamps();
         });
 
         App::$db->schema->create('tags_relations', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigIncrements('id')->unique();
             $table->string('type');
             $table->integer('type_id');
             $table->unsignedBigInteger('tag_id');
