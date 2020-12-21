@@ -104,6 +104,11 @@ class View
         $this->tpl->template_dir = $dir;
     }
 
+    public function getViewPath()
+    {
+        return $this->tpl->template_dir;
+    }
+
     private function generateAdditionalParams($data)
     {
         $params = '';
