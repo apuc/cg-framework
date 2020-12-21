@@ -64,7 +64,7 @@ class VueForm
      * Generate and return array of forms in json
      * @return array
      */
-    public function getFormArrayByModel(){                  //TODO Переназвать
+    public function getFormArrayByModel(){
         $formArray = array();
         $modelArray = $this->model::all();
 
