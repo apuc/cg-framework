@@ -8,26 +8,25 @@ use core\component_manager\lib\Config;
 use core\Controller;
 use core\Debug;
 use Illuminate\Support\Facades\DB;
+use Rakit\Validation\Validator;
 use workspace\modules\tags\models\Tag;
 use workspace\modules\tags\models\Type;
-use workspace\modules\tags\requests\TagsRequest;
-use Illuminate\Database\Capsule\Manager as Capsule; //TODO
+use workspace\modules\tags\requests\TagRequest;
+use workspace\modules\tags\requests\TagRequestEdit;
+use workspace\modules\tags\requests\TagsRequestSearch;
+use Illuminate\Database\Capsule\Manager as Capsule;
+use workspace\modules\tags\services\TagsService;
+use workspace\modules\tags\Tags;
+
+//TODO
 
 class TagsController extends Controller
 {
 
-    public $request = TagsRequest::class;
-
-    public $tag = Tag::class;
-
-    public $type = Type::class;
 
 
     protected function init()
     {
-        $this->request = new $this->request();
-        $this->tag = new $this->tag();
-        $this->type = new $this->type();
         $this->viewPath = '/modules/tags/views/';
         $this->layoutPath = App::$config['adminLayoutPath'];
         App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);
@@ -37,39 +36,21 @@ class TagsController extends Controller
 
     public function actionStore()
     {
-        if($this->request->name && $this->request->type && $this->request->type_id
-            && $this->request->status) {
+        $request = new TagRequest();
 
-            $tagModel = new $this->tag();
-            $typeModel = new $this->type();
-
-            $tagModel->name = $this->request->name;
-
-            if($this->request->slug) {
-                $tagModel->slug = $this->request->slug;
-            }
-            else{
-                $tagModel->slug = $tagModel->makeSlug($this->request->name);
-            }
-
-            $tagModel->status = (int)$this->request->status;
-            $tagModel->save();
-
-            $typeModel->type = $this->request->type;
-            $typeModel->type_id = $this->request->type_id;
-            $typeModel->tag_id = $tagModel->id;
-            $typeModel->save();
-
+        if ($request->validate()) {
+            TagsService::createTag($request);
             $this->redirect('tags');
         } else {
-            return $this->render('tags/store.tpl');
+            $errors = $request->isPost() ? $request->errors->all() : null;
+            return $this->render('tags/store.tpl', ['errors' => $errors]);
         }
     }
 
 
     public function actionIndex()
     {
-        $model = Tag::search($this->request);
+        $model = TagsService::searchTag(new TagsRequestSearch());
 
         return $this->render('tags/index.tpl',
             ['options' => $this->setOptions($model), 'h1' => 'Тэги']);
@@ -77,7 +58,7 @@ class TagsController extends Controller
 
     public function actionView($id)
     {
-        $model = $this->tag::where('id', $id)->first();
+        $model = TagsService::getTagById($id);
 
         $options = [
             'fields' => [
@@ -91,15 +72,13 @@ class TagsController extends Controller
     }
 
 
-
     public function actionDelete()
     {
-        $model = Tag::search($this->request);
+        $request = new TagsRequestSearch();
 
-        App::$db->capsule->getConnection()->transaction(function (){
-            Type::getTypesByTagID($this->request->id)->delete();
-            $this->tag->where('id', $this->request->id)->delete();
-        });
+        TagsService::deleteTag($request);
+
+        $model = Tag::search($request);
 
         return $this->render('tags/index.tpl',
             ['options' => $this->setOptions($model), 'h1' => 'Тэги']);
@@ -107,28 +86,19 @@ class TagsController extends Controller
 
     public function actionEdit($id)
     {
-        $tagModel = Tag::where('id', $id)->first();
+        $request = new TagRequestEdit();
 
-        if($this->request->name || $this->request->status || $this->request->slug) {
-
-            if($this->request->name)
-                $tagModel->name = $this->request->name;
-
-            if($this->request->slug)
-                $tagModel->slug = $this->request->slug;
-
-            if($this->request->status)
-                $tagModel->status = (int)$this->request->status;
-
-            $tagModel->save();
-
+        if ($request->validate()) {
+            $request->id = $id;
+            TagsService::editTag($request);
             $this->redirect('tags');
-
         } else {
+            $tagModel = TagsService::getTagById($id);
 
+            $errors = $request->isPost() ? $request->errors->all() : null;
             return $this->render('tags/edit.tpl',
-                ['model' => $tagModel, 'h1' => 'Редактировать Тэг']);
-    }
+                ['model' => $tagModel, 'h1' => 'Редактировать Тэг', 'errors' => $errors]);
+        }
     }
 
     /**
