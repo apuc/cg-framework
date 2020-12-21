@@ -10,6 +10,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Tag extends Model
 {
+    const STATUS_DISABLE = 0;
+    const STATUS_ACTIVE = 1;
+
+
+
     protected $table = "tags";
 
     public $fillable = ['name', 'slug', 'status'];
@@ -18,6 +23,23 @@ class Tag extends Model
     protected $cascadeDeletes = ['comments'];
     protected $dates = ['deleted_at'];
 
+
+    public static function getStatusLabel(){
+        return [ self::STATUS_DISABLE => 'Неактивен', self::STATUS_ACTIVE => 'Активен'];
+    }
+
+    /*
+    return [
+            [
+                'id' => self::STATUS_DISABLE,
+                'value' => 'Неактивен'
+            ],
+            [
+                'id' => self::STATUS_ACTIVE,
+                'value' => 'Активен'
+            ]
+        ];
+    */
 
     /**
      * @param TagsRequestSearch $request

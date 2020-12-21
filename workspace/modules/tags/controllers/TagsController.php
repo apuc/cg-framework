@@ -5,6 +5,7 @@ namespace workspace\modules\tags\controllers;
 
 use core\App;
 use core\Controller;
+use core\Select2;
 use workspace\modules\tags\models\Tag;
 use workspace\modules\tags\requests\TagRequest;
 use workspace\modules\tags\requests\TagRequestEdit;
@@ -34,8 +35,18 @@ class TagsController extends Controller
             $this->service->createTag($request);
             $this->redirect('tags');
         } else {
+
+//            $sel2 = new Select2();
+//            $sel2->setParams(Tag::getStatusLabel(), [
+//                'label' => 'Статус:',
+//                'id' => 'status',
+//                'class' => '',
+//            ], [1]);
+//
+//            $selectList = $sel2->getSelectArray();
+
             $errors = $request->isPost() ? $request->errors->all() : null;
-            return $this->render('tags/store.tpl', ['errors' => $errors]);
+            return $this->render('tags/store.tpl', ['errors' => $errors, ]);
         }
     }
 
@@ -44,8 +55,9 @@ class TagsController extends Controller
     {
         $model = TagsService::searchTag(new TagsRequestSearch());
 
+
         return $this->render('tags/index.tpl',
-            ['options' => $this->setOptions($model), 'h1' => 'Тэги']);
+            ['options' => $this->setOptions($model),  'h1' => 'Тэги']);
     }
 
     public function actionView($id)

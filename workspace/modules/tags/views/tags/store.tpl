@@ -8,6 +8,10 @@
     {/foreach}
 {/if}
 
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
+
 <div class="container">
     <form class="form-horizontal" name="create_form" id="create_form" method="post" action="/tags/create">
         <div class="form-group">
@@ -18,10 +22,17 @@
             <label for="slug">Slug:</label>
             <input type="text" name="slug" id="slug" class="form-control"/>
         </div>
-        <div class="form-group">
-            <label for="status">Статус:</label>
-            <input type="text" name="status" id="status" class="form-control" required="required"/>
+
+        {$sel2}
+        <!--
+                <div class="form-group">
+                    <label for="status">Статус:</label>
+                    <select type="text" name="status" id="status" class="select2-selection--single form-control" required="required">
+                        <option value="1" selected="selected">Активен</--option>
+                        <option value="0">Неактивен</--option>
+                    </select>
         </div>
+        -->
         <div class="form-group">
             <label for="type">Type:</label>
             <input type="text" name="type" id="type" class="form-control" required="required" value=""/>
