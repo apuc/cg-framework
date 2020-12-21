@@ -43,4 +43,22 @@ class Select2 extends Widget
 
         return $result;
     }
+
+    public function getSelectArray()
+    {
+        $result = '<div class="form-group"><label for="' . $this->options['id'] . '">' . $this->options['label'] . '</label>
+            <select id="' . $this->options['id'] . '" name="'.$this->options['id'].'[]" class="select2 selectpicker form-control' . $this->options['class']
+            . '" required="required" >';
+
+
+        foreach ($this->model as $value) {
+            if (in_array($value, $this->selected))
+                $result .= '<option value=' . key($this->model) . ' selected>' . $value . '</option>';
+            else
+                $result .= '<option value=' . key($this->model) . '>' . $value . '</option>';
+        }
+
+        $result .= '</select></div>';
+        return $result;
+    }
 }
