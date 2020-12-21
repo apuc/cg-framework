@@ -6,7 +6,7 @@ namespace workspace\modules\tags\requests;
 use core\RequestSearch;
 
 /**
- * Class TagsRequest
+ * Class TagsRequestSearch
  * @package workspace\modules\tags\requests
  *
  * @property string $name
@@ -17,7 +17,7 @@ use core\RequestSearch;
  */
 
 
-class TagsRequest extends RequestSearch
+class TagsRequestSearch extends RequestSearch
 {
     public $id;
 
