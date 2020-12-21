@@ -4,7 +4,7 @@ namespace workspace\modules\tags\models;
 
 
 use Illuminate\Database\Eloquent\Model;
-use workspace\modules\tags\requests\TagsRequest;
+use workspace\modules\tags\requests\TagsRequestSearch;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
@@ -20,10 +20,10 @@ class Tag extends Model
 
 
     /**
-     * @param TagsRequest $request
+     * @param TagsRequestSearch $request
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
-    public static function search(TagsRequest $request)
+    public static function search(TagsRequestSearch $request)
     {
         $query = self::query();
 

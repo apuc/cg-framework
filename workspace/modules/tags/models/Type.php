@@ -5,8 +5,7 @@ namespace workspace\modules\tags\models;
 
 
 use Illuminate\Database\Eloquent\Model;
-use workspace\modules\tags\requests\TagsRequest;
-use workspace\modules\tags\requests\TypesRequest;
+use workspace\modules\tags\requests\TagsRequestSearch;
 
 class Type extends Model
 {
@@ -15,7 +14,7 @@ class Type extends Model
     public $fillable = ['type', 'type_id', 'tag_id'];
 
 
-    public static function search(TagsRequest $request)
+    public static function search(TagsRequestSearch $request)
     {
         $query = self::query();
 
