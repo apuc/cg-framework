@@ -168,8 +168,13 @@ class GridView extends Widget
                 $html .= '<td>' . $field['filterHtml'] . '</td>';
             } else {
                 if(isset($field['filterType']) && $field['filterType'] == "select" && isset($field['selectOptions'])){
-                    $html .= '<td><select class="form-control __filter" type="text" name="' . $key . 'Search">'
-                                    . $field['selectOptions'] . ' </td>';
+                    $html .= '<td><select class="select2 form-control __filter" type="text" name="' . $key . 'Search">';
+
+                    foreach ($field['selectOptions'] as $value => $label){
+                        $html .= '<option value="' . $value . '">' . $label . '</option>';
+                    }
+
+                    $html .= ' </td>';
                 } else {
                     $val = isset($_GET[$key . 'Search']) ? $_GET[$key . 'Search'] : '';
                     $html .= '<td><input class="form-control __filter" type="text" name="' . $key . 'Search" value="' . $val . '"></td>';

@@ -19,7 +19,7 @@ jQuery(document).ready(function ($) {
         });
     });
 
-    $(".__filter").on("focusout", function (e) {
+    $(".__filter").on("focusout change", function (e) {
         $(".__filterForm").submit();
     });
 

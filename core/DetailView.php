@@ -29,16 +29,14 @@ class DetailView extends Widget
         $table .= '<tr><th scope="col">Ключ</th><th scope="col">Значение</th></tr></thead>';
 
         foreach ($this->options['fields'] as $key => $option)
-
-            if(isset($this->model->$key))
-                $table .= '<tr><td>'.$this->options['fields'][$key].'</td><td>'.$this->model->$key.'</td></tr>';
-            elseif(isset($this->options['fields'][$key]['value']))
+            if(isset($this->model->$key) && is_string($this->model[$key]))
+                $table .= '<tr><td>' . $this->options['fields'][$key] . '</td><td>' . $this->model->$key . '</td></tr>';
+            elseif(isset($this->options['fields'][$key]['value']) && '' !== $this->options['fields'][$key]['value'])
                 $table .= '<tr><td>'.$this->options['fields'][$key]['label'].'</td><td>'.call_user_func($this->options['fields'][$key]['value'], $this->model).'</td></tr>';
             else
                 $table .= '<tr><td></td><td></td></tr>';
 
         $table .= '</table>';
-
         return $table;
     }
 

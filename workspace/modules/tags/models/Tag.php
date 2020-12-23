@@ -3,6 +3,7 @@
 namespace workspace\modules\tags\models;
 
 
+use core\Debug;
 use Illuminate\Database\Eloquent\Model;
 use workspace\modules\tags\requests\TagsRequestSearch;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,6 +13,10 @@ class Tag extends Model
 {
     const STATUS_DISABLE = 0;
     const STATUS_ACTIVE = 1;
+
+    const TYPE_POST = 'post';
+    const TYPE_ARTICLE = 'article';
+    const TYPE_COMMENT = 'comment';
 
 
 
@@ -28,6 +33,13 @@ class Tag extends Model
         return [ self::STATUS_DISABLE => 'Неактивен', self::STATUS_ACTIVE => 'Активен'];
     }
 
+    public static function getTypeLabel(){
+        return [
+            self::TYPE_ARTICLE => 'Статья',
+            self::TYPE_COMMENT => 'Комментарий',
+            self::TYPE_POST => 'Пост'
+        ];
+    }
 
     /**
      * @param TagsRequestSearch $request
@@ -38,7 +50,7 @@ class Tag extends Model
         $query = self::query();
 
         if ($request->id)
-            $query->where('name', $request->id);
+            $query->where('id', $request->id);
 
         if ($request->name)
             $query->where('name', 'LIKE', "%$request->name%");
@@ -46,7 +58,7 @@ class Tag extends Model
         if ($request->slug)
             $query->where('slug', 'LIKE', "%$request->slug%");
 
-        if ($request->status)
+        if (NULL !== $request->status && 2 != $request->status)
             $query->where('status', $request->status);
 
         return $query->get();

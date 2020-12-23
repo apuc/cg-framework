@@ -9,6 +9,7 @@ use core\Debug;
 use core\Select2;
 use mysql_xdevapi\DocResult;
 use workspace\modules\tags\models\Tag;
+use workspace\modules\tags\models\Type;
 use workspace\modules\tags\requests\TagRequest;
 use workspace\modules\tags\requests\TagRequestEdit;
 use workspace\modules\tags\requests\TagsRequestSearch;
@@ -19,6 +20,9 @@ class TagsController extends Controller
 {
     public $service;
 
+    /**
+     * initialization
+     */
     protected function init()
     {
         $this->service = new TagsService();
@@ -65,14 +69,29 @@ class TagsController extends Controller
     {
         $model = TagsService::getTagById($id);
 
-        //TODO
-        $model->status = Tag::getStatusLabel()[$model->status];
-
         $options = [
             'fields' => [
                 'name' => 'Имя тега',
                 'slug' => 'Slug тега',
-                'status' => 'Статус'
+                'status' => [
+                    'label' => 'Статус',
+                    'value' => function($model){
+                        return Tag::getStatusLabel()[$model->status];
+                    }
+                ],
+                'type' => [
+                    'label' => 'Тип',
+                    'value' => function($model){
+                        $typeList = array();
+                        foreach (Type::getTypesByTagID($model->id) as $typeModel) {
+                            if(isset(Tag::getTypeLabel()[$typeModel->type]))
+                                array_push($typeList, Tag::getTypeLabel()[$typeModel->type]);
+                            else    //TODO
+                                array_push($typeList, "Отсутствует");
+                        }
+                        return implode(', ', $typeList);
+                    }
+                ]
             ],
         ];
 
@@ -129,20 +148,18 @@ class TagsController extends Controller
             'fields' => [
                 'name' => 'Тег',
                 'slug' => 'Slug',
-                'status' => [//TODO status
+                'status' => [
                     'label' => 'Статус',
                     'filterType' => 'select',
-                    /*'filterHtml' => Select2::widget()->setParams(Tag::getStatusLabel(), [
-                        'id' => 'status',
-                        'class' => ' __filter',
-                    ], [])->run(),*/
-                    'selectOptions' => '<option></option>
-                                    <option value="1">Активен</option>
-                                    <option value="0">Неактивен</option>',
+                    'selectOptions' => [
+                        '2' => 'Всё', //TODO
+                        '1' => 'Активен',
+                        '0' => 'Неактивен'
+                    ],
                     'value' => function($model){
                             return Tag::getStatusLabel()[$model->status];
                     }
-                ]
+                ],
             ],
             'baseUri' => '/tags',
         ];
