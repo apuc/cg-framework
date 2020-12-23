@@ -23,7 +23,7 @@ class TagRequest extends Request
     {
         return [
             'name' => 'required|min:3',
-            'status' => 'required|numeric|min:0|max:1',
+            'status' => 'required|numeric',
             'type' => 'required|min:1',
             'type_id' => 'required|numeric',
         ];
