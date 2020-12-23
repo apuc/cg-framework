@@ -12,6 +12,6 @@ class LeftMenu extends Widget
 
     public function run()
     {
-        echo $this->view->getTpl('leftMenu.tpl');
+        echo $this->render('leftMenu.tpl');
     }
 }

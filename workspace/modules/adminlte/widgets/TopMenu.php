@@ -12,6 +12,6 @@ class TopMenu extends Widget
 
     public function run()
     {
-        echo $this->view->getTpl('topMenu.tpl');
+        echo $this->render('topMenu.tpl');
     }
 }
