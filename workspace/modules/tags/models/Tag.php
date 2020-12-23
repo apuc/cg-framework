@@ -28,18 +28,6 @@ class Tag extends Model
         return [ self::STATUS_DISABLE => 'Неактивен', self::STATUS_ACTIVE => 'Активен'];
     }
 
-    /*
-    return [
-            [
-                'id' => self::STATUS_DISABLE,
-                'value' => 'Неактивен'
-            ],
-            [
-                'id' => self::STATUS_ACTIVE,
-                'value' => 'Активен'
-            ]
-        ];
-    */
 
     /**
      * @param TagsRequestSearch $request

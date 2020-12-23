@@ -30,6 +30,13 @@ class Type extends Model
         return $query->get();
     }
 
+    //TODO
+    public function getTypesNames(){
+        return [
+            'clothes' => 'Одежда',
+            ''
+        ];
+    }
 
     public static function getTypesByTagID($id){
         return Type::where('tag_id', $id);
