@@ -12,7 +12,11 @@ class Select2 extends Widget
 
     public function run()
     {
-        return $this->getSelect();
+        if(is_array($this->model)) {
+            return $this->getSelectByArray();
+        } else {
+            return $this->getSelect();
+        }
     }
 
     public function setParams($data = [], $options = [], $selected = [])
@@ -44,21 +48,33 @@ class Select2 extends Widget
         return $result;
     }
 
-    public function getSelectArray()
+    public function getSelectByArray()
     {
-        $result = '<div class="form-group"><label for="' . $this->options['id'] . '">' . $this->options['label'] . '</label>
-            <select id="' . $this->options['id'] . '" name="'.$this->options['id'].'[]" class="select2 selectpicker form-control' . $this->options['class']
-            . '" required="required" >';
+        $result = '';
 
-
-        foreach ($this->model as $value) {
-            if (in_array($value, $this->selected))
-                $result .= '<option value=' . key($this->model) . ' selected>' . $value . '</option>';
-            else
-                $result .= '<option value=' . key($this->model) . '>' . $value . '</option>';
+        if(isset($this->options['id']) && isset($this->options['label'])) {
+            $result .= '<div class="form-group"><label for="' . $this->options['id'] . '">' . $this->options['label']
+                . '</label>
+                <select type="text" id="' . $this->options['id'] . '" name="'.$this->options['id']
+                . '" class="select2 selectpicker form-control' . $this->options['class']
+                . '" required="required" >';
+        } else {
+            $result .= '<select type="text" text="Select tag" name="' . $this->options['id'] .
+                'Search" class="select2 selectpicker form-control' . $this->options['class']
+                . '" value="" >';
+            $result .= '<option></option>'; //TODO
         }
 
-        $result .= '</select></div>';
+        foreach ($this->model as $key => $value) {
+            if (!empty($this->selected) && in_array($key, $this->selected))
+                $result .= '<option value=' . $key . ' selected>' . $value . '</option>';
+            else
+                $result .= '<option value=' . $key . '>' . $value . '</option>';
+        }
+
+
+
+        $result .= isset($this->options['label']) ? '</select></div>' : '</select>';
         return $result;
     }
 }
