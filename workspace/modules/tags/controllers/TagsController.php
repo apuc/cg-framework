@@ -5,7 +5,9 @@ namespace workspace\modules\tags\controllers;
 
 use core\App;
 use core\Controller;
+use core\Debug;
 use core\Select2;
+use mysql_xdevapi\DocResult;
 use workspace\modules\tags\models\Tag;
 use workspace\modules\tags\requests\TagRequest;
 use workspace\modules\tags\requests\TagRequestEdit;
@@ -36,17 +38,17 @@ class TagsController extends Controller
             $this->redirect('tags');
         } else {
 
-//            $sel2 = new Select2();
-//            $sel2->setParams(Tag::getStatusLabel(), [
-//                'label' => 'Статус:',
-//                'id' => 'status',
-//                'class' => '',
-//            ], [1]);
-//
-//            $selectList = $sel2->getSelectArray();
+            $sel2 = new Select2();
+            $sel2->setParams(Tag::getStatusLabel(), [
+                'label' => 'Статус:',
+                'id' => 'status',
+                'class' => '',
+            ], [0]);
+
+            $selectList = $sel2->run();
 
             $errors = $request->isPost() ? $request->errors->all() : null;
-            return $this->render('tags/store.tpl', ['errors' => $errors, ]);
+            return $this->render('tags/store.tpl', ['errors' => $errors, 'statusSelect' => $selectList]);
         }
     }
 
@@ -55,7 +57,6 @@ class TagsController extends Controller
     {
         $model = TagsService::searchTag(new TagsRequestSearch());
 
-
         return $this->render('tags/index.tpl',
             ['options' => $this->setOptions($model),  'h1' => 'Тэги']);
     }
@@ -63,6 +64,9 @@ class TagsController extends Controller
     public function actionView($id)
     {
         $model = TagsService::getTagById($id);
+
+        //TODO
+        $model->status = Tag::getStatusLabel()[$model->status];
 
         $options = [
             'fields' => [
@@ -99,9 +103,17 @@ class TagsController extends Controller
         } else {
             $tagModel = TagsService::getTagById($id);
 
+            $sel2 = new Select2();
+            $sel2->setParams(Tag::getStatusLabel(), [
+                'label' => 'Статус:',
+                'id' => 'status',
+                'class' => '',
+            ], [$tagModel->status]);
+            $selectList = $sel2->run();
+
             $errors = $request->isPost() ? $request->errors->all() : null;
             return $this->render('tags/edit.tpl',
-                ['model' => $tagModel, 'h1' => 'Редактировать Тэг', 'errors' => $errors]);
+                ['model' => $tagModel, 'h1' => 'Редактировать Тэг', 'errors' => $errors, 'statusSelect' => $selectList]);
         }
     }
 
@@ -117,7 +129,20 @@ class TagsController extends Controller
             'fields' => [
                 'name' => 'Тег',
                 'slug' => 'Slug',
-                'status' => 'Status'
+                'status' => [//TODO status
+                    'label' => 'Статус',
+                    'filterType' => 'select',
+                    /*'filterHtml' => Select2::widget()->setParams(Tag::getStatusLabel(), [
+                        'id' => 'status',
+                        'class' => ' __filter',
+                    ], [])->run(),*/
+                    'selectOptions' => '<option></option>
+                                    <option value="1">Активен</option>
+                                    <option value="0">Неактивен</option>',
+                    'value' => function($model){
+                            return Tag::getStatusLabel()[$model->status];
+                    }
+                ]
             ],
             'baseUri' => '/tags',
         ];
