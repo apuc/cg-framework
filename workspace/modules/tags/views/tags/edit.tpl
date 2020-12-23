@@ -20,10 +20,9 @@
             <label for="slug">Slug:</label>
             <input type="text" name="slug" id="slug" class="form-control" value="{$model->slug}" required="required"/>
         </div>
-        <div class="form-group">
-            <label for="status">Статус:</label>
-            <input type="text" name="status" id="status" class="form-control" value="{$model->status}" required="required"/>
-        </div>
+
+        {$statusSelect}
+
         <div class="form-group">
             <input type="submit" name="submit" id="submit_button" class="btn btn-dark" value="Submit">
         </div>
