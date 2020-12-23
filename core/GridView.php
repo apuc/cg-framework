@@ -117,11 +117,11 @@ class GridView extends Widget
                 }
 
                 foreach ($this->options['fields'] as $key => $option)
-                    if (isset($this->model[$i]->$key))
+                    if (isset($this->model[$i]->$key) && is_string($option))
                         $table .= '<td>' . $this->model[$i]->$key . '</td>';
                     elseif (isset($this->options['fields'][$key]['label']))
-                        $table .= '<td>' . call_user_func($this->options['fields'][$key]['value'], $this->model[$i])
-                            . '</td>';
+                        $table .= '<td>' . call_user_func($this->options['fields'][$key]['value'],
+                                                                                        $this->model[$i]) . '</td>';
                     else
                         $table .= '<td></td>';
 
@@ -164,9 +164,16 @@ class GridView extends Widget
         foreach ($options['fields'] as $key => $field) {
             if (isset($field['showFilter']) && !$field['showFilter']) {
                 $html .= '<td></td>';
+            } elseif(isset($field['filterHtml'])) {
+                $html .= '<td>' . $field['filterHtml'] . '</td>';
             } else {
-                $val = isset($_GET[$key . 'Search']) ? $_GET[$key . 'Search'] : '';
-                $html .= '<td><input class="form-control __filter" type="text" name="' . $key . 'Search" value="' . $val . '"></td>';
+                if(isset($field['filterType']) && $field['filterType'] == "select" && isset($field['selectOptions'])){
+                    $html .= '<td><select class="form-control __filter" type="text" name="' . $key . 'Search">'
+                                    . $field['selectOptions'] . ' </td>';
+                } else {
+                    $val = isset($_GET[$key . 'Search']) ? $_GET[$key . 'Search'] : '';
+                    $html .= '<td><input class="form-control __filter" type="text" name="' . $key . 'Search" value="' . $val . '"></td>';
+                }
             }
         }
         $html .= '</form></tr>';
