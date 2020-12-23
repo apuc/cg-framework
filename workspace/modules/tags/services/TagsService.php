@@ -41,11 +41,18 @@ class TagsService
     }
 
     public static function deleteTag($request)
-    {
+    {/*
         App::$db->capsule->getConnection()->transaction(function () use ($request) {
             Type::getTypesByTagID($request->id)->delete();
             Tag::where('id', $request->id)->delete();
-        });
+        });*/
+        try{
+            Type::getTypesByTagID($request->id)->delete();
+            Tag::where('id', $request->id)->delete();
+        } catch (\Exception $e){
+            echo $e;
+            return false;
+        }
 
     }
 
