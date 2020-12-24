@@ -43,22 +43,29 @@ class TagsController extends Controller
     public function actionStore()
     {
         $request = new TagRequest();
+        $errors = array();
+
+        $sel2 = new Select2();
+        $sel2->setParams(Tag::getStatusLabel(), [
+            'label' => 'Статус:',
+            'id' => 'status',
+            'class' => '',
+        ], [0]);
+        $selectList = $sel2->run();
 
         if ($request->validate()) {
-            $this->service->createTag($request);
-            $this->redirect('tags');
+
+            if($this->service->createTag($request))
+                $this->redirect('tags');
+            else {
+                array_push($errors, "Такой Slug уже существует. 
+                                                    Введите другой или оставьте его пустым и измените имя.");
+
+                return $this->render('tags/store.tpl', ['errors' => $errors, 'statusSelect' => $selectList]);
+            }
         } else {
-
-            $sel2 = new Select2();
-            $sel2->setParams(Tag::getStatusLabel(), [
-                'label' => 'Статус:',
-                'id' => 'status',
-                'class' => '',
-            ], [0]);
-
-            $selectList = $sel2->run();
-
             $errors = $request->isPost() ? $request->errors->all() : null;
+
             return $this->render('tags/store.tpl', ['errors' => $errors, 'statusSelect' => $selectList]);
         }
     }

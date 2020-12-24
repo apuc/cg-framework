@@ -35,27 +35,35 @@ class TagsService
     /**
      * Adding new tag
      *
-     * Also adding new row in tags_relations
+     * Also adding new row in tags_relation
      *
      * @param $request
+     * @return bool
      */
     public function createTag($request)
     {
-        $this->tag->name = $request->name;
+        if(NULL == Tag::where('slug', $request->slug)->first() && NULL == Tag::where('slug', $this->tag->makeSlug($request->name))->first()){
+            $this->tag->name = $request->name;
 
-        if ($request->slug) {
-            $this->tag->slug = $request->slug;
+            if ($request->slug) {
+                $this->tag->slug = $request->slug;
+            } else {
+                $this->tag->slug = $this->tag->makeSlug($request->name);
+            }
+
+            $this->tag->status = $request->status;
+            $this->tag->save();
+
+            $this->type->type = $request->type;
+            $this->type->type_id = $request->type_id;
+            $this->type->tag_id = $this->tag->id;
+            $this->type->save();
+
+            return true;
         } else {
-            $this->tag->slug = $this->tag->makeSlug($request->name);
+
+            return false;
         }
-
-        $this->tag->status = $request->status;
-        $this->tag->save();
-
-        $this->type->type = $request->type;
-        $this->type->type_id = $request->type_id;
-        $this->type->tag_id = $this->tag->id;
-        $this->type->save();
     }
 
     /**
