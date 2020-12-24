@@ -42,15 +42,17 @@ class TagsService
      */
     public function createTag($request)
     {
+        //TODO Если инкапсулировать slug, нужно делать проверки на само имя
         if(NULL == Tag::withTrashed()->where('slug', $request->slug)->first()
-                    && NULL == Tag::withTrashed()->where('slug', $this->tag->makeSlug($request->name))->first()){
+                && ((!$request->slug) ?
+                (NULL == Tag::withTrashed()->where('slug', Tag::makeSlug($request->name))->first()) : true)){
 
             $this->tag->name = $request->name;
 
             if ($request->slug) {
                 $this->tag->slug = $request->slug;
             } else {
-                $this->tag->slug = $this->tag->makeSlug($request->name);
+                $this->tag->slug = Tag::makeSlug($request->name);
             }
 
             $this->tag->status = $request->status;

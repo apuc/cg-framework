@@ -103,7 +103,7 @@ class Tag extends Model
      * @param $string
      * @return false|string
      */
-    function makeSlug($string){
+    public static function makeSlug($string){
         return $slug = \Transliterator::createFromRules(
             ':: Any-Latin;'
             . ':: NFD;'
