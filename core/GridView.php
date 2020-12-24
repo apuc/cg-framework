@@ -169,6 +169,7 @@ class GridView extends Widget
             } else {
                 if(isset($field['filterType']) && $field['filterType'] == "select" && isset($field['selectOptions'])){
                     $html .= '<td><select class="select2 form-control __filter" type="text" name="' . $key . 'Search">';
+                    $html .= '<option></option>';
 
                     foreach ($field['selectOptions'] as $value => $label){
                         $html .= '<option value="' . $value . '">' . $label . '</option>';
