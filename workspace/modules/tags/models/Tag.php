@@ -8,31 +8,61 @@ use Illuminate\Database\Eloquent\Model;
 use workspace\modules\tags\requests\TagsRequestSearch;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
+/**
+ * Class Tag
+ * @package workspace\modules\tags\models
+ */
 class Tag extends Model
 {
+
+    protected $softDelete = true;
+
+    /**
+     * define status values
+     */
     const STATUS_DISABLE = 0;
     const STATUS_ACTIVE = 1;
 
+    /**
+     * define type values
+     */
     const TYPE_POST = 'post';
     const TYPE_ARTICLE = 'article';
     const TYPE_COMMENT = 'comment';
 
 
-
+    /**
+     * name of tag table
+     * @var string
+     */
     protected $table = "tags";
 
+    /**
+     * columns of table
+     * @var string[]
+     */
     public $fillable = ['name', 'slug', 'status'];
 
-
-    protected $cascadeDeletes = ['comments'];
+    /**
+     *
+     * @var string[] $dates
+     */
     protected $dates = ['deleted_at'];
 
-
+    /**
+     * Returns the match between the status number and its name
+     *
+     * @return string[]
+     */
     public static function getStatusLabel(){
         return [ self::STATUS_DISABLE => 'Неактивен', self::STATUS_ACTIVE => 'Активен'];
     }
 
+    /**
+     * Returns the match between the type value and its name
+     *
+     * @return string[]
+     */
     public static function getTypeLabel(){
         return [
             self::TYPE_ARTICLE => 'Статья',
@@ -42,6 +72,8 @@ class Tag extends Model
     }
 
     /**
+     * Search tag
+     *
      * @param TagsRequestSearch $request
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
@@ -64,6 +96,13 @@ class Tag extends Model
         return $query->get();
     }
 
+
+    /**
+     * Making slug from tag name
+     *
+     * @param $string
+     * @return false|string
+     */
     function makeSlug($string){
         return $slug = \Transliterator::createFromRules(
             ':: Any-Latin;'
@@ -77,6 +116,10 @@ class Tag extends Model
             ->transliterate( $string );
     }
 
+    /**
+     * Adding new tag to table
+     * @param $request
+     */
     public function _save($request)
     {
         $this->name = $request->name;

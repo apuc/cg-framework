@@ -15,7 +15,11 @@ use workspace\modules\tags\requests\TagRequestEdit;
 use workspace\modules\tags\requests\TagsRequestSearch;
 use workspace\modules\tags\services\TagsService;
 
-
+/**
+ * Class TagsController
+ * @package workspace\modules\tags\controllers
+ * @var TagsService $service
+ */
 class TagsController extends Controller
 {
     public $service;
@@ -32,7 +36,10 @@ class TagsController extends Controller
         App::$breadcrumbs->addItem(['text' => 'Tags', 'url' => 'tags']);
     }
 
-
+    /**
+     * Adding tag
+     * @return false|string
+     */
     public function actionStore()
     {
         $request = new TagRequest();
@@ -56,7 +63,10 @@ class TagsController extends Controller
         }
     }
 
-
+    /**
+     * Show all tags
+     * @return false|string
+     */
     public function actionIndex()
     {
         $model = TagsService::searchTag(new TagsRequestSearch());
@@ -65,6 +75,11 @@ class TagsController extends Controller
             ['options' => $this->setOptions($model),  'h1' => 'Тэги']);
     }
 
+    /**
+     * Show tag by id
+     * @param $id
+     * @return false|string
+     */
     public function actionView($id)
     {
         $model = TagsService::getTagById($id);
@@ -98,7 +113,10 @@ class TagsController extends Controller
         return $this->render('tags/view.tpl', ['model' => $model, 'options' => $options]);
     }
 
-
+    /**
+     * Delete tag by tag in request
+     * @return false|string
+     */
     public function actionDelete()
     {
         $request = new TagsRequestSearch();
@@ -106,11 +124,15 @@ class TagsController extends Controller
         TagsService::deleteTag($request);
 
         $model = Tag::search($request);
-
         return $this->render('tags/index.tpl',
             ['options' => $this->setOptions($model), 'h1' => 'Тэги']);
     }
 
+    /**
+     * Edit tag
+     * @param $id
+     * @return false|string
+     */
     public function actionEdit($id)
     {
         $request = new TagRequestEdit();
@@ -137,6 +159,10 @@ class TagsController extends Controller
     }
 
     /**
+     * Set options
+     *
+     * Options are needed to display table of tags
+     *
      * @param $data
      * @return array
      */

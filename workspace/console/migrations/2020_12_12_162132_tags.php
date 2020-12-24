@@ -20,6 +20,7 @@ class Tags extends Migration
             $table->string('slug')->unique();
             $table->integer('status');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         App::$db->schema->create('tags_relations', function (Blueprint $table) {
@@ -29,6 +30,7 @@ class Tags extends Migration
             $table->unsignedBigInteger('tag_id');
             $table->foreign('tag_id')->references('id')->on('tags');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

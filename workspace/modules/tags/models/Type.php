@@ -9,11 +9,27 @@ use workspace\modules\tags\requests\TagsRequestSearch;
 
 class Type extends Model
 {
+
+    protected $softDelete = true;
+
+    /**
+     * name of table
+     * @var string
+     */
     protected $table = "tags_relations";
 
+    /**
+     * columns of table
+     * @var string[]
+     */
     public $fillable = ['type', 'type_id', 'tag_id'];
 
-
+    /**
+     * Search type
+     *
+     * @param TagsRequestSearch $request
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
     public static function search(TagsRequestSearch $request)
     {
         $query = self::query();
@@ -30,10 +46,21 @@ class Type extends Model
         return $query->get();
     }
 
+    /**
+     * Return rows from tags_relations
+     * which relate to tag by id
+     *
+     * @param $id
+     * @return mixed
+     */
     public static function getTypesByTagID($id){
-        return Type::where('tag_id', $id)->get();
+        return Type::where('tag_id', $id);
     }
 
+    /**
+     * Adding new type to table
+     * @param $request
+     */
     public function _save($request)
     {
         $this->type = $request->type;
