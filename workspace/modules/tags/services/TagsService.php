@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TagsService
 {
+    use SoftDeletes;
+
     /**
      * @var Tag
      */

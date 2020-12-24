@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Tag extends Model
 {
 
-    protected $softDelete = true;
+    use SoftDeletes;
 
     /**
      * define status values

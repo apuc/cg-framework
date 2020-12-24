@@ -5,12 +5,13 @@ namespace workspace\modules\tags\models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use workspace\modules\tags\requests\TagsRequestSearch;
 
 class Type extends Model
 {
 
-    protected $softDelete = true;
+    use SoftDeletes;
 
     /**
      * name of table
