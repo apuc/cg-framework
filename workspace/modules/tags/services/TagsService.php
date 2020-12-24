@@ -42,7 +42,9 @@ class TagsService
      */
     public function createTag($request)
     {
-        if(NULL == Tag::where('slug', $request->slug)->first() && NULL == Tag::where('slug', $this->tag->makeSlug($request->name))->first()){
+        if(NULL == Tag::withTrashed()->where('slug', $request->slug)->first()
+                    && NULL == Tag::withTrashed()->where('slug', $this->tag->makeSlug($request->name))->first()){
+
             $this->tag->name = $request->name;
 
             if ($request->slug) {
@@ -76,10 +78,26 @@ class TagsService
      */
     public static function deleteTag($request)
     {
+        /*
         App::$db->capsule->getConnection()->transaction(function () use ($request) {
             Type::getTypesByTagID($request->id)->delete();
             Tag::where('id', $request->id)->delete();
         });
+        */
+
+        App::$db->capsule->getConnection()->beginTransaction();
+        try {
+            Type::getTypesByTagID($request->id)->delete();
+            Tag::where('id', $request->id)->delete();
+            App::$db->capsule->getConnection()->commit();
+
+            $success = true;
+        } catch (\Exception $e) {
+            $success = false;
+            App::$db->capsule->getConnection()->rollBack();
+        }
+
+        return $success;
     }
 
     /**

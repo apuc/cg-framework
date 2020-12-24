@@ -128,11 +128,16 @@ class TagsController extends Controller
     {
         $request = new TagsRequestSearch();
 
-        TagsService::deleteTag($request);
-
+        $errors = NULL;
+        if(TagsService::deleteTag($request)){
+            $errors = array();
+            array_push($errors, "Удаление не вышло из-за SQL-ошибки.");
+            array_push($errors, $request->errors->all());
+        }
         $model = Tag::search($request);
+
         return $this->render('tags/index.tpl',
-            ['options' => $this->setOptions($model), 'h1' => 'Тэги']);
+            ['options' => $this->setOptions($model), 'h1' => 'Тэги', 'errors' => $errors]);
     }
 
     /**
