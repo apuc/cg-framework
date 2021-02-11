@@ -1,9 +1,0 @@
-{
-  "name": "role",
-  "version": "0.1",
-  "class": "workspace\\modules\\role\\Role",
-  "description": "roles module",
-  "configFile": "config/role.php",
-  "routFile": "routing/rout.php",
-  "migrationPath": "console/migrations"
-}

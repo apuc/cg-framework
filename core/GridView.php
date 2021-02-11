@@ -44,23 +44,23 @@ class GridView extends Widget
         return self::getTable() . $this->pagination->run();
     }
 
-/*    public function setParams($data = [], $options = [])
+    public function setParams($data = [], $options = [])
     {
         $this->model = $data;
         $this->options = array_merge($this->defaultOptions, $options);
 
         return self::getTable() . $this->pagination->run();
-    }*/
-
-    public function setParams($data = [], $options = [])
-    {
-        $this->model = $data;
-        $this->options = $options;
-
-        $this->pagination = Pagination::widget();
-
-        return $this;
     }
+
+//    public function setParams($data = [], $options = [])
+//    {
+//        $this->model = $data;
+//        $this->options = $options;
+//
+//        $this->pagination = Pagination::widget();
+//
+//        return $this;
+//    }
 
     public function getTable()
     {
@@ -92,7 +92,7 @@ class GridView extends Widget
         if ($end > $this->pagination->getAmountOfData())
             $end = $this->pagination->getAmountOfData();
 
-        if (isset($this->options['filters'])) {
+        if ($this->options['filters']) {
             $table .= $this->createFilters($this->options);
         }
 

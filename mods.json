@@ -1,10 +1,10 @@
 {
   "adminlte":{"version":"0.1","status":"active","type":"module"},
-  "frontend":{"version":"0.1","status":"inactive","type":"module"},
-  "themes":{"version":"0.1","status":"inactive","type":"module"},
+  "frontend":{"version":"0.1","status":"active","type":"module"},
+  "themes":{"version":"0.1","status":"active","type":"module"},
   "settings":{"version":"0.1","status":"active","type":"module"},
-  "article":{"version":"0.1","status":"inactive","type":"module"},
-  "categories":{"version":"0.1","status":"inactive","type":"module"},
+  "article":{"version":"0.1","status":"active","type":"module"},
+  "categories":{"version":"0.1","status":"active","type":"module"},
   "users":{"version":"0.1","status":"active","type":"module"},
   "the-news-reporter":{"version":"0.1","status":"active","type":"theme"},
   "default":{"version":"0.1","status":"inactive","type":"theme"},
@@ -14,21 +14,13 @@
   },
   "promocode": {
     "version": "0.1",
-    "status": "inactive"
+    "status": "active"
   },
   "product": {
     "version": "0.1",
-    "status": "inactive"
-  },
-  "order": {
-    "version": "0.1",
-    "status": "inactive"
-  },
-  "rule": {
-    "version": "0.1",
     "status": "active"
   },
-  "role": {
+  "order": {
     "version": "0.1",
     "status": "active"
   }

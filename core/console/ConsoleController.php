@@ -4,7 +4,7 @@
 namespace core\console;
 
 
-use core\ArgvParser;
+use samejack\PHP\PHP_ArgvParser;
 
 class ConsoleController
 {
@@ -21,7 +21,7 @@ class ConsoleController
         unset($argv[0]);
         unset($argv[1]);
         if(!empty($argv)){
-            $argvParser = new ArgvParser();
+            $argvParser = new PHP_ArgvParser();
             $tmp = implode(" ", $argv);
             $this->argv = $argvParser->parseConfigs($tmp);
         }
