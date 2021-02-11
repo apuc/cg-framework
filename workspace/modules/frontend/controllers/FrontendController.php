@@ -30,6 +30,7 @@ class FrontendController extends Controller
 
     public function actionIndex()
     {
+        /*
         $settings = Settings::where('key', 'title')->first();
         $this->view->setTitle('Home');
 
@@ -37,24 +38,7 @@ class FrontendController extends Controller
         $articles = Article::all()->sortByDesc("updated_at");
         $categories = Category::all();
         $article_category = ArticleCategory::all();
-
-        if(isset($_SESSION['username']) && isset($_SESSION['role'])) {
-            $username = $_SESSION['username'];
-            $role = $_SESSION['role'];
-
-        }
-        else {
-            $username = '';
-            $role = '';
-        }
-
-        try {
-            return $this->render($theme->value . '/index.tpl',
-                ['articles' => $articles, 'categories' => $categories, 'article_category' => $article_category,
-                    'amount' => 3, 'popular' => 10, 'username' => $username, 'role' => $role]);
-        } catch (\Exception $e) {
-            return $this->render('default/index.tpl');
-        }
+        */
     }
 
     public function actionCategory($id)

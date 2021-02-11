@@ -1,0 +1,9 @@
+{
+  "name": "rule",
+  "version": "0.1",
+  "class": "workspace\\modules\\rule\\Rule",
+  "description": "rules module",
+  "configFile": "config/rule.php",
+  "routFile": "routing/rout.php",
+  "migrationPath": "console/migrations"
+}
