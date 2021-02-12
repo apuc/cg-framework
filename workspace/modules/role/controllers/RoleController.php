@@ -26,16 +26,7 @@ class RoleController extends Controller
     {
         $model = Role::all();
 
-        $options = [
-            'serial' => '#',
-            'fields' => [
-                'key' => 'Имя',
-                'id' => 'ID'
-            ],
-            'baseUri' => 'roles'
-        ];
-
-        return $this->render('role/roles.tpl', ['h1' => 'Роли', 'model' => $model, 'options' => $options]);
+        return $this->render('role/roles.tpl', ['h1' => 'Роли', 'model' => $model, 'options' => $this->setOptions($model)]);
     }
 
     public function actionView($id)
@@ -80,5 +71,32 @@ class RoleController extends Controller
     public function actionDelete()
     {
         Role::where('id', $_POST['id'])->delete();
+    }
+
+
+    public function setOptions($data): array
+    {
+        return [
+            'data' => $data,
+            'serial' => '#',
+            'fields' => [
+                'key' => 'Имя',
+                'id' => 'ID'
+            ],
+            'baseUri' => '/admin/roles'
+        ];
+    }
+
+    public function setRuleOptions($data): array
+    {
+        return [
+            'data' => $data,
+            'serial' => '#',
+            'fields' => [
+                'key' => 'Ключ',
+                'id' => 'ID'
+            ],
+            'baseUri' => 'rules'
+        ];
     }
 }

@@ -46,11 +46,9 @@ class MainController extends Controller
             $model = new User();
             $model->username = $request->username;
             $model->email = $request->email;
-            $model->role = 2;
             $model->password_hash = password_hash($request->password, PASSWORD_DEFAULT);
             $model->save();
 
-            $_SESSION['role'] = $model->role;
             $_SESSION['username'] = $model->username;
 
             $this->redirect('');
@@ -68,7 +66,6 @@ class MainController extends Controller
             $model = User::where('username', $request->username)->first();
 
             if (password_verify($request->password, $model->password_hash)) {
-                $_SESSION['role'] = $model->role;
                 $_SESSION['username'] = $model->username;
 
                 $this->redirect('');

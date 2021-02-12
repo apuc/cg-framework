@@ -19,7 +19,6 @@ class User extends Migration
             $table->string('username', 255)->unique();
             $table->string('email', 255);
             $table->string('password_hash', 255);
-            $table->integer('role');
             $table->timestamps();
         });
     }
