@@ -3,3 +3,9 @@
 <div class="h1">{$model->key}</div>
 
 {core\DetailView::widget()->setParams($model, $options)->run()}
+
+<a href="/admin/rules/update/{$model->id}" class="btn btn-dark">Edit</a>
+<p></p>
+
+<div class="h1">Роли, владеющие этим правом:</div>
+{core\GridView::widget()->setParams($roles['data'], $roles)->run()}

@@ -24,11 +24,11 @@
     "version": "0.1",
     "status": "inactive"
   },
-  "rule": {
+  "role": {
     "version": "0.1",
     "status": "active"
   },
-  "role": {
+  "rule": {
     "version": "0.1",
     "status": "active"
   }

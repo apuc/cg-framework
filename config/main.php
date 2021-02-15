@@ -7,7 +7,7 @@
  */
 
 return [
-    'app_name' => 'LovedShop',
+    'app_name' => 'Admin Panel',
     'adminLeftMenu' => [
     ],
     'component_manager' => [

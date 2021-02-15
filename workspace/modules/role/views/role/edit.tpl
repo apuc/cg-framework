@@ -5,16 +5,19 @@
 
 <div class="container">
     <form class="form-horizontal" name="edit_form" id="edit_form" method="post"
-          action="/admin/roles/update/{$model->id}">
+          action="/admin/roles/update/{$model->id}" enctype="multipart/form-data">
         <div class="form-group">
             <label for="firstname">Name:</label>
             <input type="text" name="key" id="key" class="form-control" required="required" value="{$model->key}"/>
         </div>
-
         <div>
-{*            {$selectRules}*}
+            <select class="form-control select2-selection select2-selection--multiple" role="combobox" aria-haspopup="true" tabindex="-1" aria-disabled="false" name="rules[]" id="rules" multiple="multiple">
+                {foreach from=$rules item=rule}
+                    <option value="{$rule->key}" {if $linked_rules->containsStrict('id', $rule->id) }selected{/if}>{$rule->key}</option>
+                {/foreach}
+            </select>
         </div>
-
+        <p></p>
         <div class="form-group">
             <input type="submit" name="submit" id="submit_button" class="btn btn-default" value="Submit">
         </div>

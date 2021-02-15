@@ -34,7 +34,7 @@ class User extends Model
         }
     }
 
-    public static function updateUser($id, $username, $email)
+    public static function updateUser($id, $username, $email, $roles = null)
     {
         $model = User::where('id', $id)->first();
 
@@ -42,25 +42,16 @@ class User extends Model
         $model->email = $email;
         $model->save();
 
-//        return $model;
+        if (isset($roles)) {
+            $model->roles()->sync($roles);
+        }
     }
 
     public static function deleteUser($id)
     {
-        DB::beginTransaction();
-        try {
-            $user = User::findOrFail($id);
-            $user->roles()->detach();
-            $user->delete();
-
-            DB::commit();
-
-            return true;
-        } catch (ModelNotFoundException $exception) {
-            DB::rollBack();
-
-            return false;
-        }
+        $user = User::findOrFail($_POST['id']);
+        $user->roles()->detach();
+        $user->delete();
     }
 
     public function roles()
@@ -70,8 +61,8 @@ class User extends Model
             'username', 'key');
     }
 
-    public function getRules()
-    { //TODO
+    public function getRules() //TODO
+    {
 
         $roles = $this->roles()->getModels();
 

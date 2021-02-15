@@ -47,11 +47,11 @@ class UsersController extends Controller
 
     public function actionStore()
     {
-        if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])) {
+        if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['roles'])) {
 
-            User::storeUser($_POST['username'], $_POST['email'], $_POST['password']); /*, $_POST['roles']*/
+            User::storeUser($_POST['username'], $_POST['email'], $_POST['password'], $_POST['roles']);
 
-            $this->redirect('users');
+            $this->redirect('admin/users');
         } else {
             return $this->render('users/store.tpl');
         }
@@ -97,7 +97,7 @@ class UsersController extends Controller
                 'username' => 'Логин',
                 'email' => 'Email'
             ],
-            'baseUri' => 'users',
+            'baseUri' => '/admin/users',
         ];
     }
 
@@ -123,7 +123,7 @@ class UsersController extends Controller
                 'key' => 'Ключ',
                 'id' => 'ID'
             ],
-            'baseUri' => 'rules',
+            'baseUri' => '/admin/rules',
             'actionBtn' => 'del_all'
         ];
     }

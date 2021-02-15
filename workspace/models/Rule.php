@@ -14,27 +14,28 @@ class Rule extends Model
 
     public $fillable = ['key'];
 
-    public function roles(){
+    public function roles()
+    {
         return $this->belongsToMany(Role::class, 'role_rule_relations',
-                                    'rule_key', 'role_name',
-                                            'key', 'key');
+            'rule_key', 'role_name',
+            'key', 'key');
+    }
+
+    public static function udpateRule($id, $key, $roles)
+    {
+        $rule = Rule::findOrFail($id);
+
+        $rule->key = $_POST['key'];
+        $rule->save();
+
+        $rule->roles()->sync($roles);
+
     }
 
     public static function deleteRule($id)
     {
-        DB::beginTransaction();
-        try {
-            $rule = Rule::findOrFail($id);
-            $rule->roles()->detach();
-            $rule->delete();
-
-            DB::commit();
-
-            return true;
-        } catch (ModelNotFoundException $exception) {
-            DB::rollBack();
-
-            return false;
-        }
+        $rule = Rule::findOrFail($id);
+        $rule->roles()->detach();
+        $rule->delete();
     }
 }

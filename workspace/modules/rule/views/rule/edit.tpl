@@ -9,6 +9,14 @@
             <label for="firstname">Key:</label>
             <input type="text" name="key" id="key" class="form-control" required="required" value="{$model->key}" />
         </div>
+        <div>
+            <select class="form-control select2-selection select2-selection--multiple" role="combobox" aria-haspopup="true" tabindex="-1" aria-disabled="false" name="roles[]" id="roles" multiple="multiple">
+                {foreach from=$roles item=role}
+                    <option value="{$role->key}" {if $linked_roles->containsStrict('id', $role->id) }selected{/if}>{$role->key}</option>
+                {/foreach}
+            </select>
+        </div>
+        <p></p>
         <div class="form-group">
             <input type="submit" name="submit" id="submit_button" class="btn btn-default" value="Submit">
         </div>

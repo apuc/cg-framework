@@ -37,7 +37,7 @@ class SettingsController extends Controller
                     }
                 ]
             ],
-            'baseUri' => 'settings'
+            'baseUri' => '/admin/settings'
         ];
 
         return $this->render('settings/settings.tpl', ['h1' => 'Настройки',

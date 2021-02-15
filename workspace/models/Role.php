@@ -2,6 +2,7 @@
 
 namespace workspace\models;
 
+use core\Debug;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
@@ -12,22 +13,20 @@ class Role extends Model
 
     public $fillable = ['key'];
 
+    public static function storeRole($key, $rules){
+        $role = new Role();
+        $role->key = $_POST['key'];
+        $role->save();
+
+        $role->rules()->sync($rules);
+    }
+
     public static function deleteRole($id)
     {
-        DB::beginTransaction();
-        try {
             $role = Role::findOrFail($id);
+            $role->rules()->detach();
             $role->users()->detach();
             $role->delete();
-
-            DB::commit();
-
-            return true;
-        } catch (ModelNotFoundException $exception) {
-            DB::rollBack();
-
-            return false;
-        }
     }
 
     public function rules()
@@ -37,19 +36,22 @@ class Role extends Model
             'key', 'key');
     }
 
-    public function users(){
+    public function users()
+    {
         return $this->belongsToMany(User::class, 'user_role_relations',
             'role_key', 'user_name',
             'key', 'username');
     }
 
-    public static function updateRole($id, $key, $rules)
+    public static function updateRole($id, $key, $rules = null)
     {
         $role = Role::where('id', $id)->first();
 
         $role->key = $key;
         $role->save();
 
-        $role->rules()->sync($rules);
+        if (isset($rules)) {
+            $role->rules()->sync($rules);
+        }
     }
 }

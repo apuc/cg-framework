@@ -6,6 +6,7 @@ namespace workspace\modules\role\controllers;
 
 use core\App;
 use core\Controller;
+use core\Debug;
 use core\Select2;
 use workspace\models\Role;
 use workspace\models\RoleRuleRelations;
@@ -40,7 +41,7 @@ class RoleController extends Controller
             'fields' => [
                 'id' => 'ID',
                 'key' => 'Имя'
-            ],
+            ]
         ];
 
         return $this->render('role/view.tpl', ['model' => $model, 'options' => $options,
@@ -49,45 +50,44 @@ class RoleController extends Controller
 
     public function actionStore()
     {
-        if (isset($_POST['key'])) {
-            $role = new Role();
-            $role->key = $_POST['key'];
-            $role->save();
+        if (isset($_POST['key']) && isset($_POST['rules'])) {
+            Role::storeRole($_POST['key'], $_POST['rules']);
 
             $this->redirect('admin/roles');
         } else
-            return $this->render('role/store.tpl', ['h1' => 'Добавить роль']);
+            return $this->render('role/store.tpl', ['h1' => 'Добавить роль', 'rules' => Rule::all()]);
     }
 
     public function actionEdit($id)
     {
-
-
         if (isset($_POST['key']) && isset($_POST['rules'])) {
+
+//            Debug::dd($_POST['rules']);
 
             Role::updateRole($id, $_POST['key'], $_POST['rules']);
 
-            $this->redirect('admin/roles');
+            $this->redirect("admin/roles/{$id}");
         } else {
             $role = Role::where('id', $id)->first();
 
             $rules = $role->rules;
-
-//            $sel2 = new Select2();
-//            $sel2->setParams(
-//                $rules,
-//                [
-//                    'label' => 'Права',
-//                    'id' => 'rule',
-//                    'class' => '',
-//                    'value' => $rules[0]->key,
-//                    'value_id' => $rules[0]->id,
-//                ]
-//            );
-//            $selectList = $sel2->run();
+            /*
+                        $sel2 = new Select2();
+                        $sel2->setParams(
+                            $rules,
+                            [
+                                'label' => 'Права',
+                                'id' => 'rule',
+                                'class' => '',
+                                'value' => $rules[0]->key,
+                                'value_id' => $rules[0]->id,
+                            ]
+                        );
+                        $selectList = $sel2->run();*/
 
             return $this->render('role/edit.tpl', ['h1' => 'Редактировать: ', 'model' => $role,
-                'rules' => $rules,
+                'linked_rules' => $rules,
+                'rules' => Rule::all()
 //                'selectRules' => $selectList
             ]);
         }
@@ -120,7 +120,8 @@ class RoleController extends Controller
                 'key' => 'Ключ',
                 'id' => 'ID'
             ],
-            'baseUri' => 'rules'
+            'baseUri' => '/admin/rules',
+            'actionBtn' => 'del_all'
         ];
     }
 }

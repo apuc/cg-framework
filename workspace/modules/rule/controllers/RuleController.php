@@ -6,6 +6,7 @@ namespace workspace\modules\rule\controllers;
 
 use core\App;
 use core\Controller;
+use workspace\models\Role;
 use workspace\models\Rule;
 
 class RuleController extends Controller
@@ -33,12 +34,12 @@ class RuleController extends Controller
     {
         $model = Rule::where('id', $id)->first();
 
-        return $this->render('rule/view.tpl', ['model' => $model, 'options' => $this->setOptions($model)]);
+        return $this->render('rule/view.tpl', ['model' => $model, 'options' => $this->setOptions($model), 'roles' => $this->setRoleOptions($model->roles)]);
     }
 
     public function actionStore()
     {
-        if(isset($_POST['key'])) {
+        if (isset($_POST['key'])) {
             $rule = new Rule();
             $rule->key = $_POST['key'];
             $rule->save();
@@ -50,15 +51,18 @@ class RuleController extends Controller
 
     public function actionEdit($id)
     {
-        $rule = Rule::where('id', $id)->first();
-
-        if(isset($_POST['key'])) {
-            $rule->key = $_POST['key'];
-            $rule->save();
+        if (isset($_POST['key']) && isset($_POST['roles'])) {
+            Rule::udpateRule($id, $_POST['key'], $_POST['roles']);
 
             $this->redirect('admin/rules');
-        } else
-            return $this->render('rule/edit.tpl', ['h1' => 'Редактировать: ', 'model' => $rule]);
+        } else {
+            $rule = Rule::findOrFail($id);
+
+            return $this->render('rule/edit.tpl', ['h1' => 'Редактировать: ', 'model' => $rule,
+                'roles' => Role::all(),
+                'linked_roles' => $rule->roles
+                ]);
+        }
     }
 
     public function actionDelete()
@@ -76,7 +80,21 @@ class RuleController extends Controller
                 'key' => 'Ключ',
                 'id' => 'ID'
             ],
-            'baseUri' => 'rules'
+            'baseUri' => '/admin/rules'
+        ];
+    }
+
+    public function setRoleOptions($data): array
+    {
+        return [
+            'data' => $data,
+            'serial' => '#',
+            'fields' => [
+                'key' => 'Имя',
+                'id' => 'ID'
+            ],
+            'baseUri' => '/admin/roles',
+            'actionBtn' => 'del_all'
         ];
     }
 }

@@ -7,6 +7,14 @@
             <label for="firstname">Name:</label>
             <input type="text" name="key" id="key" class="form-control" required="required" />
         </div>
+        <div>
+        <select class="form-control select2-selection select2-selection--multiple" name="rules[]" id="rules" multiple="multiple">
+            {foreach from=$rules item=rule}
+                <option value="{$rule->key}">{$rule->key}</option>
+            {/foreach}
+        </select>
+        </div>
+        <p></p>
         <div class="form-group">
             <input type="submit" name="submit" id="submit_button" class="btn btn-default" value="Submit">
         </div>

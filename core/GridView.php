@@ -35,7 +35,7 @@ class GridView extends Widget
         'edit' => ['class' => 'custom-link', 'id' => '', 'icon' => '<i class="nav-icon fas fa-edit"></i>',
             'url' => '/update/{id}'],
         'delete' => ['class' => 'custom-link __delete', 'id' => 'delete',
-            'icon' => '<i class="nav-icon fas fa-trash"></i>', 'url' => '/delete/{id}'],
+            'icon' => '<i class="nav-icon fas fa-trash"></i>', 'url' => '/delete/'],
     ];
 
     /*
