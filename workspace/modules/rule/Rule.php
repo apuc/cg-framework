@@ -13,7 +13,7 @@ class Rule
             [
                 'title' => 'Права',
                 'url' => '/admin/rules',
-                'icon' => '<i class="fas fa-cogs"></i>', //TODO
+                'icon' => '<i class="fas fa-gavel"></i>',
             ],
         ];
 

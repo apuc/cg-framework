@@ -13,7 +13,7 @@ class Users
             [
                 'title' => 'Users',
                 'url' => '/admin/users',
-                'icon' => '<i class="nav-icon fas fa-copy"></i>',
+                'icon' => '<i class="nav-icon fa fa-users"></i>',
             ],
         ];
 

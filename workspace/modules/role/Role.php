@@ -13,7 +13,7 @@ class Role
             [
                 'title' => 'Роли',
                 'url' => '/admin/roles',
-                'icon' => '<i class="fas fa-cogs"></i>', //TODO
+                'icon' => '<i class="fas fa-id-badge"></i>',
             ],
         ];
 
