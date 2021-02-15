@@ -26,30 +26,14 @@ class RuleController extends Controller
     {
         $model = Rule::all();
 
-        $options = [
-            'serial' => '#',
-            'fields' => [
-                'key' => 'Ключ',
-                'id' => 'ID'
-            ],
-            'baseUri' => 'rules'
-        ];
-
-        return $this->render('rule/rules.tpl', ['h1' => 'Права', 'model' => $model, 'options' => $options]);
+        return $this->render('rule/rules.tpl', ['h1' => 'Права', 'model' => $model, 'options' => $this->setOptions($model)]);
     }
 
     public function actionView($id)
     {
         $model = Rule::where('id', $id)->first();
 
-        $options = [
-            'fields' => [
-                'id' => 'ID',
-                'key' => 'Ключ'
-            ],
-        ];
-
-        return $this->render('rule/view.tpl', ['model' => $model, 'options' => $options]);
+        return $this->render('rule/view.tpl', ['model' => $model, 'options' => $this->setOptions($model)]);
     }
 
     public function actionStore()
@@ -79,6 +63,20 @@ class RuleController extends Controller
 
     public function actionDelete()
     {
-        Rule::where('id', $_POST['id'])->delete();
+        Rule::deleteRule($_POST['id']);
+    }
+
+
+    public function setOptions($data): array
+    {
+        return [
+            'data' => $data,
+            'serial' => '#',
+            'fields' => [
+                'key' => 'Ключ',
+                'id' => 'ID'
+            ],
+            'baseUri' => 'rules'
+        ];
     }
 }

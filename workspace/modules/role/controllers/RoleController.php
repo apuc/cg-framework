@@ -6,7 +6,10 @@ namespace workspace\modules\role\controllers;
 
 use core\App;
 use core\Controller;
+use core\Select2;
 use workspace\models\Role;
+use workspace\models\RoleRuleRelations;
+use workspace\models\Rule;
 
 class RoleController extends Controller
 {
@@ -40,12 +43,13 @@ class RoleController extends Controller
             ],
         ];
 
-        return $this->render('role/view.tpl', ['model' => $model, 'options' => $options]);
+        return $this->render('role/view.tpl', ['model' => $model, 'options' => $options,
+            'rules' => $this->setRuleOptions($model->rules)]);
     }
 
     public function actionStore()
     {
-        if(isset($_POST['key'])) {
+        if (isset($_POST['key'])) {
             $role = new Role();
             $role->key = $_POST['key'];
             $role->save();
@@ -57,22 +61,42 @@ class RoleController extends Controller
 
     public function actionEdit($id)
     {
-        $role = Role::where('id', $id)->first();
 
-        if(isset($_POST['key'])) {
-            $role->key = $_POST['key'];
-            $role->save();
+
+        if (isset($_POST['key']) && isset($_POST['rules'])) {
+
+            Role::updateRole($id, $_POST['key'], $_POST['rules']);
 
             $this->redirect('admin/roles');
-        } else
-            return $this->render('role/edit.tpl', ['h1' => 'Редактировать: ', 'model' => $role]);
+        } else {
+            $role = Role::where('id', $id)->first();
+
+            $rules = $role->rules;
+
+//            $sel2 = new Select2();
+//            $sel2->setParams(
+//                $rules,
+//                [
+//                    'label' => 'Права',
+//                    'id' => 'rule',
+//                    'class' => '',
+//                    'value' => $rules[0]->key,
+//                    'value_id' => $rules[0]->id,
+//                ]
+//            );
+//            $selectList = $sel2->run();
+
+            return $this->render('role/edit.tpl', ['h1' => 'Редактировать: ', 'model' => $role,
+                'rules' => $rules,
+//                'selectRules' => $selectList
+            ]);
+        }
     }
 
     public function actionDelete()
     {
-        Role::where('id', $_POST['id'])->delete();
+        Role::deleteRole($_POST['id']);
     }
-
 
     public function setOptions($data): array
     {

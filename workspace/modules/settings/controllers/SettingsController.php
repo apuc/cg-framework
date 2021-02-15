@@ -27,7 +27,7 @@ class SettingsController extends Controller
         $model = Settings::all();
 
         $options = [
-            'serial' => '#',
+            'serial' => $model,
             'fields' => [
                 'key' => 'Ключ',
                 'category' => [
@@ -40,7 +40,8 @@ class SettingsController extends Controller
             'baseUri' => 'settings'
         ];
 
-        return $this->render('settings/settings.tpl', ['h1' => 'Настройки', 'model' => $model, 'options' => $options]);
+        return $this->render('settings/settings.tpl', ['h1' => 'Настройки',
+                                    'model' => $model, 'options' => $this->setOptions($model)]);
     }
 
     public function actionView($id)
@@ -92,5 +93,23 @@ class SettingsController extends Controller
     public function actionDelete()
     {
         Settings::where('id', $_POST['id'])->delete();
+    }
+
+    public function setOptions($model): array
+    {
+        return [
+            'data' => $model,
+            'serial' => '#',
+            'fields' => [
+                'key' => 'key',
+                'category' => [
+                    'label' => 'value',
+                    'value' => function($model) {
+                        return $model->value;
+                    }
+                ]
+            ],
+            'baseUri' => '/admin/roles'
+        ];
     }
 }

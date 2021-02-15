@@ -6,6 +6,8 @@ namespace workspace\models;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 use workspace\modules\users\requests\UsersSearchRequest;
 
 class User extends Model
@@ -19,18 +21,62 @@ class User extends Model
         return $_SESSION['username'] ?? null;
     }
 
-    public function roles(){
-        return $this->belongsToMany(Role::class, 'user_role_relations',
-                                    'user_name', 'role_key',
-                                        'username', 'key');
+    public static function storeUser($username, $email, $password, $roles)
+    {
+        $model = new User();
+        $model->username = $username;
+        $model->email = $email;
+        $model->password_hash = password_hash($password, PASSWORD_DEFAULT);
+        $model->save();
+
+        if (isset($roles)) {
+            $model->roles()->sync($roles);
+        }
     }
 
-    public function getRules(){
+    public static function updateUser($id, $username, $email)
+    {
+        $model = User::where('id', $id)->first();
+
+        $model->username = $username;
+        $model->email = $email;
+        $model->save();
+
+//        return $model;
+    }
+
+    public static function deleteUser($id)
+    {
+        DB::beginTransaction();
+        try {
+            $user = User::findOrFail($id);
+            $user->roles()->detach();
+            $user->delete();
+
+            DB::commit();
+
+            return true;
+        } catch (ModelNotFoundException $exception) {
+            DB::rollBack();
+
+            return false;
+        }
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'user_role_relations',
+            'user_name', 'role_key',
+            'username', 'key');
+    }
+
+    public function getRules()
+    { //TODO
 
         $roles = $this->roles()->getModels();
 
         $rules = new Collection();
-        foreach ($roles as $role){
+        foreach ($roles as $role) {
             $rules = $rules->merge($role->rules);
         }
 

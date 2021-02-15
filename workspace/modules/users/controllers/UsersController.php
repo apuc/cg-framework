@@ -8,6 +8,7 @@ use core\Debug;
 use Illuminate\Database\Eloquent\Model;
 use workspace\models\Role;
 use workspace\models\User;
+use workspace\models\UserRoleRelations;
 use workspace\modules\users\requests\UsersSearchRequest;
 
 class UsersController extends Controller
@@ -47,11 +48,8 @@ class UsersController extends Controller
     public function actionStore()
     {
         if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])) {
-            $model = new User();
-            $model->username = $_POST['username'];
-            $model->email = $_POST['email'];
-            $model->password_hash = password_hash($_POST['password'], PASSWORD_DEFAULT);
-            $model->save();
+
+            User::storeUser($_POST['username'], $_POST['email'], $_POST['password'], $_POST['roles']);
 
             $this->redirect('users');
         } else {
@@ -59,24 +57,35 @@ class UsersController extends Controller
         }
     }
 
+/*    public function addRoles($id)
+    {
+        if (isset($_POST['roles'])) {
+            $roles = $_POST['roles'];
+
+            foreach ($roles as $role) {
+                $user = User::findOrFail($id);
+                $user_role_relations = new UserRoleRelations();
+                $user_role_relations->_save($user->username, $role->key);
+            }
+        }
+    }*/
+
     public function actionEdit($id) //TODO
     {
-        $model = User::where('id', $id)->first();
 
         if (isset($_POST['username']) && isset($_POST['email'])) {
-            $model->username = $_POST['username'];
-            $model->email = $_POST['email'];
-            $model->save();
+
+            User::updateUser($id, $_POST['username'], $_POST['email']);
 
             $this->redirect('admin/users');
         } else
-            return $this->render('users/edit.tpl', ['h1' => 'Редактировать: ', 'model' => $model]);
+            return $this->render('users/edit.tpl', ['h1' => 'Редактировать: ', 'model' => User::findOrFail($id)]);
 
     }
 
-    public function actionDelete($id)
+    public function actionDelete()
     {
-        User::where('id', $_POST['id'])->delete();
+        User::deleteUser($_POST['id']);
     }
 
     public function setOptions($data): array
