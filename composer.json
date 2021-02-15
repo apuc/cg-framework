@@ -9,7 +9,6 @@
     "ext-zip": "*",
     "ext-fileinfo": "*",
     "snapappointments/bootstrap-select": "^1.13",
-    "samejack/php-argv": "dev-master",
     "ext-json": "*",
     "phpquery/phpquery": "^0.0.2",
     "symfony/filesystem": "^5.0",

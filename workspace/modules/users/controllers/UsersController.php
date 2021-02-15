@@ -49,7 +49,7 @@ class UsersController extends Controller
     {
         if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])) {
 
-            User::storeUser($_POST['username'], $_POST['email'], $_POST['password'], $_POST['roles']);
+            User::storeUser($_POST['username'], $_POST['email'], $_POST['password']); /*, $_POST['roles']*/
 
             $this->redirect('users');
         } else {

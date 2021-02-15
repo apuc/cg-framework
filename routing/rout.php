@@ -7,6 +7,7 @@ App::$collector->get('products', function(){ return 'Create Product';});
 App::$collector->get('/forms/{id}', ['workspace\controllers\FormsController', 'actionShow']);
 
 App::$collector->get('admin', ['workspace\modules\adminpanel\controllers\AdminController', 'actionIndex']);
+App::$collector->any('adminlte', ['workspace\modules\adminlte\controllers\AdminController', 'actionIndex']);
 
 App::$collector->post('/store-article', ['workspace\controllers\ApiController', 'actionStoreArticle']);
 App::$collector->post('/update-article', ['workspace\controllers\ApiController', 'actionUpdateArticle']);

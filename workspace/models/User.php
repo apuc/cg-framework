@@ -21,7 +21,7 @@ class User extends Model
         return $_SESSION['username'] ?? null;
     }
 
-    public static function storeUser($username, $email, $password, $roles)
+    public static function storeUser($username, $email, $password, $roles = null)
     {
         $model = new User();
         $model->username = $username;
