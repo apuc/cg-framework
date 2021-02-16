@@ -4,10 +4,12 @@
 namespace workspace\modules\role\sevices;
 
 
-class AccessService
+class RoleService
 {
     public function getPermission()
     {
 
     }
+
+
 }
