@@ -2,3 +2,11 @@
 {$view->addMeta('description', 'описание главной страницы')}
 {*{core\Debug::prn(core\App::$config['adminLeftMenu'])}*}
 <h1 class="h1">{$h1}</h1>
+
+{if isset($errors)}
+    {foreach from=$errors item=error}
+        <div class="alert alert-danger" role="alert">
+            {$error}
+        </div>
+    {/foreach}
+{/if}

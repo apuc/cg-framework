@@ -4,6 +4,14 @@
 
 <div class="h1">{$h1} {$model->username}</div>
 
+{if isset($errors)}
+    {foreach from=$errors item=error}
+        <div class="alert alert-danger" role="alert">
+            {$error}
+        </div>
+    {/foreach}
+{/if}
+
 <div class="container">
     <form class="form-horizontal" name="edit_form" id="edit_form" method="post" action="/admin/users/update/{$model->id}">
         <div class="form-group">

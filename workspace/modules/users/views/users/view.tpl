@@ -2,6 +2,14 @@
 {core\App::$breadcrumbs->addItem(['text' => $model->username, 'url' => $url])}
 <div class="h1">{$model->username}</div>
 
+{if isset($errors)}
+    {foreach from=$errors item=error}
+        <div class="alert alert-danger" role="alert">
+            {$error}
+        </div>
+    {/foreach}
+{/if}
+
 {core\DetailView::widget()->setParams($model, $options)->run()}
 <a href="/admin/users/update/{$model->id}" class="btn btn-dark">Edit</a>
 

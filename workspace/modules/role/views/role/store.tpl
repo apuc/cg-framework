@@ -1,6 +1,14 @@
 {core\App::$breadcrumbs->addItem(['text' => 'Create'])}
 <div class="h1">{$h1}</div>
 
+{if isset($errors)}
+    {foreach from=$errors item=error}
+        <div class="alert alert-danger" role="alert">
+            {$error}
+        </div>
+    {/foreach}
+{/if}
+
 <div class="container">
     <form class="form-horizontal" name="create_form" id="create_form" method="post" action="/admin/roles/create">
         <div class="form-group">

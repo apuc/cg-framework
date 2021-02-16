@@ -1,7 +1,15 @@
 {assign var="url" value="{'/admin/roles/'}{$model->id}"}
 {core\App::$breadcrumbs->addItem(['text' => $model->key, 'url' => {$url}])}
 {core\App::$breadcrumbs->addItem(['text' => 'Edit'])}
-<div class="h1">{$h1} {$model->key}</div>
+<div class="h1">Редактировать: {$model->key}</div>
+
+{if isset($errors)}
+    {foreach from=$errors item=error}
+        <div class="alert alert-danger" role="alert">
+            {$error}
+        </div>
+    {/foreach}
+{/if}
 
 <div class="container">
     <form class="form-horizontal" name="edit_form" id="edit_form" method="post"
