@@ -15,6 +15,11 @@ class Role
                 'url' => '/admin/roles',
                 'icon' => '<i class="fas fa-id-badge"></i>',
             ],
+            [
+                'title' => 'Права',
+                'url' => '/admin/rules',
+                'icon' => '<i class="fas fa-gavel"></i>',
+            ]
         ];
 
         App::mergeConfig($config);

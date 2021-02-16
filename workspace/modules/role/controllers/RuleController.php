@@ -1,7 +1,7 @@
 <?php
 
 
-namespace workspace\modules\rule\controllers;
+namespace workspace\modules\role\controllers;
 
 
 use core\App;
@@ -11,13 +11,13 @@ use workspace\models\Rule;
 
 class RuleController extends Controller
 {
-    public $viewPath = '/modules/rule/views/';
+    public $viewPath = '/modules/role/views/';
 
     protected function init()
     {
         //if(!isset($_SESSION['role']) || $_SESSION['role'] != 1) $this->redirect('');
 
-        $this->viewPath = '/modules/rule/views/';
+        $this->viewPath = '/modules/role/views/';
         $this->layoutPath = App::$config['adminLayoutPath'];
         App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);
         App::$breadcrumbs->addItem(['text' => 'Rules', 'url' => 'admin/rules']);

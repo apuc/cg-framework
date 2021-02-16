@@ -27,9 +27,5 @@
   "role": {
     "version": "0.1",
     "status": "active"
-  },
-  "rule": {
-    "version": "0.1",
-    "status": "active"
   }
 }
