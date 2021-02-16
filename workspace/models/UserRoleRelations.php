@@ -18,4 +18,10 @@ class UserRoleRelations extends Model
         $this->role_key = $role_key;
         $this->save();
     }
+
+    public static function removeRole($username, $role_key)
+    {
+        $user = User::where('username', $username)->first();
+        $user->roles->detach($role_key);
+    }
 }

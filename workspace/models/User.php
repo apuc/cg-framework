@@ -7,6 +7,7 @@ namespace workspace\models;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\DB;
 use workspace\modules\users\requests\UsersSearchRequest;
 
@@ -30,7 +31,7 @@ class User extends Model
         $model->save();
 
         if (isset($roles)) {
-            $model->roles()->sync($roles);
+            $model->roles()->attach($roles); //TODO CL was sync
         }
     }
 
@@ -54,16 +55,18 @@ class User extends Model
         $user->delete();
     }
 
-    public function roles()
+    /**
+     * @return BelongsToMany
+     */
+    public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'user_role_relations',
             'user_name', 'role_key',
             'username', 'key');
     }
 
-    public function getRules() //TODO
-    {
-
+    public function getRules(): Collection
+    {                                           //TODO сделать более "прямым" способом
         $roles = $this->roles()->getModels();
 
         $rules = new Collection();
@@ -72,6 +75,12 @@ class User extends Model
         }
 
         return $rules;
+    }
+
+    public static function setRole(int $id, string $role_key)
+    {
+        $user = User::findOrFail($id);
+        $user->roles()->syncWithoutDetaching($role_key);
     }
 
     public static function search(UsersSearchRequest $request)

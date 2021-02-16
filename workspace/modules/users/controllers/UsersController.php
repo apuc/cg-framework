@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use workspace\models\Role;
 use workspace\models\User;
 use workspace\models\UserRoleRelations;
+use workspace\modules\role\sevices\RoleService;
 use workspace\modules\users\requests\UsersSearchRequest;
 
 class UsersController extends Controller
@@ -27,7 +28,6 @@ class UsersController extends Controller
         $request = new UsersSearchRequest();
         $model = User::search($request);
 
-
         return $this->render('users/index.tpl',
             ['options' => $this->setOptions($model), 'h1' => 'Пользователи', 'model' => $model]);
     }
@@ -36,8 +36,8 @@ class UsersController extends Controller
     {
         $model = User::where('id', $id)->first();
 
-
-//        Debug::dd($model->getRoles());
+//        $service = new RoleService($model);
+//        Debug::dd($service->hasRole('admin'));
 
         return $this->render('users/view.tpl', ['model' => $model, 'options' => $this->setOptions($model),
             'role_options' => $this->setRoleOptions($model->roles),

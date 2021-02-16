@@ -12,6 +12,9 @@ use workspace\models\Role;
 use workspace\models\RoleRuleRelations;
 use workspace\models\Rule;
 use workspace\models\User;
+use workspace\modules\role\requests\RoleDeleteRequest;
+use workspace\modules\role\requests\RoleRequest;
+use workspace\modules\role\sevices\RoleService;
 
 class RoleController extends Controller
 {
@@ -19,7 +22,9 @@ class RoleController extends Controller
 
     protected function init()
     {
-        //if(!isset($_SESSION['role']) || $_SESSION['role'] != 1) $this->redirect('');
+//        $service = new RoleService(User::where('username', $_SESSION['username'])->first());
+//
+//        if(!$service->hasRole('admin')) $this->redirect('');
 
         $this->viewPath = '/modules/role/views/';
         $this->layoutPath = App::$config['adminLayoutPath'];
@@ -52,40 +57,63 @@ class RoleController extends Controller
 
     public function actionStore()
     {
-        if (isset($_POST['key']) && isset($_POST['rules']) && isset($_POST['users'])) {
-            Role::storeRole($_POST['key'], $_POST['rules']);
+        $request = new RoleRequest();
+
+        if ($request->validate()) {
+            RoleService::storeRole($request);
 
             $this->redirect('admin/roles');
-        } else
-            return $this->render('role/store.tpl', ['h1' => 'Добавить роль',
-                'rules' => Rule::all(),
-                'users' => User::all()]);
+        } else {
+            $errors = $request->isPost() ? $request->errors->all() : null;
+
+            return $this->render('role/store.tpl',
+                [
+                    'h1' => 'Добавить роль',
+                    'rules' => Rule::all(),
+                    'users' => User::all(),
+                    'errors' => $errors
+                ]
+            );
+        }
     }
 
     public function actionEdit($id)
     {
-        if (isset($_POST['key']) && isset($_POST['rules']) && isset($_POST['users'])) {
+        $request = new RoleRequest();
+        $request->id = $id;
 
-            Role::updateRole($id, $_POST['key'], $_POST['rules'], $_POST['users']);
+        if ($request->validate()) {
+            RoleService::editRole($request);
 
             $this->redirect("admin/roles/{$id}");
         } else {
             $role = Role::where('id', $id)->first();
-
             $rules = $role->rules;
 
-            return $this->render('role/edit.tpl', ['h1' => 'Редактировать: ', 'model' => $role,
-                'linked_rules' => $rules,
-                'rules' => Rule::all(),
-                'users' => User::all(),
-                'linked_users' => $role->users
-            ]);
+            $errors = $request->isPost() ? $request->errors->all() : null;
+
+            return $this->render('role/edit.tpl',
+                [
+                    'model' => $role,
+                    'linked_rules' => $rules,
+                    'rules' => Rule::all(),
+                    'users' => User::all(),
+                    'linked_users' => $role->users,
+                    'errors' => $errors
+                ]
+            );
         }
     }
 
     public function actionDelete()
     {
-        Role::deleteRole($_POST['id']);
+        $request = new RoleDeleteRequest();
+
+        if ($request->validate()) {
+            RoleService::deleteRole($request);
+        } else {
+            //TODO render some(current) tpl, but with errors?
+        }
     }
 
     public function setOptions($data): array

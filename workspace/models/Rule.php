@@ -6,6 +6,7 @@ namespace workspace\models;
 use core\Debug;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\DB;
 
 class Rule extends Model
@@ -14,7 +15,7 @@ class Rule extends Model
 
     public $fillable = ['key'];
 
-    public function roles()
+    public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'role_rule_relations',
             'rule_key', 'role_name',
@@ -27,7 +28,7 @@ class Rule extends Model
         $rule->key = $key;
         $rule->save();
 
-        $rule->roles()->sync($roles);
+        $rule->roles()->attach($roles); // TODO check later sync > attach
     }
 
     public static function udpateRule($id, $key, $roles)
