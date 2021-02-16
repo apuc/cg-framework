@@ -39,14 +39,13 @@ class RuleController extends Controller
 
     public function actionStore()
     {
-        if (isset($_POST['key'])) {
-            $rule = new Rule();
-            $rule->key = $_POST['key'];
-            $rule->save();
+        if (isset($_POST['key']) && $_POST['roles']) {
+
+            Rule::storeRule($_POST['key'], $_POST['roles']);
 
             $this->redirect('admin/rules');
         } else
-            return $this->render('rule/store.tpl', ['h1' => 'Добавить правило']);
+            return $this->render('rule/store.tpl', ['h1' => 'Добавить правило', 'roles' => Role::all()]);
     }
 
     public function actionEdit($id)

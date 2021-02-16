@@ -21,6 +21,15 @@ class Rule extends Model
             'key', 'key');
     }
 
+    public static function storeRule($key, $roles)
+    {
+        $rule = new Rule();
+        $rule->key = $key;
+        $rule->save();
+
+        $rule->roles()->sync($roles);
+    }
+
     public static function udpateRule($id, $key, $roles)
     {
         $rule = Rule::findOrFail($id);

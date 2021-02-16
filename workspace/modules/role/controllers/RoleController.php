@@ -11,6 +11,7 @@ use core\Select2;
 use workspace\models\Role;
 use workspace\models\RoleRuleRelations;
 use workspace\models\Rule;
+use workspace\models\User;
 
 class RoleController extends Controller
 {
@@ -45,50 +46,39 @@ class RoleController extends Controller
         ];
 
         return $this->render('role/view.tpl', ['model' => $model, 'options' => $options,
-            'rules' => $this->setRuleOptions($model->rules)]);
+            'rules' => $this->setRuleOptions($model->rules),
+            'users' => $this->setUserOptions($model->users)]);
     }
 
     public function actionStore()
     {
-        if (isset($_POST['key']) && isset($_POST['rules'])) {
+        if (isset($_POST['key']) && isset($_POST['rules']) && isset($_POST['users'])) {
             Role::storeRole($_POST['key'], $_POST['rules']);
 
             $this->redirect('admin/roles');
         } else
-            return $this->render('role/store.tpl', ['h1' => 'Добавить роль', 'rules' => Rule::all()]);
+            return $this->render('role/store.tpl', ['h1' => 'Добавить роль',
+                'rules' => Rule::all(),
+                'users' => User::all()]);
     }
 
     public function actionEdit($id)
     {
-        if (isset($_POST['key']) && isset($_POST['rules'])) {
+        if (isset($_POST['key']) && isset($_POST['rules']) && isset($_POST['users'])) {
 
-//            Debug::dd($_POST['rules']);
-
-            Role::updateRole($id, $_POST['key'], $_POST['rules']);
+            Role::updateRole($id, $_POST['key'], $_POST['rules'], $_POST['users']);
 
             $this->redirect("admin/roles/{$id}");
         } else {
             $role = Role::where('id', $id)->first();
 
             $rules = $role->rules;
-            /*
-                        $sel2 = new Select2();
-                        $sel2->setParams(
-                            $rules,
-                            [
-                                'label' => 'Права',
-                                'id' => 'rule',
-                                'class' => '',
-                                'value' => $rules[0]->key,
-                                'value_id' => $rules[0]->id,
-                            ]
-                        );
-                        $selectList = $sel2->run();*/
 
             return $this->render('role/edit.tpl', ['h1' => 'Редактировать: ', 'model' => $role,
                 'linked_rules' => $rules,
-                'rules' => Rule::all()
-//                'selectRules' => $selectList
+                'rules' => Rule::all(),
+                'users' => User::all(),
+                'linked_users' => $role->users
             ]);
         }
     }
@@ -121,6 +111,20 @@ class RoleController extends Controller
                 'id' => 'ID'
             ],
             'baseUri' => '/admin/rules',
+            'actionBtn' => 'del_all'
+        ];
+    }
+
+    public function setUserOptions($data): array
+    {
+        return [
+            'data' => $data,
+            'serial' => '#',
+            'fields' => [
+                'username' => 'Логин',
+                'email' => 'Email'
+            ],
+            'baseUri' => '/admin/users',
             'actionBtn' => 'del_all'
         ];
     }

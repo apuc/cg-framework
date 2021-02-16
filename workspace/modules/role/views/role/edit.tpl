@@ -11,9 +11,22 @@
             <input type="text" name="key" id="key" class="form-control" required="required" value="{$model->key}"/>
         </div>
         <div>
-            <select class="form-control select2-selection select2-selection--multiple" role="combobox" aria-haspopup="true" tabindex="-1" aria-disabled="false" name="rules[]" id="rules" multiple="multiple">
+            <select class="form-control select2-selection select2-selection--multiple" role="combobox"
+                    aria-haspopup="true" tabindex="-1" aria-disabled="false" name="rules[]" id="rules"
+                    multiple="multiple">
                 {foreach from=$rules item=rule}
-                    <option value="{$rule->key}" {if $linked_rules->containsStrict('id', $rule->id) }selected{/if}>{$rule->key}</option>
+                    <option value="{$rule->key}"
+                            {if $linked_rules->containsStrict('id', $rule->id) }selected{/if}>{$rule->key}</option>
+                {/foreach}
+            </select>
+        </div>
+        <p></p>
+        <div>
+            <select class="form-control select2-selection select2-selection--multiple" name="users[]" id="users"
+                    multiple="multiple">
+                {foreach from=$users item=user}
+                    <option value="{$user->username}"
+                            {if $linked_users->containsStrict('id', $user->id) }selected{/if}>{$user->username}</option>
                 {/foreach}
             </select>
         </div>

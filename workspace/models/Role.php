@@ -13,12 +13,16 @@ class Role extends Model
 
     public $fillable = ['key'];
 
-    public static function storeRole($key, $rules){
+    public static function storeRole($key, $rules, $users = null){
         $role = new Role();
         $role->key = $_POST['key'];
         $role->save();
 
         $role->rules()->sync($rules);
+
+        if(isset($users)){
+            $role->users()->sync($users);
+        }
     }
 
     public static function deleteRole($id)
@@ -43,7 +47,7 @@ class Role extends Model
             'key', 'username');
     }
 
-    public static function updateRole($id, $key, $rules = null)
+    public static function updateRole($id, $key, $rules = null, $users = null)
     {
         $role = Role::where('id', $id)->first();
 
@@ -52,6 +56,9 @@ class Role extends Model
 
         if (isset($rules)) {
             $role->rules()->sync($rules);
+        }
+        if(isset($users)){
+            $role->users()->sync($users);
         }
     }
 }

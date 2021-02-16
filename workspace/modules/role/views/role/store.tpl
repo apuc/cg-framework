@@ -4,15 +4,27 @@
 <div class="container">
     <form class="form-horizontal" name="create_form" id="create_form" method="post" action="/admin/roles/create">
         <div class="form-group">
-            <label for="firstname">Name:</label>
-            <input type="text" name="key" id="key" class="form-control" required="required" />
+            <label for="key">Name:</label>
+            <input type="text" name="key" id="key" class="form-control" required="required"/>
         </div>
         <div>
-        <select class="form-control select2-selection select2-selection--multiple" name="rules[]" id="rules" multiple="multiple">
-            {foreach from=$rules item=rule}
-                <option value="{$rule->key}">{$rule->key}</option>
-            {/foreach}
-        </select>
+            <label for="rules">Select rules:</label>
+            <select class="form-control select2-selection select2-selection--multiple" name="rules[]" id="rules"
+                    multiple="multiple">
+                {foreach from=$rules item=rule}
+                    <option value="{$rule->key}">{$rule->key}</option>
+                {/foreach}
+            </select>
+        </div>
+        <p></p>
+        <div>
+            <label for="users">Give it to:</label>
+            <select class="form-control select2-selection select2-selection--multiple" name="users[]" id="users"
+                    multiple="multiple">
+                {foreach from=$users item=user}
+                    <option value="{$user->username}">{$user->username}</option>
+                {/foreach}
+            </select>
         </div>
         <p></p>
         <div class="form-group">

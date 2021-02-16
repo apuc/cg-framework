@@ -53,34 +53,29 @@ class UsersController extends Controller
 
             $this->redirect('admin/users');
         } else {
-            return $this->render('users/store.tpl');
+            return $this->render('users/store.tpl', ['roles' => Role::all()]);
         }
     }
 
-/*    public function addRoles($id)
-    {
-        if (isset($_POST['roles'])) {
-            $roles = $_POST['roles'];
-
-            foreach ($roles as $role) {
-                $user = User::findOrFail($id);
-                $user_role_relations = new UserRoleRelations();
-                $user_role_relations->_save($user->username, $role->key);
-            }
-        }
-    }*/
 
     public function actionEdit($id) //TODO
     {
 
-        if (isset($_POST['username']) && isset($_POST['email'])) {
+        if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['roles'])) {
 
-            User::updateUser($id, $_POST['username'], $_POST['email']);
+            User::updateUser($id, $_POST['username'], $_POST['email'], $_POST['roles']);
 
-            $this->redirect('admin/users');
-        } else
-            return $this->render('users/edit.tpl', ['h1' => 'Редактировать: ', 'model' => User::findOrFail($id)]);
-
+            $this->redirect("admin/users/{$id}");
+        } else {
+            return $this->render('users/edit.tpl',
+                [
+                    'h1' => 'Редактировать: ',
+                    'model' => User::findOrFail($id),
+                    'roles' => Role::all(),
+                    'linked_roles' => User::findOrFail($id)->roles
+                ]
+            );
+        }
     }
 
     public function actionDelete()
@@ -110,7 +105,8 @@ class UsersController extends Controller
                 'key' => 'Имя',
                 'id' => 'ID'
             ],
-            'baseUri' => '/admin/roles'
+            'baseUri' => '/admin/roles',
+            'actionBtn' => 'del_all'
         ];
     }
 

@@ -14,10 +14,16 @@
             <label for="email">E-mail:</label>
             <input type="text" name="email" id="email" class="form-control" required="required" value="{$model->email}" />
         </div>
-        <div class="form-group">
-            <label for="role">Роль:</label>
-            <input type="text" name="role" id="role" class="form-control" required="required" value="{$model->role}" />
+        <div>
+            <label for="rules">Select roles:</label>
+            <select class="form-control select2-selection select2-selection--multiple" name="roles[]" id="roles"
+                    multiple="multiple">
+                {foreach from=$roles item=role}
+                    <option value="{$role->key}" {if $linked_roles->containsStrict('id', $role->id) }selected{/if}>{$role->key}</option>
+                {/foreach}
+            </select>
         </div>
+        <p></p>
         <div class="form-group">
             <input type="submit" name="submit" id="submit_button" class="btn btn-dark" value="Submit">
         </div>

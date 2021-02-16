@@ -3,9 +3,9 @@
 <div class="h1">{$model->username}</div>
 
 {core\DetailView::widget()->setParams($model, $options)->run()}
+<a href="/admin/users/update/{$model->id}" class="btn btn-dark">Edit</a>
 
 <div class="h1">Роли</div>
-<a href="/admin/roles/create?user_name={$model->username}" class="btn btn-dark">Добавить Роль</a>
 {*{core\DetailView::widget()->setParams($roles, $role_options)->run()}*}
 {core\GridView::widget()->setParams($role_options['data'], $role_options)->run()}
 

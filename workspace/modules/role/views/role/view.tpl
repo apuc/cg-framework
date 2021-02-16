@@ -9,3 +9,6 @@
 
 <div class="h1">Права</div>
 {core\GridView::widget()->setParams($rules['data'], $rules)->run()}
+
+<div class="h1">Пользователи с этой ролью:</div>
+{core\GridView::widget()->setParams($users['data'], $users)->run()}
