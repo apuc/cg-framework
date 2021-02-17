@@ -24,15 +24,17 @@ class UsersController extends Controller
     {
         $this->service = RoleService::initialize();
 
-        if (false !== $this->service &&
-            ($this->service->hasOneOfPermissions(self::$PERMISSION_INIT))) {
+        if (false === $this->service) {     //если не залогинен
+            $this->redirect('sign-in');
 
+        } elseif ($this->service->hasOneOfPermissions(self::$PERMISSION_INIT)) {
 
             $this->viewPath = '/modules/users/views/';
             $this->layoutPath = App::$config['adminLayoutPath'];
             App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);
             App::$breadcrumbs->addItem(['text' => 'Users', 'url' => 'users']);
-        } else {
+
+        } else {                            //если нет прав
             $this->redirect('adminlte');
         }
     }

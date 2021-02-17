@@ -22,15 +22,17 @@ class RuleController extends Controller
     {
         $this->service = RoleService::initialize();
 
-        if (false !== $this->service &&
-            ( $this->service->hasOneOfPermissions(self::$PERMISSION_INIT) )) {
+        if (false === $this->service) {     //если не залогинен
+            $this->redirect('sign-in');
 
-        $this->viewPath = '/modules/role/views/';
-        $this->layoutPath = App::$config['adminLayoutPath'];
-        App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);
-        App::$breadcrumbs->addItem(['text' => 'Rules', 'url' => 'admin/rules']);
+        } elseif ($this->service->hasOneOfPermissions(self::$PERMISSION_INIT)) {
 
-        } else {
+            $this->viewPath = '/modules/role/views/';
+            $this->layoutPath = App::$config['adminLayoutPath'];
+            App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);
+            App::$breadcrumbs->addItem(['text' => 'Rules', 'url' => 'admin/rules']);
+
+        } else {                            //если нет прав
             $this->redirect('adminlte');
         }
     }
@@ -72,7 +74,7 @@ class RuleController extends Controller
             return $this->render('rule/edit.tpl', ['h1' => 'Редактировать: ', 'model' => $rule,
                 'roles' => Role::all(),
                 'linked_roles' => $rule->roles
-                ]);
+            ]);
         }
     }
 

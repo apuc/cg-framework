@@ -26,19 +26,32 @@ class RoleService
 
     private function __construct(User $user)
     {
-        $this->user = $user;
+        $this->setUser($user);
         $this->roles = $user->roles()->get();
     }
 
-    public static function initialize() //TODO?
+    /**
+     * @param User|null $user
+     * @return false|RoleService
+     */
+    public static function initialize(User $user = null)
     {
-        if(isset($_SESSION['username'])) {
-            $user = User::where('username', $_SESSION['username'])->first();
+        if (isset($user)) {
+
+            return new RoleService($user);
+
+        } elseif (isset($_SESSION['username'])) {
+            $user = User::getUserByName($_SESSION['username']);
 
             return new RoleService($user);
         } else {
             return false;
         }
+    }
+
+    public function setUser(User $user)
+    {
+        $this->user = $user;
     }
 
     /** Permission's methods */
@@ -59,8 +72,8 @@ class RoleService
 
     public function hasOneOfPermissions(array $permissions): bool
     {
-        foreach ($permissions as $perm){
-            if($this->hasPermission($perm)){
+        foreach ($permissions as $perm) {
+            if ($this->hasPermission($perm)) {
                 return true;
             }
         }
@@ -74,7 +87,8 @@ class RoleService
         return $this->roles;
     }
 
-    public function setRole(int $user_id, string $role_key){
+    public function setRole(int $user_id, string $role_key)
+    {
         User::setRole($user_id, $role_key);
     }
 
