@@ -20,7 +20,7 @@
             <select class="form-control select2-selection select2-selection--multiple" name="rules[]" id="rules"
                     multiple="multiple">
                 {foreach from=$rules item=rule}
-                    <option value="{$rule->key}">{$rule->key}</option>
+                    <option value="{$rule->id}">{$rule->key}</option>
                 {/foreach}
             </select>
         </div>
@@ -30,7 +30,7 @@
             <select class="form-control select2-selection select2-selection--multiple" name="users[]" id="users"
                     multiple="multiple">
                 {foreach from=$users item=user}
-                    <option value="{$user->username}">{$user->username}</option>
+                    <option value="{$user->id}">{$user->username}</option>
                 {/foreach}
             </select>
         </div>

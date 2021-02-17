@@ -17,11 +17,11 @@ class UserRoleRelations extends Migration
         App::$db->schema->create('user_role_relations', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->string('user_name', 255);
-            $table->string('role_key');
+            $table->unsignedBiginteger('user_id', false);
+            $table->unsignedBigInteger('role_id', false);
 
-            $table->foreign('user_name')->references('username')->on('user');
-            $table->foreign('role_key')->references('key')->on('role');
+            $table->foreign('user_id')->references('id')->on('user');
+            $table->foreign('role_id')->references('id')->on('role');
 
 
             $table->timestamps();

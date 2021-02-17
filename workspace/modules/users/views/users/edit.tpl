@@ -27,7 +27,7 @@
             <select class="form-control select2-selection select2-selection--multiple" name="roles[]" id="roles"
                     multiple="multiple">
                 {foreach from=$roles item=role}
-                    <option value="{$role->key}" {if $linked_roles->containsStrict('id', $role->id) }selected{/if}>{$role->key}</option>
+                    <option value="{$role->id}" {if $linked_roles->containsStrict('id', $role->id) }selected{/if}>{$role->key}</option>
                 {/foreach}
             </select>
         </div>

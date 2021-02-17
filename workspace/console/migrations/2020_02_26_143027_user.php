@@ -15,7 +15,7 @@ class User extends Migration
     public function up()
     {
         App::$db->schema->create('user', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('username', 255)->unique();
             $table->string('email', 255);
             $table->string('password_hash', 255);

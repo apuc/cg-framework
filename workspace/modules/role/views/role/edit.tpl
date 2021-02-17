@@ -23,7 +23,7 @@
                     aria-haspopup="true" tabindex="-1" aria-disabled="false" name="rules[]" id="rules"
                     multiple="multiple">
                 {foreach from=$rules item=rule}
-                    <option value="{$rule->key}"
+                    <option value="{$rule->id}"
                             {if $linked_rules->containsStrict('id', $rule->id) }selected{/if}>{$rule->key}</option>
                 {/foreach}
             </select>
@@ -33,7 +33,7 @@
             <select class="form-control select2-selection select2-selection--multiple" name="users[]" id="users"
                     multiple="multiple">
                 {foreach from=$users item=user}
-                    <option value="{$user->username}"
+                    <option value="{$user->id}"
                             {if $linked_users->containsStrict('id', $user->id) }selected{/if}>{$user->username}</option>
                 {/foreach}
             </select>

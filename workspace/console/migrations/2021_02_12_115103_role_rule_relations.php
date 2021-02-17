@@ -18,11 +18,11 @@ class RoleRuleRelations extends Migration
             $table->bigIncrements('id');
 
 
-            $table->string('role_name');
-            $table->string('rule_key');
+            $table->unsignedBigInteger('role_id', false);
+            $table->unsignedBigInteger('rule_id', false);
 
-            $table->foreign('role_name')->references('key')->on('role');
-            $table->foreign('rule_key')->references('key')->on('rule');
+            $table->foreign('role_id')->references('id')->on('role');
+            $table->foreign('rule_id')->references('id')->on('rule');
 
             $table->timestamps();
         });

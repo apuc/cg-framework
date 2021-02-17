@@ -18,7 +18,7 @@
         <div>
             <select class="form-control select2-selection select2-selection--multiple" role="combobox" aria-haspopup="true" tabindex="-1" aria-disabled="false" name="roles[]" id="roles" multiple="multiple">
                 {foreach from=$roles item=role}
-                    <option value="{$role->key}">{$role->key}</option>
+                    <option value="{$role->id}">{$role->key}</option>
                 {/foreach}
             </select>
         </div>

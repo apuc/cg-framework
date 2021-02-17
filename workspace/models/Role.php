@@ -17,13 +17,13 @@ class Role extends Model
     public static function storeRole($key, $rules, $users = null)
     {
         $role = new Role();
-        $role->key = $_POST['key'];
+        $role->key = $key;
         $role->save();
 
-        $role->rules()->attach($rules); // TODO check later, sync > attach
+        $role->rules()->attach($rules);
 
         if (isset($users)) {
-            $role->users()->attach($users); // TODO check later, sync > attach
+            $role->users()->attach($users);
         }
     }
 
@@ -38,15 +38,15 @@ class Role extends Model
     public function rules(): BelongsToMany
     {
         return $this->belongsToMany(Rule::class, 'role_rule_relations',
-            'role_name', 'rule_key',
-            'key', 'key');
+            'role_id', 'rule_id',
+            'id', 'id');
     }
 
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'user_role_relations',
-            'role_key', 'user_name',
-            'key', 'username');
+            'role_id', 'user_id',
+            'id', 'id');
     }
 
     public static function updateRole($id, $key, $rules, $users)

@@ -4,6 +4,7 @@
 namespace workspace\models;
 
 
+use core\Debug;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -37,7 +38,7 @@ class User extends Model
 
     public static function updateUser($id, $username, $email, $roles)
     {
-        $model = User::where('id', $id)->first();
+        $model = User::findOrFail($id);
 
         $model->roles()->detach();
 
@@ -63,8 +64,8 @@ class User extends Model
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'user_role_relations',
-            'user_name', 'role_key',
-            'username', 'key');
+            'user_id', 'role_id',
+            'id', 'id');
     }
 
     public function getRules(): Collection
@@ -79,10 +80,10 @@ class User extends Model
         return $rules;
     }
 
-    public static function setRole(int $id, string $role_key)
+    public static function setRole(int $id, string $role_id)
     {
         $user = User::findOrFail($id);
-        $user->roles()->syncWithoutDetaching($role_key);
+        $user->roles()->syncWithoutDetaching($role_id);
     }
 
     public static function search(UsersSearchRequest $request)
@@ -96,5 +97,20 @@ class User extends Model
             $query->where('email', 'LIKE', "%$request->email%");
 
         return $query->get();
+    }
+
+    /**
+     * @param string $username
+     * @return User | false
+     */
+    public static function getUserByName(string $username)
+    {
+        $user = User::where('username', $username);
+
+        if($user->exists()){
+            return $user->first();
+        } else {
+            throw new ModelNotFoundException('User not found!');
+        }
     }
 }
