@@ -20,16 +20,24 @@ class RoleController extends Controller
 {
     public $viewPath = '/modules/role/views/';
 
+    public $service;
+
+    static $PERMISSION_INIT = ['All', 'roleAll', 'roleInit'];
+
     protected function init()
     {
-//        $service = new RoleService(User::where('username', $_SESSION['username'])->first());
-//
-//        if(!$service->hasRole('admin')) $this->redirect('');
+        $this->service = RoleService::initialize();
 
-        $this->viewPath = '/modules/role/views/';
-        $this->layoutPath = App::$config['adminLayoutPath'];
-        App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);
-        App::$breadcrumbs->addItem(['text' => 'Roles', 'url' => 'admin/roles']);
+        if (false !== $this->service &&
+            ( $this->service->hasOneOfPermissions(self::$PERMISSION_INIT) )) {
+
+            $this->viewPath = '/modules/role/views/';
+            $this->layoutPath = App::$config['adminLayoutPath'];
+            App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);
+            App::$breadcrumbs->addItem(['text' => 'Roles', 'url' => 'admin/roles']);
+        } else {
+            $this->redirect('adminlte');
+        }
     }
 
     public function actionIndex()

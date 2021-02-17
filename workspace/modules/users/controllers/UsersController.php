@@ -14,13 +14,27 @@ use workspace\modules\users\requests\UsersSearchRequest;
 
 class UsersController extends Controller
 {
+
+    public $service;
+
+    static $PERMISSION_INIT = ['All', 'usersAll'];
+
+
     protected function init()
     {
-        //if (!isset($_SESSION['role']) || $_SESSION['role'] != 1) $this->redirect('');
-        $this->viewPath = '/modules/users/views/';
-        $this->layoutPath = App::$config['adminLayoutPath'];
-        App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);
-        App::$breadcrumbs->addItem(['text' => 'Users', 'url' => 'users']);
+        $this->service = RoleService::initialize();
+
+        if (false !== $this->service &&
+            ($this->service->hasOneOfPermissions(self::$PERMISSION_INIT))) {
+
+
+            $this->viewPath = '/modules/users/views/';
+            $this->layoutPath = App::$config['adminLayoutPath'];
+            App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);
+            App::$breadcrumbs->addItem(['text' => 'Users', 'url' => 'users']);
+        } else {
+            $this->redirect('adminlte');
+        }
     }
 
     public function actionIndex()

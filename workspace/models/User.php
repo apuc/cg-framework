@@ -35,9 +35,11 @@ class User extends Model
         }
     }
 
-    public static function updateUser($id, $username, $email, $roles = null)
+    public static function updateUser($id, $username, $email, $roles)
     {
         $model = User::where('id', $id)->first();
+
+        $model->roles()->detach();
 
         $model->username = $username;
         $model->email = $email;

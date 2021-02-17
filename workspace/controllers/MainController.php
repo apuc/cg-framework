@@ -14,6 +14,7 @@ use workspace\models\User;
 use core\Debug;
 use core\helpers\Form;
 use core\Request;
+use workspace\modules\role\sevices\RoleService;
 use workspace\requests\LoginRequest;
 use workspace\requests\RegistrationRequest;
 use workspace\widgets\Language;
@@ -68,7 +69,12 @@ class MainController extends Controller
             if (password_verify($request->password, $model->password_hash)) {
                 $_SESSION['username'] = $model->username;
 
-                $this->redirect('');
+                $service = RoleService::initialize();
+
+                if ($service->hasPermission('All')) {
+                    $this->redirect('adminlte'); }
+                else {
+                    $this->redirect(''); }
             }
         }
 

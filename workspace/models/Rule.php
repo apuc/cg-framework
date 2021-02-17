@@ -35,7 +35,9 @@ class Rule extends Model
     {
         $rule = Rule::findOrFail($id);
 
-        $rule->key = $_POST['key'];
+        $rule->roles()->detach();
+
+        $rule->key = $key;
         $rule->save();
 
         $rule->roles()->sync($roles);

@@ -8,19 +8,31 @@ use core\App;
 use core\Controller;
 use workspace\models\Role;
 use workspace\models\Rule;
+use workspace\modules\role\sevices\RoleService;
 
 class RuleController extends Controller
 {
     public $viewPath = '/modules/role/views/';
 
+    public $service;
+
+    static $PERMISSION_INIT = ['All', 'roleAll'];
+
     protected function init()
     {
-        //if(!isset($_SESSION['role']) || $_SESSION['role'] != 1) $this->redirect('');
+        $this->service = RoleService::initialize();
+
+        if (false !== $this->service &&
+            ( $this->service->hasOneOfPermissions(self::$PERMISSION_INIT) )) {
 
         $this->viewPath = '/modules/role/views/';
         $this->layoutPath = App::$config['adminLayoutPath'];
         App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);
         App::$breadcrumbs->addItem(['text' => 'Rules', 'url' => 'admin/rules']);
+
+        } else {
+            $this->redirect('adminlte');
+        }
     }
 
     public function actionIndex()

@@ -49,9 +49,12 @@ class Role extends Model
             'key', 'username');
     }
 
-    public static function updateRole($id, $key, $rules = null, $users = null)
+    public static function updateRole($id, $key, $rules, $users)
     {
         $role = Role::findOrFail($id);
+
+        $role->rules()->detach();
+        $role->users()->detach();
 
         $role->key = $key;
         $role->save();

@@ -24,10 +24,21 @@ class RoleService
      */
     public $user;
 
-    public function __construct(User $user)
+    private function __construct(User $user)
     {
         $this->user = $user;
         $this->roles = $user->roles()->get();
+    }
+
+    public static function initialize() //TODO?
+    {
+        if(isset($_SESSION['username'])) {
+            $user = User::where('username', $_SESSION['username'])->first();
+
+            return new RoleService($user);
+        } else {
+            return false;
+        }
     }
 
     /** Permission's methods */
@@ -46,6 +57,17 @@ class RoleService
         return $this->user->getRules()->contains('key', '==', $rule_key);
     }
 
+    public function hasOneOfPermissions(array $permissions): bool
+    {
+        foreach ($permissions as $perm){
+            if($this->hasPermission($perm)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /** Role's methods */
     public function getRoles(): Collection
     {
@@ -56,7 +78,7 @@ class RoleService
         User::setRole($user_id, $role_key);
     }
 
-    public function hasRole(string $role_key): bool
+    public function hasRole($role_key): bool
     {
         return $this->roles->contains('key', '==', $role_key);
     }
