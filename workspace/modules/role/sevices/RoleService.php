@@ -31,6 +31,9 @@ class RoleService
     }
 
     /**
+     * Создает Сервис
+     * Если user не передан и пользователь не авторизован, возвращает false
+     *
      * @param User|null $user
      * @return false|RoleService
      */
@@ -54,31 +57,65 @@ class RoleService
         $this->user = $user;
     }
 
-    /** Permission's methods */
+
+    /* Permission's methods */
     public function getPermissions(): Collection
     {
         return $this->user->getRules();
     }
 
-    public static function setPermission(int $role_id, string $rule_key)
+    /**
+     * Установить права
+     *
+     * Можно передаввать комбинированный массив из id(int) и key(string)
+     *
+     * @param int | string $role_id
+     * @param int | string | array $rule_key
+     */
+    public static function setPermission(int $role_id, $rule_key)
     {
-        Role::setRule($role_id, $rule_key);
-    }
-
-    public function hasPermission(string $rule_key): bool
-    {
-        return $this->user->getRules()->contains('key', '==', $rule_key);
-    }
-
-    public function hasOneOfPermissions(array $permissions): bool
-    {
-        foreach ($permissions as $perm) {
-            if ($this->hasPermission($perm)) {
-                return true;
+        if(is_array($rule_key)){
+            /**
+             * Если передан массив имён прав($rules), мы получаем коллекцию из getRuleByKey, а из неё массив id
+             */
+            foreach ($rule_key as $key) {
+                Role::setRule(is_integer($role_id) ? $role_id : Role::getRoleByKey($rule_key)->id,
+                    is_integer($key) ? $key : Rule::getRuleByKey($rule_key)->only('id')->all());
             }
-        }
 
-        return false;
+        } else {
+
+            Role::setRule(is_integer($role_id) ? $role_id : Role::getRoleByKey($rule_key)->id,
+                        is_integer($rule_key) ? $rule_key : Rule::getRuleByKey($rule_key)->id );
+        }
+    }
+
+    /**
+     * Есть ли права у пользователя
+     *
+     * Можно передаввать комбинированный массив из id(int) и key(string) (имён прав)
+     *
+     * @param string | int | array $rule_key
+     * @return bool
+     */
+    public function hasPermission($rule_key): bool
+    {
+        if (is_array($rule_key)) {
+
+            foreach ($rule_key as $perm) {
+                if ($this->user->getRules()->contains((is_integer($perm)) ? 'id' : 'key',
+                                                                                 '==', $perm)) {
+                    return true;
+                }
+            }
+
+            return false;
+
+        } else {
+
+            return $this->user->getRules()->contains((is_integer($rule_key)) ? 'id' : 'key',
+                                                                                    '==', $rule_key);
+        }
     }
 
     /** Role's methods */
@@ -87,11 +124,29 @@ class RoleService
         return $this->roles;
     }
 
-    public function setRole(int $user_id, string $role_key)
+    /**
+     * Усвтановить пользователю роль
+     *
+     * Можно передаввать комбинированный массив из id(int) и key(string) (имён Ролей)
+     *
+     * @param int $user_id
+     * @param int | string | array $role_key
+     */
+    public function setRole(int $user_id, $role_key) //TODO мне не нравится повторение кода
     {
-        User::setRole($user_id, $role_key);
+        if(is_array($role_key)){
+            foreach ($role_key as $key) {
+                User::setRole($user_id, is_integer($key) ? $key : Role::getRoleByKey($key)->id);
+            }
+        } else {
+            User::setRole($user_id, is_integer($role_key) ? $role_key : Role::getRoleByKey($role_key)->id);
+        }
     }
 
+    /**
+     * @param string $role_key
+     * @return bool
+     */
     public function hasRole($role_key): bool
     {
         return $this->roles->contains('key', '==', $role_key);
@@ -111,5 +166,4 @@ class RoleService
     {
         Role::deleteRole($request->id);
     }
-
 }

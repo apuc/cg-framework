@@ -80,7 +80,14 @@ class User extends Model
         return $rules;
     }
 
-    public static function setRole(int $id, string $role_id)
+
+    /**
+     * Установить пользователю роль
+     *
+     * @param int $id
+     * @param int | array $role_id
+     */
+    public static function setRole(int $id, $role_id)
     {
         $user = User::findOrFail($id);
         $user->roles()->syncWithoutDetaching($role_id);

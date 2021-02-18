@@ -8,6 +8,7 @@ use core\App;
 use core\Controller;
 use core\Debug;
 use core\Select2;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use workspace\models\Role;
 use workspace\models\RoleRuleRelations;
 use workspace\models\Rule;
@@ -22,7 +23,8 @@ class RoleController extends Controller
 
     public $service;
 
-    static $PERMISSION_INIT = ['All', 'roleAll', 'roleInit'];
+//    static $PERMISSION_INIT = [];
+    static $PERMISSION_INIT = [2, 'All'];
 
     protected function init()
     {
@@ -31,13 +33,13 @@ class RoleController extends Controller
         if (false === $this->service) {     //если не залогинен
             $this->redirect('sign-in');
 
-        } elseif ($this->service->hasOneOfPermissions(self::$PERMISSION_INIT)) {
+        } elseif ($this->service->hasPermission(self::$PERMISSION_INIT)) {
 
             $this->viewPath = '/modules/role/views/';
             $this->layoutPath = App::$config['adminLayoutPath'];
             App::$breadcrumbs->addItem(['text' => 'AdminPanel', 'url' => 'adminlte']);
             App::$breadcrumbs->addItem(['text' => 'Roles', 'url' => 'admin/roles']);
-            
+
         } else {                            //если нет прав
             $this->redirect('adminlte');
         }
@@ -153,6 +155,7 @@ class RoleController extends Controller
             'actionBtn' => 'del_all'
         ];
     }
+
 
     public function setUserOptions($data): array
     {

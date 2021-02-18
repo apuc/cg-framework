@@ -27,7 +27,7 @@ class UsersController extends Controller
         if (false === $this->service) {     //если не залогинен
             $this->redirect('sign-in');
 
-        } elseif ($this->service->hasOneOfPermissions(self::$PERMISSION_INIT)) {
+        } elseif ($this->service->hasPermission(self::$PERMISSION_INIT)) {
 
             $this->viewPath = '/modules/users/views/';
             $this->layoutPath = App::$config['adminLayoutPath'];

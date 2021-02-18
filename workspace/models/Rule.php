@@ -7,6 +7,7 @@ use core\Debug;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class Rule extends Model
@@ -49,5 +50,20 @@ class Rule extends Model
         $rule = Rule::findOrFail($id);
         $rule->roles()->detach();
         $rule->delete();
+    }
+
+    /**
+     * @param string $rule_key
+     * @return Rule
+     */
+    public static function getRuleByKey(string $rule_key): Rule
+    {
+        $rule = Rule::where('key', $rule_key);
+
+        if($rule->exists()){
+            return $rule->first();
+        } else {
+            throw new ModelNotFoundException('Rule not found!');
+        }
     }
 }

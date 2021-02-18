@@ -6,13 +6,14 @@ use core\Debug;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class Role extends Model
 {
     protected $table = "role";
 
-    public $fillable = ['key'];
+    public $fillable = ['id', 'key'];
 
     public static function storeRole($key, $rules, $users = null)
     {
@@ -67,7 +68,27 @@ class Role extends Model
         }
     }
 
-    public static function setRule(int $role_id, string $rule_key)
+
+    /**
+     * @param string $role_key
+     * @return Role
+     */
+    public static function getRoleByKey(string $role_key): Role
+    {
+        $role = Role::where('key', $role_key);
+
+        if($role->exists()){
+            return $role->first();
+        } else {
+            throw new ModelNotFoundException('Role not found!');
+        }
+    }
+
+    /**
+     * @param int $role_id
+     * @param int | array $rule_key
+     */
+    public static function setRule(int $role_id, $rule_key)
     {
         $role = Role::findOrFail($role_id);
         $role->rules()->syncWithoutDetaching($rule_key);
