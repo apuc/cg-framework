@@ -21,6 +21,9 @@ class Role extends Migration
 
             $table->timestamps();
         });
+
+        \workspace\models\Role::storeRole('admin', []);
+        \workspace\models\Role::storeRole('user', []);
     }
 
     /**

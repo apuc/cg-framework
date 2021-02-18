@@ -15,7 +15,7 @@ class Role extends Model
 
     public $fillable = ['id', 'key'];
 
-    public static function storeRole($key, $rules, $users = null)
+    public static function storeRole(string $key, $rules, $users = null)
     {
         $role = new Role();
         $role->key = $key;
