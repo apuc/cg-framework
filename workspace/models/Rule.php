@@ -53,7 +53,10 @@ class Rule extends Model
     }
 
     /**
+     * Получить право по имени(ключу)
+     *
      * @param string $rule_key
+     * @throws ModelNotFoundException
      * @return Rule
      */
     public static function getRuleByKey(string $rule_key): Rule

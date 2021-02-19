@@ -107,10 +107,13 @@ class User extends Model
     }
 
     /**
+     * Получить пользователя по имени
+     *
      * @param string $username
-     * @return User | false
+     * @throws ModelNotFoundException
+     * @return User
      */
-    public static function getUserByName(string $username)
+    public static function getUserByName(string $username): User
     {
         $user = User::where('username', $username);
 

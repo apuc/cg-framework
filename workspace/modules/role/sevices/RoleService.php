@@ -132,7 +132,7 @@ class RoleService
      * @param int $user_id
      * @param int | string | array $role_key
      */
-    public function setRole(int $user_id, $role_key) //TODO мне не нравится повторение кода
+    public function setRole(int $user_id, $role_key)
     {
         if (is_array($role_key)) {
             foreach ($role_key as $key) {

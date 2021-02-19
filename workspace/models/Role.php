@@ -70,7 +70,10 @@ class Role extends Model
 
 
     /**
+     * Получить роль по имени
+     *
      * @param string $role_key
+     * @throws ModelNotFoundException
      * @return Role
      */
     public static function getRoleByKey(string $role_key): Role
