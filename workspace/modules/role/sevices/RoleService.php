@@ -74,7 +74,7 @@ class RoleService
      */
     public static function setPermission(int $role_id, $rule_key)
     {
-        if(is_array($rule_key)){
+        if (is_array($rule_key)) {
             /**
              * Если передан массив имён прав($rules), мы получаем коллекцию из getRuleByKey, а из неё массив id
              */
@@ -86,12 +86,12 @@ class RoleService
         } else {
 
             Role::setRule(is_integer($role_id) ? $role_id : Role::getRoleByKey($rule_key)->id,
-                        is_integer($rule_key) ? $rule_key : Rule::getRuleByKey($rule_key)->id );
+                is_integer($rule_key) ? $rule_key : Rule::getRuleByKey($rule_key)->id);
         }
     }
 
     /**
-     * Есть ли права у пользователя
+     * Есть ли права у пользователя, отдаёт true по первому совпадению
      *
      * Можно передаввать комбинированный массив из id(int) и key(string) (имён прав)
      *
@@ -104,7 +104,7 @@ class RoleService
 
             foreach ($rule_key as $perm) {
                 if ($this->user->getRules()->contains((is_integer($perm)) ? 'id' : 'key',
-                                                                                 '==', $perm)) {
+                    '==', $perm)) {
                     return true;
                 }
             }
@@ -114,7 +114,7 @@ class RoleService
         } else {
 
             return $this->user->getRules()->contains((is_integer($rule_key)) ? 'id' : 'key',
-                                                                                    '==', $rule_key);
+                '==', $rule_key);
         }
     }
 
@@ -125,7 +125,7 @@ class RoleService
     }
 
     /**
-     * Усвтановить пользователю роль
+     * Установить пользователю роль
      *
      * Можно передаввать комбинированный массив из id(int) и key(string) (имён Ролей)
      *
@@ -134,7 +134,7 @@ class RoleService
      */
     public function setRole(int $user_id, $role_key) //TODO мне не нравится повторение кода
     {
-        if(is_array($role_key)){
+        if (is_array($role_key)) {
             foreach ($role_key as $key) {
                 User::setRole($user_id, is_integer($key) ? $key : Role::getRoleByKey($key)->id);
             }
@@ -144,12 +144,27 @@ class RoleService
     }
 
     /**
-     * @param string $role_key
+     * Принадлежит ли пользователь к одной из ролей, отдаёт true по первому совпадению
+     *
+     * Можно передаввать комбинированный массив из id(int) и key(string) (имён Ролей)
+     *
+     * @param int | string | array $role_key
      * @return bool
      */
     public function hasRole($role_key): bool
     {
-        return $this->roles->contains('key', '==', $role_key);
+        if (is_array($role_key)) {
+            foreach ($role_key as $key) {
+                if($this->roles->contains(is_integer($key) ? 'id' : 'key', '==', $key)){
+                    return true;
+                }
+            }
+
+            return false;
+        } else {
+
+            return $this->roles->contains(is_integer($role_key) ? 'id' : 'key', '==', $role_key);
+        }
     }
 
     public static function storeRole(RoleRequest $request)

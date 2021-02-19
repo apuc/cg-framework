@@ -25,7 +25,7 @@ class RuleController extends Controller
         if (false === $this->service) {     //если не залогинен
             $this->redirect('sign-in');
 
-        } elseif ($this->service->hasPermission(self::$PERMISSION_INIT)) {
+        } elseif ($this->service->hasRole('admin')) { //TODO add your roles/rules
 
             $this->viewPath = '/modules/role/views/';
             $this->layoutPath = App::$config['adminLayoutPath'];
