@@ -46,6 +46,16 @@ class CurlRep implements Rep
         }
     }
 
+    /**
+     * @param string $url
+     * @param string $path
+     * @return bool
+     */
+    public function upload(string $url, string $path):bool
+    {
+        return 1;
+    }
+
     public function getComponent()
     {
         // TODO: Implement getComponent() method.

@@ -7,29 +7,25 @@ namespace workspace\console\controllers;
 use core\App;
 use core\console\CgMigrationCreator;
 use core\console\ConsoleController;
-use core\Debug;
+use Exception;
 use Illuminate\Database\Migrations\DatabaseMigrationRepository;
-use Illuminate\Database\Migrations\MigrationCreator;
 use Illuminate\Database\Migrations\Migrator;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Schema\Builder;
 use Illuminate\Filesystem\Filesystem;
-use samejack\PHP\PHP_ArgvParser;
 
 class MigrationController extends ConsoleController
 {
     //create migrations table
-    public function actionCreateMigrationTable()
+    public function actionInit()
     {
         try {
             App::$db->schema->create('migration', function (Blueprint $table) {
-                $table->bigIncrements('id');
+                $table->increments('id');
                 $table->string('migration', 255);
                 $table->integer('batch');
             });
-            $this->out->r("Success", 'green');
-        }
-        catch (\Exception $e){
+            $this->out->r("Migration initialized successfully", 'green');
+        } catch (Exception $e){
             $this->out->r($e->getMessage(), 'red');
         }
     }
@@ -39,7 +35,7 @@ class MigrationController extends ConsoleController
     {
         try {
             if (!isset($this->argv['name'])) {
-                throw new \Exception('Missing migration "--name" specified');
+                throw new Exception('Missing migration "--name" specified');
             }
             $m = new CgMigrationCreator(new Filesystem());
 
@@ -52,7 +48,7 @@ class MigrationController extends ConsoleController
                 !isset($this->argv['update'])
             );
             $this->out->r(basename($res) . " created", 'green');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->out->r('Message: ' .$e->getMessage(), 'red');
         }
     }
@@ -70,7 +66,7 @@ class MigrationController extends ConsoleController
                 $this->out->r(basename($re), 'green');
             }
         }
-        catch (\Exception $e){
+        catch (Exception $e){
             $this->out->r('Message: ' .$e->getMessage(), 'red');
         }
     }
@@ -87,7 +83,7 @@ class MigrationController extends ConsoleController
                 $this->out->r(basename($re), 'green');
             }
         }
-        catch (\Exception $e){
+        catch (Exception $e){
             $this->out->r('Message: ' .$e->getMessage(), 'red');
         }
     }

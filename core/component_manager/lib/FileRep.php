@@ -7,7 +7,7 @@ use core\component_manager\interfaces\Rep;
 
 class FileRep implements Rep
 {
-    public  $content;
+    public $content;
 
     /**
      * @param string $url
@@ -25,16 +25,25 @@ class FileRep implements Rep
      * @param string $path
      * @return bool
      */
-    public function download(string $url, string $path):bool
+    public function download(string $url, string $path): bool
     {
         $path = ROOT_DIR . '/download/' . $path . '/' . 'manifest.zip';
-        if (fopen($url, "r")){
+        if (fopen($url, "r")) {
             file_put_contents($path, file_get_contents($url));
             return true;
-        }
-        else{
+        } else {
             return false;
         }
+    }
+
+    /**
+     * @param string $url
+     * @param string $path
+     * @return bool
+     */
+    public function upload(string $url, string $path): bool
+    {
+        return 1;
     }
 
     public function getComponent()
@@ -47,7 +56,7 @@ class FileRep implements Rep
      * @param string $slug
      * @return array|null
      */
-    public function getManifest(string $slug):?array
+    public function getManifest(string $slug): ?array
     {
         // TODO: Implement getManifest() method.
 

@@ -13,7 +13,7 @@ class Adminlte extends Migration
      */
     public function up()
     {
-        echo "adm up\n";
+        //echo "adm up\n";
     }
 
     /**
@@ -23,6 +23,6 @@ class Adminlte extends Migration
      */
     public function down()
     {
-        echo "adm down\n";
+        //echo "adm down\n";
     }
 }

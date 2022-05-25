@@ -1,15 +1,34 @@
 <?php
 
-namespace workspace\modules\settings;
-
-
-use core\App;
-
 namespace core;
 
+/*
+* available params for $options:
+* 'serial' => '#',
+* 'actions' => 'view, edit, delete',
+* 'table_class' => 'class_1 class_2 ... class_m',
+* 'thead_class' => 'class_1 class_2 ... class_m',
+* 'baseUri' => 'url',
+* 'fields' => ['attr_1', ..., 'attr_m']
+*/
 
 class GridView extends Widget
 {
+    protected $model;
+    /**
+     * @var $pagination Pagination
+     */
+    protected $pagination;
+
+    /**
+     * @var array $options
+     */
+    protected $options;
+
+    protected $defaultOptions = [
+        'filters' => true,
+    ];
+
     public $actionsBtn = [
         'view' => ['class' => 'custom-link', 'id' => '', 'icon' => '<i class="nav-icon fas fa-eye"></i>',
             'url' => '/{id}'],
@@ -19,54 +38,45 @@ class GridView extends Widget
             'icon' => '<i class="nav-icon fas fa-trash"></i>', 'url' => '/delete/{id}'],
     ];
 
-    protected $model;
-    protected $options;
-    protected $defaultOptions = [
-        'filters' => true,
-    ];
+    public function __construct($options = [])
+    {
+        parent::__construct();
 
-    /**
-     * @var $pagination Pagination
-     * available params for $options:
-     * 'serial' => '#',
-     * 'actions' => 'view, edit, delete',
-     * 'table_class' => 'class_1 class_2 ... class_m',
-     * 'thead_class' => 'class_1 class_2 ... class_m',
-     * 'baseUri' => 'url',
-     * 'fields' => ['attr_1', ..., 'attr_m']
-     */
-    protected $pagination;
+        $this->model = $options['data'];
+        $this->options = array_merge($this->defaultOptions, $options);
+        $this->pagination = Pagination::widget();
+        $this->pagination->setParams($this->options['baseUri'], count($this->model),
+            isset($this->options['pagination']) ? $this->options['pagination'] : []);
+
+        return $this;
+    }
 
     public function run()
     {
         $this->view->registerJs('/resources/js/gridView.js', [], true);
 
-        return self::getTable() . $this->pagination->run();
+        return $this->getTable() . $this->pagination->run();
     }
 
     public function setParams($data = [], $options = [])
     {
         $this->model = $data;
         $this->options = array_merge($this->defaultOptions, $options);
+        $this->pagination = Pagination::widget();
+        $this->pagination->setParams($this->options['baseUri'], count($this->model),
+            isset($this->options['pagination']) ? $this->options['pagination'] : []);
 
-        return self::getTable() . $this->pagination->run();
+        return $this;
     }
-
-//    public function setParams($data = [], $options = [])
-//    {
-//        $this->model = $data;
-//        $this->options = $options;
-//
-//        $this->pagination = Pagination::widget();
-//
-//        return $this;
-//    }
 
     public function getTable()
     {
+        if (isset($this->options['actionBtn']) && $this->options['actionBtn'] == 'del_all')
+            $this->deleteActionButtons();
+
         $table = '';
-        $table .= self::setTableSettings($table, 'table', 'table_class', 'table table-striped');
-        $table .= self::setTableSettings($table, 'thead', 'thead_class', 'thead-dark');
+        $table .= $this->setTableSettings($table, 'table', 'table_class', 'table table-striped');
+        $table .= $this->setTableSettings($table, 'thead', 'thead_class', 'thead-dark');
 
         $table .= '<tr>';
 
@@ -83,41 +93,40 @@ class GridView extends Widget
         $table .= '</tr>';
         $table .= '</thead>';
 
-        $this->pagination->setParams($this->options['baseUri'], count($this->model),
-            isset($this->options['pagination']) ? $this->options['pagination'] : []);
-
         $end = $this->pagination->getPage() * $this->pagination->getPerPage();
         $start = ($end - ($this->pagination->getPerPage() - 1)) - 1;
 
         if ($end > $this->pagination->getAmountOfData())
             $end = $this->pagination->getAmountOfData();
 
-        if ($this->options['filters']) {
+        if ($this->options['filters'])
             $table .= $this->createFilters($this->options);
-        }
 
-        for ($i = $start; $i < $end; $i++) {
-            $table .= '<tr>';
+        if (count($this->options['data'])) {
 
-            (isset($this->options['serial'])) ? $table .= '<td>' . ($i + 1) . '</td>' : $table .= '';
+            for ($i = $start; $i < $end; $i++) {
+                $table .= '<tr>';
 
-            if (!empty($this->actionsBtn)) {
-                $table .= '<td>';
-                foreach ((array)$this->actionsBtn as $item)
-                    $table .= $this->createBtn($item, $this->options['baseUri'], $this->model[$i]->id);
-                $table .= '</td>';
+                (isset($this->options['serial'])) ? $table .= '<td>' . ($i + 1) . '</td>' : $table .= '';
+
+                if (!empty($this->actionsBtn)) {
+                    $table .= '<td>';
+                    foreach ((array)$this->actionsBtn as $item)
+                        $table .= $this->createBtn($item, $this->options['baseUri'], $this->model[$i]->id);
+                    $table .= '</td>';
+                }
+
+                foreach ($this->options['fields'] as $key => $option)
+                    if (isset($this->model[$i]->$key))
+                        $table .= '<td>' . $this->model[$i]->$key . '</td>';
+                    elseif (isset($this->options['fields'][$key]['label']))
+                        $table .= '<td>' . call_user_func($this->options['fields'][$key]['value'], $this->model[$i])
+                            . '</td>';
+                    else
+                        $table .= '<td></td>';
+
+                $table .= '</tr>';
             }
-
-            foreach ($this->options['fields'] as $key => $option)
-                if(isset($this->model[$i]->$key))
-                    $table .= '<td>' . $this->model[$i]->$key . '</td>';
-                elseif(isset($this->options['fields'][$key]['label']))
-                    $table .= '<td>' . call_user_func($this->options['fields'][$key]['value'], $this->model[$i])
-                        . '</td>';
-                else
-                    $table .= '<td></td>';
-
-            $table .= '</tr>';
         }
         $table .= '</table>';
 
@@ -127,6 +136,15 @@ class GridView extends Widget
     public function addActionBtn($data)
     {
         $this->actionsBtn = array_merge($this->actionsBtn, $data);
+
+        return $this;
+    }
+
+    public function deleteActionButtons()
+    {
+        unset($this->actionsBtn['view']);
+        unset($this->actionsBtn['edit']);
+        unset($this->actionsBtn['delete']);
 
         return $this;
     }
@@ -148,7 +166,7 @@ class GridView extends Widget
                 $html .= '<td></td>';
             } else {
                 $val = isset($_GET[$key . 'Search']) ? $_GET[$key . 'Search'] : '';
-                $html .= '<td><input class="form-control __filter" type="text" name="' . $key . 'Search" value="'. $val .'"></td>';
+                $html .= '<td><input class="form-control __filter" type="text" name="' . $key . 'Search" value="' . $val . '"></td>';
             }
         }
         $html .= '</form></tr>';

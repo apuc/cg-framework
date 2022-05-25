@@ -5,12 +5,7 @@ namespace core;
 
 
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Arr;
 use Phroute\Phroute\Dispatcher;
-use Phroute\Phroute\RouteCollector;
-use Illuminate\Database\Capsule\Manager as Capsule;
-use routing\Filter;
-use workspace\models\User;
 
 /**
  * Class App
@@ -73,9 +68,7 @@ class App
         foreach (App::$configList as $item) {
             App::$config = array_merge(App::$config, (include(CONFIG_DIR . '/' . $item)));
         }
-        App::$header = new Header();
-        App::$collector = new CgRouteCollector();
-        App::$breadcrumbs = new BCContainer();
+        $this->setStat();
 
         return $this;
     }
@@ -85,8 +78,17 @@ class App
         $this->routList = (include(CORE_DIR . '/routing/rout.php'));
         $this->routList = (include(ROUTING_DIR . '/' . $routListFile));
         foreach ($this->routList as $item) {
-            include(ROUTING_DIR . '/' . $item);
+            include_once(ROUTING_DIR . '/' . $item);
         }
+        return $this;
+    }
+
+    public function setStat()
+    {
+        App::$header = new Header();
+        App::$collector = new CgRouteCollector();
+        App::$breadcrumbs = new BCContainer();
+
         return $this;
     }
 
@@ -115,7 +117,7 @@ class App
     {
         $mods = self::getMods();
         foreach ((array)$mods as $key => $mod) {
-            if ($mod['status'] === 'active') {
+            if (isset($mod['status']) && $mod['status'] === 'active') {
                 App::$activeMods[$key] = $mod;
             }
         }
@@ -129,24 +131,25 @@ class App
     protected function setMods()
     {
         $filesystem = new Filesystem();
-        foreach (App::$activeMods as $key => $mod) {
-            $modulePath = WORKSPACE_DIR . "/modules/" . $key;
-            if ($filesystem->exists($modulePath . "/manifest.json")) {
-                $manifest = json_decode(file_get_contents($modulePath . "/manifest.json"), true);
-                if (isset($manifest['configFile'])) {
-                    App::$config = array_merge(App::$config, (include($modulePath . '/' . $manifest['configFile'])));
-                }
-                if (isset($manifest['routFile'])) {
-                    include($modulePath . '/' . $manifest['routFile']);
-                }
-                if (isset($manifest['migrationPath'])) {
-                    App::$migrationsPaths[] = WORKSPACE_DIR . "/modules/" . $key . "/" . $manifest['migrationPath'];
-                }
-                if (isset($manifest['class'])) {
-                    call_user_func_array([$manifest['class'], 'run'], []);
+        if (App::$activeMods)
+            foreach (App::$activeMods as $key => $mod) {
+                $modulePath = WORKSPACE_DIR . "/modules/" . $key;
+                if ($filesystem->exists($modulePath . "/manifest.json")) {
+                    $manifest = json_decode(file_get_contents($modulePath . "/manifest.json"), true);
+                    if (isset($manifest['configFile'])) {
+                        App::$config = array_merge(App::$config, (include($modulePath . '/' . $manifest['configFile'])));
+                    }
+                    if (isset($manifest['routFile'])) {
+                        include($modulePath . '/' . $manifest['routFile']);
+                    }
+                    if (isset($manifest['migrationPath'])) {
+                        App::$migrationsPaths[] = WORKSPACE_DIR . "/modules/" . $key . "/" . $manifest['migrationPath'];
+                    }
+                    if (isset($manifest['class'])) {
+                        call_user_func_array([$manifest['class'], 'run'], []);
+                    }
                 }
             }
-        }
     }
 
     protected function setModRouting()

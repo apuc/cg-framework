@@ -3,6 +3,8 @@
 namespace core\component_manager\lib;
 
 
+use Exception;
+
 class CM
 {
     public $service;
@@ -68,12 +70,45 @@ class CM
     }
 
     /**
-     * @param string $slug
+     * @param $name
+     * @return array
+     */
+    public function getByName($name)
+    {
+        return $this->service->getByName($name);
+    }
+
+    /**
+     * @param string $data
+     * @param string $type
+     * @param string $serverPath
+     * @param string $savePath
+     * @param string $unpackPath
      * @return string
      */
-    public function download(string $slug)
+    public function download(string $data, string $type, string $serverPath, string $savePath, string $unpackPath)
     {
-        return $this->service->download($slug);
+        return $this->service->download($data, $type, $serverPath, $savePath, $unpackPath);
+    }
+
+    /**
+     * @param string $data
+     * @return string
+     */
+    public function update(string $data)
+    {
+        return $this->service->update($data);
+    }
+
+
+    /**
+     * @param string $data
+     * @return string
+     * @throws Exception
+     */
+    public function upload(string $data)
+    {
+        return $this->service->upload($data);
     }
 
     /**
@@ -96,21 +131,40 @@ class CM
     }
 
     /**
-     * @param string $slug
+     * @param string $data
      * @return bool
      */
-    public function modChangeStatusToActive(string $slug)
+    public function modChangeStatusToActive(string $data)
     {
-        return $this->service->modChangeStatusToActive($slug);
+        return $this->service->modChangeStatusToActive($data);
     }
 
     /**
-     * @param string $slug
+     * @param string $data
      * @return bool
      */
-    public function modChangeStatusToInactive(string $slug)
+    public function modChangeStatusToInactive(string $data)
     {
-        return $this->service->modChangeStatusToInactive($slug);
+        return $this->service->modChangeStatusToInactive($data);
+    }
+
+
+    /**
+     * @param string $data
+     * @return bool
+     */
+    public function coreChangeStatusToActive(string $data)
+    {
+        return $this->service->coreChangeStatusToActive($data);
+    }
+
+    /**
+     * @param string $data
+     * @return bool
+     */
+    public function coreChangeStatusToInactive(string $data)
+    {
+        return $this->service->coreChangeStatusToInactive($data);
     }
 
     /**

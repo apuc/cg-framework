@@ -68,9 +68,13 @@ class Controller
         $this->tpl->template_dir = WORKSPACE_DIR . $dir;
     }
 
+    public function setLayout($name)
+    {
+        $this->layout = $name;
+    }
+
     protected function init()
     {
 
     }
-
 }

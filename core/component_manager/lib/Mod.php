@@ -3,8 +3,7 @@
 namespace core\component_manager\lib;
 
 
-use core\component_manager\interfaces\Rep;
-use core\Debug;
+use core\component_manager\models\Modules;
 
 class Mod
 {
@@ -34,6 +33,18 @@ class Mod
         $this->file = ROOT_DIR . "/mods.json";
         $mods = file_get_contents($this->file);
         $this->mod = json_decode($mods, true);
+    }
+
+    /**
+     * @param string $slug
+     * @return array
+     */
+    public function getRelations(string $slug) : array
+    {
+        $rel = new RelationsHandler();
+        $rel->init($slug);
+
+        return $rel->arr();
     }
 
     /**
@@ -78,6 +89,36 @@ class Mod
     }
 
     /**
+     * @param $path
+     * @return array
+     */
+    public function getLocModByFolder($path) :array
+    {
+        $dirs = scandir($path);
+        unset($dirs[0]);
+        unset($dirs[1]);
+
+        return $dirs;
+    }
+
+    public function getLocModObjArr($modules_path)
+    {
+        $local_modules = $this->getLocModByFolder("$modules_path/");
+        $modules = [];
+
+        if (isset($local_modules))
+            foreach ($local_modules as $local_module) {
+                $manifest = json_decode(file_get_contents("$modules_path/$local_module/manifest.json"));
+                $module = new Modules();
+                $module->init($manifest->name, $manifest->version, $manifest->description,
+                    $this->getModInfo($local_module)['status'], 'local', $manifest->relations);
+                array_push($modules, $module);
+            }
+
+        return $modules;
+    }
+
+    /**
      * @param string $slug
      * @return array
      */
@@ -103,6 +144,20 @@ class Mod
             $onlyVersion[] = $value['version'];
 
         return $onlyVersion;
+    }
+
+    /**
+     * @param $name
+     * @return array
+     */
+    public function getByName($name)
+    {
+        $all = [];
+        foreach ($this->mod as $key => $value)
+            if (in_array($name, $value))
+                $all[$key] = $value;
+
+        return $all;
     }
 
     /**
@@ -142,6 +197,16 @@ class Mod
     }
 
     /**
+     * @param string $version
+     */
+    public function core_save(string $version)
+    {
+        $mods = json_decode(file_get_contents('mods.json'));
+        array_push($mods->__core, ['version' => $version, 'status' => 'inactive', 'localStatus' => 'local', 'type' => 'core']);
+        file_put_contents('mods.json', json_encode($mods));
+    }
+
+    /**
      * @param string $slug
      * @return bool
      */
@@ -154,12 +219,12 @@ class Mod
 
     /**
      * @param string $slug
-     * @param array $data
+     * @param array $status
      * @return bool
      */
-    public function changeStatus(string $slug, array $data = []): bool
+    public function changeStatus(string $slug, array $status = []): bool
     {
-        return $this->save($slug, $data);
+        return $this->save($slug, $status);
     }
 
     /**

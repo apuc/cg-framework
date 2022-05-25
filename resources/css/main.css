@@ -42,10 +42,62 @@
 }
 
 .title-center {
-    margin-top: 3%;
+    margin-top: 1%;
     text-align: center;
+}
+
+.content-center {
+    margin-top: 1.5%;
+    text-align: center;
+}
+
+.margin {
+    margin-bottom: 1.5%;
 }
 
 .transparent {
     opacity: 0;
+}
+
+.gen-info {
+    background: #eaeaea;
+    border: 1px solid #dedede;
+    border-radius: 4px;
+    padding: 15px;
+}
+
+.gen_success {
+    color: darkgreen;
+}
+
+.gen_existed {
+    color: orangered;
+}
+
+.back {
+    margin: 10px;
+}
+
+.loader {
+    position: absolute;
+    margin-top: 20%;
+    margin-left: 47.5%;
+    border: 6px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 6px solid black;
+    width: 50px;
+    height: 50px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

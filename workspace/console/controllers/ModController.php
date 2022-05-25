@@ -1,19 +1,27 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: kirill
- * Date: 27.02.20
- * Time: 23:52
- */
+
 
 namespace workspace\console\controllers;
 
 
 use core\App;
+use core\component_manager\lib\ModulesHandler;
 use core\console\ConsoleController;
 
 class ModController extends ConsoleController
 {
+    public function actionInit()
+    {
+        try {
+            file_put_contents('mods.json', '');
+            $modules = new ModulesHandler();
+            $modules->addToManifest();
+
+            $this->out->r("mods.json created successfully", 'green');
+        }   catch (\Exception $e){
+            $this->out->r($e->getMessage(), 'red');
+        }
+    }
 
     public function actionList()
     {
@@ -22,5 +30,4 @@ class ModController extends ConsoleController
             $this->out->r($key . ' ' . $mod['version'], $mod['status'] === 'active' ? 'green' : 'yellow');
         }
     }
-
 }

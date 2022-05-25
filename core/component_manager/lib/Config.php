@@ -39,7 +39,7 @@ class Config
      * @param string $key
      * @return string|null
      */
-    public function byKey(string $key) : ?string
+    public function byKey(string $key) : ? string
     {
         if(isset($this->data[$key]))
             return $this->data[$key];

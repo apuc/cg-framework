@@ -1,13 +1,7 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: kirill
- * Date: 15.06.19
- * Time: 0:00
- */
 
 return [
-    'app_name' => 'LovedShop',
+    'app_name' => 'CG Framework',
     'adminLeftMenu' => [
     ],
     'component_manager' => [
@@ -15,8 +9,11 @@ return [
         'url' => 'https://rep.craft-group.xyz',
         'modulePath' => '/workspace/modules/',
         'themePath' => '/workspace/modules/themes/themes/',
-    ]
+    ],
+    'codegen' => 'on',
+    'modules_manager' => 'on'
 ];
+
 /* Пример настройки локальной базы
 return [
     'db' => [

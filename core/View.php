@@ -66,7 +66,9 @@ class View
 
     public function registerJs($js, $params = [], $endOfBody = false)
     {
-        $this->js[] = ['src' => $js, 'params' => $params, 'endOfBody' => $endOfBody];
+        if(!isset($this->js[$js])){
+            $this->js[$js] = ['src' => $js, 'params' => $params, 'endOfBody' => $endOfBody];
+        }
     }
 
     public function registerCss($css, $params = [])
@@ -100,6 +102,11 @@ class View
     public function setViewPath($dir)
     {
         $this->tpl->template_dir = $dir;
+    }
+
+    public function getViewPath()
+    {
+        return $this->tpl->template_dir;
     }
 
     private function generateAdditionalParams($data)

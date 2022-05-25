@@ -2,16 +2,21 @@
 
 namespace core\component_manager\lib;
 
+
 use core\App;
 use core\component_manager\interfaces\Rep;
 use core\component_manager\traits\Delete;
 use core\component_manager\traits\Unpack;
+use core\HZip;
+use core\ZipCore;
+use Exception;
 
 
 class CmService
 {
     use Unpack;
     use Delete;
+
     /**
      * @var Rep
      */
@@ -62,24 +67,34 @@ class CmService
 
     /**
      * @param string $slug
+     * @param string $data
+     * @param string $type
+     * @param string $serverPath
+     * @param string $savePath
+     * @param string $unpackPath
      * @return bool
      */
-    public function updateCurrentVersion(string $slug):bool
+    public function updateCurrentVersion(string $slug, string $data, string $type, string $serverPath, string $savePath, string $unpackPath): bool
     {
         if ($this->checkVersion($slug) === FALSE)
-            return $this->download($slug);
+            return $this->download($data, $type,  $serverPath,  $savePath, $unpackPath);
         else
             return false;
     }
 
     /**
      * @param string $slug
+     * @param string $data
+     * @param string $type
+     * @param string $serverPath
+     * @param string $savePath
+     * @param string $unpackPath
      * @return bool
      */
-    public function getIsInstalled(string $slug):bool
+    public function getIsInstalled(string $slug, string $data, string $type, string $serverPath, string $savePath, string $unpackPath): bool
     {
         if ($this->isInstalled($slug) === FALSE)
-            return $this->download($slug);
+            return $this->download($data, $type,  $serverPath,  $savePath, $unpackPath);
         else
             return false;
     }
@@ -88,7 +103,7 @@ class CmService
      * @param string $slug
      * @return array
      */
-    public function getLocMod(string $slug):array
+    public function getLocMod(string $slug): array
     {
         return $this->mod->getLocMod($slug);
     }
@@ -147,31 +162,102 @@ class CmService
     }
 
     /**
-     * @param string $slug
+     * @param string $name
+     * @return array
+     */
+    public function getByName(string $name)
+    {
+        return $this->mod->getByName($name);
+    }
+
+    /**
+     * @param string $data
+     * @param string $type
+     * @param string $serverPath
+     * @param string $savePath
+     * @param string $unpackPath
      * @return bool
      */
-    public function download(string $slug): bool
+    public function download(string $data, string $type, string $serverPath, string $savePath, string $unpackPath): bool
     {
-        //App::$header->add('Access-Control-Allow-Origin', '*');
-        $type = file_get_contents('https://rep.craft-group.xyz/type.php?slug=' . $slug);
+        try {
+            $data = json_decode($data);
+            $slug = ($type == 'core') ? 'core' : $data->name;
+            $version = $data->version;
+            $filename = "$slug.zip";
 
-        $filename = $slug . '.zip';
-        $url = Config::get()->byKey('url') . '/components/' . $slug . '/' . $this->getVersion($slug). '/' . $filename;
+            if($type == 'core') {
+                $this->rep->download(App::$config['component_manager']['url'] . "$serverPath/$version/$filename", "$savePath/$version.zip");
+                $this->mod->core_save($version);
+            } else {
+                $this->rep->download(App::$config['component_manager']['url'] . "$serverPath/$version/$filename", "$savePath/$filename");
+                $this->unpack("$savePath/$filename", $unpackPath, $slug);
+                unlink($filename);
+                $this->mod->save($slug, ['version' => $version, 'status' => 'active', 'type' => 'module']);
+            }
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 
-        $this->rep->download($url, Config::get()->byKey($type . 'Path') . $filename);
+    /**
+     * @param string $data
+     * @return bool
+     */
+    public function update(string $data): bool
+    {
+        try {
+            $mod = new Mod();
+            $data = json_decode($data);
+            $slug = $data->name;
 
-        $data = ['version' => $this->getVersion($slug), 'status' => 'inactive', 'type' => $type];
+            $this->rep->download(App::$config['component_manager']['url'] . "/cloud/modules/$slug/$data->version/$slug.zip", "/$slug.zip");
+            $this->unpack("/$slug.zip", "/workspace/modules/$slug/temp", $slug);
 
-        $this->mod->save($slug, $data);
+            HZip::zipDir("workspace/modules/$slug/temp/$slug/core","core.zip");
+            $this->unpack("/core.zip", "/workspace/modules/$slug", 'core');
 
-        $url_loc = Config::get()->byKey($type . 'Path') . $filename;
-
-        if ($this->unpack($url_loc, Config::get()->byKey($type . 'Path'), $slug)) {
-            unlink(ROOT_DIR . $url_loc);
+            $mod->deleteDirectory("workspace/modules/$slug/temp/");
+            unlink("$slug.zip");
+            unlink("core.zip");
 
             return true;
-        } else
+        } catch (Exception $e) {
             return false;
+        }
+    }
+
+    /**
+     * @param string $data
+     * @return bool
+     * @throws Exception
+     */
+    public function upload(string $data): bool
+    {
+        $data = json_decode($data);
+        $slug = $data->name;
+        $version = $data->version;
+        $type = (isset($data->category) && $data->category) ? $data->category : '';
+
+        ($type == 'core')
+            ? ZipCore::zipDir("core", "$slug.zip")
+            : HZip::zipDir("workspace/modules/$slug", "$slug.zip");
+
+        $request = curl_init(App::$config['component_manager']['url'] . '/save');
+        curl_setopt($request, CURLOPT_POST, true);
+
+        $file = file_get_contents("$slug.zip");
+
+        curl_setopt($request, CURLOPT_POSTFIELDS, ['file' => base64_encode($file), 'slug' => $slug,
+            'version' => $version, 'type' => $type]);
+        curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($request);
+        curl_close($request);
+
+        unlink("$slug.zip");
+
+        return $result;
     }
 
     /**
@@ -180,11 +266,11 @@ class CmService
      */
     public function deleteMod(string $slug): bool
     {
-        $url = '/modules/' . $slug . '/manifest.json' ;
+        $url = '/modules/' . $slug . '/manifest.json';
         $path = '/modules/' . $slug;
         $folder = '/unpack';
         $delete = $this->delete($url, $path, $folder);
-        $modDelete =  $this->modDeleteFromJson($slug);
+        $modDelete = $this->modDeleteFromJson($slug);
 
         return (true ?: $delete and $modDelete ?: false);
     }
@@ -205,7 +291,7 @@ class CmService
      */
     public function modDeleteFromJson(string $slug): bool
     {
-        return $this->mod-> delete($slug);
+        return $this->mod->delete($slug);
     }
 
     /**
@@ -219,25 +305,65 @@ class CmService
     }
 
     /**
-     * @param string $slug
+     * @param string $data
      * @return bool
      */
-    public function modChangeStatusToActive(string $slug): bool
+    public function modChangeStatusToActive(string $data): bool
     {
-        $data = ['status' => 'active'];
+        $data = json_decode($data);
+        $slug = $data->name;
 
-        return $this->modChangeStatus($slug, $data);
+        $status = ['status' => 'active'];
+
+        return $this->modChangeStatus($slug, $status);
     }
 
     /**
-     * @param string $slug
+     * @param string $data
      * @return bool
      */
-    public function modChangeStatusToInactive(string $slug): bool
+    public function modChangeStatusToInactive(string $data): bool
     {
-        $data = ['status' => 'inactive'];
+        $data = json_decode($data);
+        $slug = $data->name;
 
-        return $this->modChangeStatus($slug, $data);
+        $status = ['status' => 'inactive'];
+
+        return $this->modChangeStatus($slug, $status);
+    }
+
+    /**
+     * @param string $data
+     * @return bool
+     */
+    public function coreChangeStatusToActive(string $data): bool
+    {
+        $mods = json_decode(file_get_contents('mods.json'));
+        foreach ($mods->__core as $i => $item)
+            if($item->version == $data) {
+                $mods->__core[$i]->status = 'active';
+                break;
+            }
+        file_put_contents('mods.json', json_encode($mods));
+
+        return 1;
+    }
+
+    /**
+     * @param string $data
+     * @return bool
+     */
+    public function coreChangeStatusToInactive(string $data): bool
+    {
+        $mods = json_decode(file_get_contents('mods.json'));
+        foreach ($mods->__core as $i => $item)
+            if($item->version == $data) {
+                $mods->__core[$i]->status = 'inactive';
+                break;
+            }
+        file_put_contents('mods.json', json_encode($mods));
+
+        return 1;
     }
 
     /**
@@ -256,6 +382,7 @@ class CmService
     private function getRep()
     {
         $class = Config::get()->byKey('repType');
-        $this->rep = new $class();
+        //$this->rep = new $class();
+        $this->rep = new CurlRep();
     }
 }

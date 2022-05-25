@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: kirill
- * Date: 01.06.20
- * Time: 23:05
- */
+
 
 namespace workspace\requests;
 

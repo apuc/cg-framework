@@ -40,4 +40,17 @@ class CgRouteCollector extends RouteCollector
     {
         $this->addRoute(Route::GET, $route, $handler, $filters);
     }
+
+    public function cors($route, $handler, array $action, array $filters = [], $headersParams = [])
+    {
+        App::$header->add('Access-Control-Allow-Origin',
+            (isset($headersParams['options'])) ? $headersParams['options'] : '*');
+        App::$header->add('Access-Control-Allow-Methods',
+            (isset($headersParams['methods'])) ? $headersParams['methods'] : 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
+        App::$header->add('Access-Control-Allow-Headers',
+            (isset($headersParams['headers'])) ? $headersParams['headers'] :
+                'Content-Type, Authorization, Access-Control-Allow-Methods, Access-Control-Request-Headers');
+
+        return $this->addRoute(Route::ANY, $route, array_merge($handler, $action), $filters);
+    }
 }

@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: kirill
- * Date: 15.06.19
- * Time: 0:25
- */
+
 
 namespace workspace\forms_vue;
 
